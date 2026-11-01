@@ -13,7 +13,8 @@
 | 当前版本链接 | `/opt/florrclone/current` |
 | 版本目录 | `/opt/florrclone/releases/<UTC版本号>` |
 | 存档 | `/var/lib/florrclone/inventory.json`，目录 0700、文件 0600 |
-| 应用资源限制 | 2GB 内存、2 核 CPU 配额 |
+| 应用资源限制 | 2GB 内存、4 核 CPU 配额 |
+| 游戏频率 | 目标 30 TPS，20Hz 快照；`/api/health` 返回实测 TPS |
 | Nginx 配置 | `/etc/nginx/conf.d/florrclone.conf` |
 
 ## 环境变量

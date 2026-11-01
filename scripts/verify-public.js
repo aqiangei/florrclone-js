@@ -2,6 +2,7 @@
 const {request,chromium}=require('playwright'),{WebSocket}=require('ws');
 const crypto=require('node:crypto'),zlib=require('node:zlib'),assert=require('node:assert/strict'),fs=require('node:fs'),path=require('node:path');
 const {loadEngine,BUNDLE}=require('../server/engine');
+const Wire=require('../server/wire');
 const delay=ms=>new Promise(resolve=>setTimeout(resolve,ms));
 (async()=>{
   if(!process.env.TARGET_URL)throw Error('TARGET_URL required, e.g. http://127.0.0.1:8088/');
@@ -16,9 +17,9 @@ const delay=ms=>new Promise(resolve=>setTimeout(resolve,ms));
       const session=await response.json();assert.equal(session.account.role,'player');assert.equal(Object.values(session.save.inventory).reduce((a,b)=>a+b,0),20);assert.ok(!session.save.debug&&!session.save.debugLevel);
       const login=await context.post(target.origin+'/api/account/login',{data:{username,password}});assert.equal(login.status(),200);assert.deepEqual((await login.json()).save.inventory,session.save.inventory);
       const cookie=(await context.storageState()).cookies.map(c=>`${c.name}=${c.value}`).join('; ');
-      const ws=new WebSocket(target.origin.replace(/^http/,'ws')+'/ws',['florr-batch-v1','florr-delta-v1'],{headers:{Cookie:cookie,Origin:target.origin}}),frames=[];
+      const ws=new WebSocket(target.origin.replace(/^http/,'ws')+'/ws',[Wire.PROTOCOL,'florr-batch-v1','florr-delta-v1'],{headers:{Cookie:cookie,Origin:target.origin}}),frames=[],decoder=new Wire.Decoder();
       connections.push({ws,frames,session});
-      ws.on('message',(data,binary)=>{try{const f=JSON.parse(binary?zlib.gunzipSync(data):data);if(f.type==='snapshot'){assert.ok(api.validate(f));frames.push(f);}}catch(e){errors.push(e.message);}});
+      ws.on('message',(data,binary)=>{try{const f=binary&&ws.protocol===Wire.PROTOCOL?decoder.decode(data):JSON.parse(binary?zlib.gunzipSync(data):data);if(f.type==='snapshot'){assert.ok(api.validate(f));frames.push(f);}}catch(e){errors.push(e.message);}});
       await new Promise((resolve,reject)=>{const timer=setTimeout(()=>reject(Error('WebSocket open timeout')),20000);ws.once('open',()=>{clearTimeout(timer);resolve();});ws.once('error',e=>{clearTimeout(timer);reject(e);});});
       ws.send(JSON.stringify({type:'start',name:username}));
     }

@@ -1,4 +1,3 @@
-#Requires -Version 7.0
 param([switch]$SkipBuild, [switch]$SkipLocalAccounts)
 $ErrorActionPreference = 'Stop'
 $projectRoot = Split-Path -Parent $PSScriptRoot
@@ -9,7 +8,7 @@ $remote = "${userName}@${hostName}"
 $key = if ($env:DEPLOY_SSH_KEY) { $env:DEPLOY_SSH_KEY } else { Join-Path $env:USERPROFILE '.ssh/id_ed25519' }
 if (-not (Test-Path -LiteralPath $key)) { throw "SSH key not found: $key (set DEPLOY_SSH_KEY)" }
 $publicPort = if ($env:DEPLOY_PUBLIC_PORT) { [int]$env:DEPLOY_PUBLIC_PORT } else { 8088 }
-$sshOptions = @('-i', $key, '-o', 'BatchMode=yes', '-o', 'IdentitiesOnly=yes', '-o', 'StrictHostKeyChecking=yes', '-o', 'ConnectTimeout=15', '-o', 'ServerAliveInterval=15')
+$sshOptions = @('-i', $key, '-o', 'BatchMode=yes', '-o', 'IdentitiesOnly=yes', '-o', 'StrictHostKeyChecking=yes', '-o', 'ConnectTimeout=15', '-o', 'ConnectionAttempts=3', '-o', 'ServerAliveInterval=15')
 $release = [DateTime]::UtcNow.ToString('yyyyMMddTHHmmssZ')
 $stage = Join-Path $projectRoot "test-results/deploy/$release"
 $remoteStage = "/root/florrclone-upload/$release"
@@ -48,12 +47,18 @@ try {
     Invoke-Remote "printf '%s  %s\n' '$sha' '$remoteStage/florrclone.tar.gz' | sha256sum --check --strict -"
     Invoke-Remote "bash -n $remoteStage/bootstrap-runtime.sh && bash -n $remoteStage/install.sh && bash $remoteStage/bootstrap-runtime.sh"
     $seedArg = if ($seed) { "$remoteStage/inventory.seed.json" } else { '' }
-    Invoke-Remote "bash $remoteStage/install.sh $release $remoteStage/florrclone.tar.gz $seedArg"
+    $preservePrefix = if ($env:PRESERVE_UNIT) { "PRESERVE_UNIT=$($env:PRESERVE_UNIT) " } else { '' }
+    Invoke-Remote "${preservePrefix}bash $remoteStage/install.sh $release $remoteStage/florrclone.tar.gz $seedArg"
     # Uploaded seed contains password hashes and stays outside the web root.
     # Remove the staging copy after successful installation.
     if ($seed) { Invoke-Remote "rm -f -- $remoteStage/inventory.seed.json"; Remove-Item -LiteralPath $seed }
     $publicUrl = "http://${hostName}:${publicPort}/"
-    $health = Invoke-RestMethod -Uri "${publicUrl}api/health" -TimeoutSec 20
+    # Public routing may briefly return 502 while existing clients reconnect.
+    # Retry the read-only check; do not restart an already installed release.
+    for ($healthAttempt = 1; $healthAttempt -le 6; $healthAttempt++) {
+        try { $health = Invoke-RestMethod -Uri "${publicUrl}api/health" -TimeoutSec 20; break }
+        catch { if ($healthAttempt -eq 6) { throw }; Start-Sleep -Seconds 2 }
+    }
     if (-not $health.ok -or $health.protocol -ne 3) { throw 'Public health check failed' }
     $record = @{release=$release;host=$hostName;publicPort=$publicPort;backend='127.0.0.1:8788';archiveSha256=$sha;url=$publicUrl;health=$health}
     $record | ConvertTo-Json -Depth 8 | Set-Content -LiteralPath (Join-Path $stage 'deployment.json') -Encoding utf8

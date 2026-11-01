@@ -16,7 +16,7 @@ test('real protocol 3 clients share authoritative rooms and persistent sessions'
       const frames=[];ws.on('message',(data,binary)=>{const frame=JSON.parse(binary?zlib.gunzipSync(data):data);if(frame.type==='snapshot'){assert.ok(app.api.validate(frame));frames.push(frame);}});
       await new Promise((resolve,reject)=>{ws.once('open',resolve);ws.once('error',reject);});return {ws,frames,cookie,session};}
     const a=await connect(),b=await connect();await delay(300);
-    assert.ok(a.frames.length>0);assert.equal(a.ws.protocol,'florr-batch-v1');
+    assert.ok(a.frames.length>0);assert.equal(a.ws.protocol,'florr-batch-v1');assert.equal(a.frames.at(-1).rates.hz,30);assert.equal(a.frames.at(-1).rates.snapshotHz,20);
     const send=(client,m)=>client.ws.send(JSON.stringify(m));send(a,{type:'start',name:'Alice'});send(b,{type:'start',name:'Bob'});
     await delay(350);assert.equal(a.frames.at(-1).players[0].name,'Bob');assert.equal(b.frames.at(-1).players[0].name,'Alice');
     const before=a.frames.at(-1).self;send(a,{type:'input',seq:1,x:1,y:0,mode:'attack',defend:false});

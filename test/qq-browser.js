@@ -1,0 +1,37 @@
+'use strict';
+const {createServer}=require('../server/server'),{chromium}=require('playwright');
+const crypto=require('node:crypto'),assert=require('node:assert/strict'),fs=require('node:fs');
+(async()=>{
+  fs.mkdirSync('test-results',{recursive:true});const app=createServer({dbPath:'test-results/qq-browser-db.json'});
+  await new Promise(r=>app.server.listen(0,'127.0.0.1',r));const base=`http://127.0.0.1:${app.server.address().port}`;
+  const browser=await chromium.launch({headless:true,channel:'chrome'});
+  try{
+    const context=await browser.newContext({viewport:{width:1280,height:800}});
+    const registered=await context.request.post(base+'/api/account/register',{data:{username:'qq_'+crypto.randomBytes(4).toString('hex'),password:crypto.randomBytes(12).toString('hex')}});assert.equal(registered.status(),200);
+    const page=await context.newPage(),errors=[];page.on('pageerror',e=>errors.push(e.message));
+    await page.goto(base,{waitUntil:'networkidle'});await page.waitForFunction(()=>!document.querySelector('.boot-screen'));
+    const qq=page.getByRole('button',{name:'Ashflor QQ 群',exact:true}),github=page.getByRole('link',{name:'GitHub 开源仓库',exact:true});
+    assert.equal(await github.getAttribute('href'),'https://github.com/aqiangei/florrclone');assert.equal(await github.getAttribute('target'),'_blank');
+    await qq.click();
+    const dialog=page.getByRole('dialog',{name:'Ashflor 交流群'});assert.equal(await dialog.isVisible(),true);
+    assert.equal(await dialog.locator('strong').innerText(),'227990150');assert.equal(await dialog.getByRole('link',{name:'加入 QQ 群'}).getAttribute('href'),'https://qm.qq.com/q/E0OG9CLIg');
+    await dialog.getByRole('button',{name:'复制群号'}).click();await page.waitForFunction(()=>document.querySelector('#ashflor-qq-dialog [data-status]').textContent.includes('复制'));
+    await page.screenshot({path:'test-results/qq-dialog-desktop.png'});
+    await page.keyboard.press('Escape');assert.equal(await dialog.count(),0);
+    await page.getByRole('button',{name:'Ready',exact:true}).click();
+    for(let i=0;i<100&&![...app.clients.values()].some(c=>c.engine.state==='playing');i++)await page.waitForTimeout(100);
+    const client=[...app.clients.values()][0];assert.equal(client.engine.state,'playing');
+    await page.keyboard.down('w');await page.waitForTimeout(150);await qq.click();await page.keyboard.up('w');await page.waitForTimeout(200);
+    assert.equal(client.engine.input.x,0);assert.equal(client.engine.input.y,0);
+    await dialog.getByRole('button',{name:'关闭',exact:true}).click();assert.equal(await dialog.count(),0);
+    await page.setViewportSize({width:375,height:812});
+    const bounds=await qq.boundingBox();assert.ok(bounds.x>=0&&bounds.x+bounds.width<=375&&bounds.y<100,JSON.stringify(bounds));
+    const gitBounds=await github.boundingBox();assert.ok(gitBounds.x>=0&&gitBounds.x+gitBounds.width<=375&&gitBounds.y<100,JSON.stringify(gitBounds));
+    await qq.click();const box=await dialog.boundingBox();assert.ok(box.x>=0&&box.x+box.width<=375,JSON.stringify(box));
+    await page.screenshot({path:'test-results/qq-dialog-mobile.png'});await dialog.getByRole('button',{name:'关闭',exact:true}).click();
+    await page.waitForTimeout(3000);const health=await(await fetch(base+'/api/health')).json();
+    assert.equal(health.targetTps,60);assert.equal(health.snapshotHz,60);assert.ok(health.actualTps>50&&health.actualTps<65,JSON.stringify(health));assert.deepEqual(errors,[]);
+    await page.setViewportSize({width:320,height:740});const small=await github.boundingBox();assert.ok(small.x+small.width<=320,JSON.stringify(small));
+    console.log(JSON.stringify({ok:true,group:'227990150',github:'https://github.com/aqiangei/florrclone',desktopAndMobile:true,inputNeutralWhileDialogOpen:true,health,errors},null,2));
+  }finally{await browser.close();await app.close();}
+})().catch(e=>{console.error(e);process.exitCode=1;});

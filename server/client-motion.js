@@ -15,7 +15,10 @@ function recordOnlineMotion(engine,snapshot){
 function smoothOnlineMotion(engine){
   const history=onlineMotionHistory.get(engine);if(!history||history.samples.length<2)return;
   const samples=history.samples,latest=samples.at(-1),now=engine.clock.now();
-  const delay=Math.min(200,Math.max(80,1000/(latest.snapshot.rates.snapshotHz||20)+15,history.gap+15));
+  // Keep petal smoothing tight; a large buffer reads as movement lag.
+  // Buffer one network sample (~53ms at 20Hz); draw at the display refresh rate.
+  const hz=latest.snapshot.rates.snapshotHz||60;
+  const delay=Math.min(80,Math.max(16,1000/hz+3,history.gap+3));
   const renderAt=now-delay;
   let from=samples[0],to=from;
   for(let i=1;i<samples.length;i++){to=samples[i];if(to.at>=renderAt)break;from=to;}

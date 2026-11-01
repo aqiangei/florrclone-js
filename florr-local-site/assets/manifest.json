@@ -1328,16 +1328,16 @@
   "Web": {
     "src": "/assets/wiki-petals/web.png",
     "bbox": [
-      74,
-      57,
-      227,
-      206
+      70,
+      72,
+      220,
+      218
     ],
     "width": 290,
     "height": 290,
-    "source": "https://official-florrio.fandom.com/wiki/Web",
-    "originalSource": "https://static.wikia.nocookie.net/official-florrio/images/f/f8/Web.png/revision/latest?cb=20221107121720",
-    "originalSha256": "3dc306112394c9922b78831ec1822e24807bfa46ce09430cc25682e7f9af1885"
+    "source": "https://florr.io/petals/20.svg",
+    "originalSource": "https://florr.io/petals/20.svg",
+    "originalSha256": "2f653044a0d55c6d7d75f67428a91d3c8118160d7f1f97c38e40efd93bd2ac6e"
   },
   "Yucca": {
     "src": "/assets/wiki-petals/yucca.png",
@@ -1671,13 +1671,13 @@
   "Electric Web": {
     "src": "/assets/wiki-petals/audit22-electric-web.png",
     "bbox": [
-      0,
-      0,
-      512,
-      498
+      70,
+      72,
+      220,
+      218
     ],
-    "width": 512,
-    "height": 498,
+    "width": 290,
+    "height": 290,
     "source": "https://official-florrio.fandom.com/wiki/File:Electric_Web_(Rare).png",
     "thumbnail": {
       "width": 2500,

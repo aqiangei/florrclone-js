@@ -28,7 +28,7 @@ PrivateTmp=true
 ReadWritePaths=/var/lib/florrclone
 LimitNOFILE=65535
 MemoryMax=2G
-CPUQuota=200%
+CPUQuota=400%
 
 [Install]
 WantedBy=multi-user.target

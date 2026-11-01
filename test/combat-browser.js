@@ -17,6 +17,9 @@ const {chromium}=require('playwright'),{createServer}=require('../server/server'
       await route.fulfill({response,body});
     });
     async function start(){
+      // Each comparison deliberately starts a new life; transport-resume is
+      // covered separately and would otherwise skip the Ready screen on reload.
+      for(const c of app.clients.values())c.engine.state='lobby';
       await page.goto(base,{waitUntil:'networkidle'});await page.getByRole('button',{name:'Ready',exact:true}).click();
       await page.waitForFunction(()=>globalThis.__observedEngine?.state==='playing');
       const c=[...app.clients.values()][0];c.room.mobs=[];app.world.bind(c);c.engine.spawnTimer=-100000;
@@ -39,9 +42,9 @@ const {chromium}=require('playwright'),{createServer}=require('../server/server'
     await page.waitForFunction(()=>globalThis.__observedEngine.particles.some(p=>p.text),null,{timeout:5000});
     const feedback=await page.evaluate(id=>({mobHp:globalThis.__observedEngine.mobs.find(m=>m.id===id)?.hp,numbers:globalThis.__observedEngine.particles.filter(p=>p.text).map(p=>p.text)}),id);
     await page.screenshot({path:'test-results/combat-feedback.png'});
-    mob.hp=1;const kills=e.sessionKills;
+    e.rng=()=>0;mob.hp=1;const kills=e.sessionKills,collected=Object.values(e.sessionCollected).reduce((n,v)=>n+v,0);
     for(let i=0;i<100&&e.sessionKills===kills;i++)await page.waitForTimeout(100);
-    assert.ok(e.sessionKills>kills);assert.ok(c.room.drops.some(d=>d.ownerId===c.id));
+    assert.ok(e.sessionKills>kills);assert.ok(c.room.drops.some(d=>d.ownerId===c.id)||Object.values(e.sessionCollected).reduce((n,v)=>n+v,0)>collected,'kill loot is owned or already collected');
     assert.deepEqual(errors,[]);
     const report={ok:true,before,after,feedback,kills:e.sessionKills,deathAck:c.room.deathSeq,errors};
     fs.writeFileSync('test-results/combat-motion-report.json',JSON.stringify(report,null,2));console.log(JSON.stringify(report,null,2));

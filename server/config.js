@@ -1,2 +1,4 @@
 'use strict';
-module.exports={TICK_HZ:60,SNAPSHOT_HZ:20};
+// Physics and network delivery have separate budgets. Render interpolation
+// keeps animation at display refresh rate without decoding 60 full worlds/s.
+module.exports={TICK_HZ:30,SNAPSHOT_HZ:20};

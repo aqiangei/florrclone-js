@@ -8,7 +8,15 @@
     "build": "node scripts/build-server.js",
     "test": "node --test test/*.test.js",
     "test:browser": "node test/browser-smoke.js",
-    "test:combat": "node test/combat-browser.js"
+    "test:combat": "node test/combat-browser.js",
+    "benchmark": "node scripts/benchmark-simulation.js",
+    "benchmark:wire": "node scripts/benchmark-wire.js",
+    "benchmark:loot": "node scripts/benchmark-loot.js",
+    "test:loot": "node test/loot-browser.js",
+    "test:performance": "node test/performance-browser.js",
+    "test:reliability": "node test/reliability-browser.js",
+    "test:community": "node test/qq-browser.js",
+    "test:portals": "node test/portals-browser.js"
   },
   "keywords": [],
   "author": "",

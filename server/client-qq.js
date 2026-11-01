@@ -6,8 +6,24 @@ const ashflorQQStyle=`
 .reference-ui .ashflor-qq-entry .ashflor-qq-button:focus-visible{outline:2px solid #fff;outline-offset:3px}
 .ashflor-qq-entry img{width:36px;height:36px;object-fit:contain;pointer-events:none}
 .ashflor-qq-caption{font:700 11px/1.1 Ubuntu,sans-serif;color:#e8e8e8;text-shadow:0 1px 2px #0008;white-space:nowrap;pointer-events:none}
+.reference-ui .ashflor-qq-entry .ashflor-github-button{background:#7b8cff!important;text-decoration:none}
+@media(max-width:520px){
+  .reference-ui .toolbar{left:6px!important;gap:4px!important}
+  .reference-ui .toolbar .tool,.reference-ui .toolbar .menu-close{width:40px!important;height:40px!important;min-width:40px;min-height:40px;padding:4px!important}
+  .reference-ui .toolbar .ashflor-qq-entry{width:36px;flex-basis:36px;gap:3px}
+  .reference-ui .toolbar .ashflor-qq-entry .ashflor-qq-button{width:36px!important;height:36px!important;min-width:36px;min-height:36px;padding:4px!important}
+  .reference-ui .toolbar .ashflor-qq-entry img{width:28px;height:28px}
+  .reference-ui .toolbar .ashflor-qq-caption{font-size:10px}
+}
+@media(max-width:360px){
+  .reference-ui .toolbar{gap:3px!important}
+  .reference-ui .toolbar .tool,.reference-ui .toolbar .menu-close{width:36px!important;height:36px!important;min-width:36px;min-height:36px}
+  .reference-ui .toolbar .ashflor-qq-entry{width:32px;flex-basis:32px}
+  .reference-ui .toolbar .ashflor-qq-entry .ashflor-qq-button{width:32px!important;height:36px!important;min-width:32px}
+}
 #ashflor-qq-dialog{box-sizing:content-box;border:2px solid #d7bd79;border-radius:20px;padding:28px 28px 22px;background:#fff9e9;color:#384638;font-family:system-ui,sans-serif;width:min(340px,calc(100vw - 108px));max-width:calc(100vw - 108px);text-align:center;box-shadow:0 18px 80px #0007;margin:auto}
 #ashflor-qq-dialog::backdrop{background:rgba(20,28,22,.45)}
+#ashflor-qq-dialog>img{display:block;margin:0 auto}
 #ashflor-qq-dialog h2{margin:12px 0 8px;font-size:1.35rem;color:#384638;text-shadow:none;-webkit-text-stroke:0}
 #ashflor-qq-dialog p{margin:0 0 10px}
 #ashflor-qq-dialog .qq-hint{font-size:14px;opacity:.85;line-height:1.4}
@@ -38,6 +54,16 @@ function openAshflorQQ(invoker){
   for(const name of ['keydown','keyup','mousedown','mouseup','pointerdown','pointerup','touchstart','touchend','touchmove'])dialog.addEventListener(name,event=>event.stopPropagation());
   document.body.appendChild(dialog);dialog.showModal();
 }
-function AshflorQQEntry({clearInput}={}){
+function AshflorQQEntry({clearInput,existingLink=false}={}){
+  // Match the captured SSR markup until hydration finishes. Then replace its
+  // old community link with the Ashflor button without rebuilding the page.
+  const [mounted,setMounted]=(0,O.useState)(false);
+  (0,O.useEffect)(()=>setMounted(true),[]);
+  if(!mounted)return existingLink?(0,b.jsx)('a',{className:'lobby-menu-qq community-link',title:'Visit the florr.io QQ community','aria-label':'Florr.io QQ',href:'https://jq.qq.com/?_wv=1027&k=eMLWfOJb',target:'_blank',rel:'noopener noreferrer',children:(0,b.jsx)(S,{name:'qq'})}):null;
   return (0,b.jsxs)(b.Fragment,{children:[(0,b.jsx)('style',{children:ashflorQQStyle}),(0,b.jsxs)('span',{className:'ashflor-qq-entry',children:[(0,b.jsx)('button',{type:'button',className:'ashflor-qq-button',title:'QQ 群：227990150','aria-label':'Ashflor QQ 群',onClick:event=>{clearInput?.();openAshflorQQ(event.currentTarget);},children:(0,b.jsx)('img',{src:'/assets/ashflor-qq.png',alt:'',width:36,height:36,draggable:false})}),(0,b.jsx)('span',{className:'ashflor-qq-caption',children:'QQ 群'})]})]});
+}
+function AshflorGithubEntry({clearInput}={}){
+  const [mounted,setMounted]=(0,O.useState)(false);(0,O.useEffect)(()=>setMounted(true),[]);
+  if(!mounted)return null;
+  return (0,b.jsxs)('span',{className:'ashflor-qq-entry ashflor-github-entry',children:[(0,b.jsx)('a',{className:'ashflor-qq-button ashflor-github-button',title:'GitHub 开源仓库','aria-label':'GitHub 开源仓库',href:'https://github.com/aqiangei/florrclone',target:'_blank',rel:'noopener noreferrer',onClick:()=>clearInput?.(),children:(0,b.jsx)('img',{src:'/assets/ashflor-github.svg',alt:'',width:36,height:36,draggable:false})}),(0,b.jsx)('span',{className:'ashflor-qq-caption',children:'GitHub'})]});
 }

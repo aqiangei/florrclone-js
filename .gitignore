@@ -10,6 +10,7 @@ inventory.seed.json
 
 # Test artifacts and deploy records
 test-results/
+temp/
 *.log
 
 # Playwright / Chrome profiles (cookies, local storage, tokens)

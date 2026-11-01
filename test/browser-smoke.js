@@ -2,6 +2,7 @@
 const fs=require('node:fs'),assert=require('node:assert/strict');
 const {chromium}=require('playwright');const {createServer}=require('../server/server');
 const crypto=require('node:crypto'),zlib=require('node:zlib');
+const Wire=require('../server/wire');
 (async()=>{
   fs.mkdirSync('test-results',{recursive:true});
   const app=createServer({dbPath:'test-results/browser-db.json'});
@@ -16,7 +17,7 @@ const crypto=require('node:crypto'),zlib=require('node:zlib');
       const registered=await auth.json();assert.equal(registered.account.role,'player');assert.equal(Object.values(registered.save.inventory).reduce((a,b)=>a+b,0),20);
       page.on('pageerror',e=>errors.push(e.message));
       page.on('response',r=>{if(r.status()>=400)failed.push(`${r.status()} ${r.url()}`);});
-      page.on('websocket',ws=>ws.on('framereceived',frame=>{try{frames[i].push(JSON.parse(typeof frame.payload==='string'?frame.payload:zlib.gunzipSync(frame.payload)));}catch{}}));
+      page.on('websocket',ws=>{const decoder=new Wire.Decoder();ws.on('framereceived',frame=>{try{frames[i].push(typeof frame.payload==='string'?JSON.parse(frame.payload):frame.payload[0]===65?decoder.decode(frame.payload):JSON.parse(zlib.gunzipSync(frame.payload)));}catch{}});});
       await page.goto(`http://127.0.0.1:${app.server.address().port}`,{waitUntil:'networkidle'});
       await page.getByRole('button',{name:'Ready',exact:true}).waitFor();
     }
