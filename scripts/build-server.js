@@ -1,0 +1,11 @@
+'use strict';
+const fs=require('node:fs'),path=require('node:path');
+const root=path.resolve(__dirname,'..'),dist=path.join(root,'dist');
+fs.mkdirSync(dist,{recursive:true});
+fs.cpSync(path.join(root,'florr-local-site'),path.join(dist,'web'),{recursive:true});
+fs.cpSync(path.join(root,'server'),path.join(dist,'server'),{recursive:true});
+fs.cpSync(path.join(root,'node_modules/ws'),path.join(dist,'node_modules/ws'),{recursive:true});
+const pkg=require('../package.json');
+fs.writeFileSync(path.join(dist,'package.json'),JSON.stringify({name:'florr-local-server',version:'1.0.0',private:true,type:'commonjs',scripts:{start:'node start.js'},dependencies:{ws:pkg.dependencies.ws}},null,2));
+fs.writeFileSync(path.join(dist,'start.js'),`process.env.WEB_ROOT ||= require('node:path').join(__dirname,'web');\nprocess.env.DB_PATH ||= require('node:path').join(__dirname,'data','inventory.json');\nconst {createServer}=require('./server/server');\nconst app=createServer({webRoot:process.env.WEB_ROOT,dbPath:process.env.DB_PATH});\napp.server.listen(Number(process.env.PORT||8787),process.env.HOST||'127.0.0.1',()=>console.log('Florr server listening on '+(process.env.PORT||8787)));\nfor(const signal of ['SIGINT','SIGTERM'])process.once(signal,()=>app.close().then(()=>process.exit(0)));\n`);
+console.log('Built standalone dist/: node dist/start.js (ws runtime included)');

@@ -1,0 +1,48 @@
+# Dependencies and build output
+node_modules/
+dist/
+
+# Runtime / local player data (sessions, password hashes)
+data/
+*.seed.json
+inventory.json
+inventory.seed.json
+
+# Test artifacts and deploy records
+test-results/
+*.log
+
+# Playwright / Chrome profiles (cookies, local storage, tokens)
+.pw-profile*/
+online-game-profile*/
+**/Default/Cookies*
+**/Default/Login Data*
+**/Default/Network/
+**/Default/Session Storage/
+**/Default/Local Storage/
+
+# Captured archives and bulky research dumps (not needed to run the server)
+online-game-archive/
+online-game-archive.zip
+online-update-capture/
+web-game-archive/
+web-game-archive.zip
+florr-site-download/
+florrclone/
+
+# Local secrets and machine-specific config
+.env
+.env.*
+!.env.example
+*.pem
+*.pem.pub
+id_*
+*.key
+credentials.json
+.git-credentials
+
+# OS / editor
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/

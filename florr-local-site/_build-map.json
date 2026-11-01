@@ -1,0 +1,2238 @@
+{
+  "builtAt": "2026-11-01T04:08:57.640Z",
+  "files": 560,
+  "map": [
+    {
+      "url": "https://152.136.97.198/",
+      "dest": "index.html"
+    },
+    {
+      "url": "https://152.136.97.198/_next/static/css/index.BkSJLsCJ.css",
+      "dest": "_next/static/css/index.BkSJLsCJ.css"
+    },
+    {
+      "url": "https://152.136.97.198/_next/static/css/page.B8yNX9Dm.css",
+      "dest": "_next/static/css/page.B8yNX9Dm.css"
+    },
+    {
+      "url": "https://152.136.97.198/_next/static/chunks/layout-segment-context-DbUje4o_.js",
+      "dest": "_next/static/chunks/layout-segment-context-DbUje4o_.js"
+    },
+    {
+      "url": "https://152.136.97.198/_next/static/chunks/rolldown-runtime-C60lm6uB.js",
+      "dest": "_next/static/chunks/rolldown-runtime-C60lm6uB.js"
+    },
+    {
+      "url": "https://152.136.97.198/_next/static/chunks/index-CUAqJsJ9.js",
+      "dest": "_next/static/chunks/index-CUAqJsJ9.js"
+    },
+    {
+      "url": "https://152.136.97.198/_next/static/chunks/framework-D_rUT4EX.js",
+      "dest": "_next/static/chunks/framework-D_rUT4EX.js"
+    },
+    {
+      "url": "https://152.136.97.198/fonts/ubuntu-bold.ttf",
+      "dest": "fonts/ubuntu-bold.ttf"
+    },
+    {
+      "url": "https://152.136.97.198/_next/static/chunks/page-CUHzIhAp.js",
+      "dest": "_next/static/chunks/page-CUHzIhAp.js"
+    },
+    {
+      "url": "https://152.136.97.198/assets/manifest.json",
+      "dest": "assets/manifest.json"
+    },
+    {
+      "url": "https://152.136.97.198/assets/world-tiles/grass_c_0.svg",
+      "dest": "assets/world-tiles/grass_c_0.svg"
+    },
+    {
+      "url": "https://152.136.97.198/assets/world-tiles/desert_c_3.svg",
+      "dest": "assets/world-tiles/desert_c_3.svg"
+    },
+    {
+      "url": "https://152.136.97.198/assets/world-tiles/desert_c_2.svg",
+      "dest": "assets/world-tiles/desert_c_2.svg"
+    },
+    {
+      "url": "https://152.136.97.198/assets/world-tiles/desert_c_4.svg",
+      "dest": "assets/world-tiles/desert_c_4.svg"
+    },
+    {
+      "url": "https://152.136.97.198/assets/world-tiles/desert_c_0.svg",
+      "dest": "assets/world-tiles/desert_c_0.svg"
+    },
+    {
+      "url": "https://152.136.97.198/assets/world-tiles/desert_c_1.svg",
+      "dest": "assets/world-tiles/desert_c_1.svg"
+    },
+    {
+      "url": "https://152.136.97.198/assets/world-tiles/ocean_c_2.svg",
+      "dest": "assets/world-tiles/ocean_c_2.svg"
+    },
+    {
+      "url": "https://152.136.97.198/assets/world-tiles/grass_c_2.svg",
+      "dest": "assets/world-tiles/grass_c_2.svg"
+    },
+    {
+      "url": "https://152.136.97.198/assets/world-tiles/grass_c_1.svg",
+      "dest": "assets/world-tiles/grass_c_1.svg"
+    },
+    {
+      "url": "https://152.136.97.198/assets/world-tiles/grass_c_3.svg",
+      "dest": "assets/world-tiles/grass_c_3.svg"
+    },
+    {
+      "url": "https://152.136.97.198/assets/world-tiles/ocean_c_1.svg",
+      "dest": "assets/world-tiles/ocean_c_1.svg"
+    },
+    {
+      "url": "https://152.136.97.198/assets/world-tiles/ocean_c_0.svg",
+      "dest": "assets/world-tiles/ocean_c_0.svg"
+    },
+    {
+      "url": "https://152.136.97.198/assets/world-tiles/dirt_l_0.svg",
+      "dest": "assets/world-tiles/dirt_l_0.svg"
+    },
+    {
+      "url": "https://152.136.97.198/assets/world-tiles/castle_tri_0.svg",
+      "dest": "assets/world-tiles/castle_tri_0.svg"
+    },
+    {
+      "url": "https://152.136.97.198/assets/world-tiles/ocean_c_3.svg",
+      "dest": "assets/world-tiles/ocean_c_3.svg"
+    },
+    {
+      "url": "https://152.136.97.198/assets/world-tiles/castle_c_0.svg",
+      "dest": "assets/world-tiles/castle_c_0.svg"
+    },
+    {
+      "url": "https://152.136.97.198/assets/world-tiles/castle_l_0.svg",
+      "dest": "assets/world-tiles/castle_l_0.svg"
+    },
+    {
+      "url": "https://152.136.97.198/assets/world-tiles/castle_tl_0.svg",
+      "dest": "assets/world-tiles/castle_tl_0.svg"
+    },
+    {
+      "url": "https://152.136.97.198/assets/world-tiles/dirt_tri_0.svg",
+      "dest": "assets/world-tiles/dirt_tri_0.svg"
+    },
+    {
+      "url": "https://152.136.97.198/assets/world-tiles/dirt_c_0.svg",
+      "dest": "assets/world-tiles/dirt_c_0.svg"
+    },
+    {
+      "url": "https://152.136.97.198/assets/world-tiles/fire_anthole.svg",
+      "dest": "assets/world-tiles/fire_anthole.svg"
+    },
+    {
+      "url": "https://152.136.97.198/assets/world-tiles/dirt_tl_0.svg",
+      "dest": "assets/world-tiles/dirt_tl_0.svg"
+    },
+    {
+      "url": "https://152.136.97.198/assets/world-tiles/dirt2_c_1.svg",
+      "dest": "assets/world-tiles/dirt2_c_1.svg"
+    },
+    {
+      "url": "https://152.136.97.198/assets/world-tiles/dirt2_c_0.svg",
+      "dest": "assets/world-tiles/dirt2_c_0.svg"
+    },
+    {
+      "url": "https://152.136.97.198/assets/world-tiles/water_l_0.svg",
+      "dest": "assets/world-tiles/water_l_0.svg"
+    },
+    {
+      "url": "https://152.136.97.198/assets/world-tiles/water_tri_0.svg",
+      "dest": "assets/world-tiles/water_tri_0.svg"
+    },
+    {
+      "url": "https://152.136.97.198/assets/world-tiles/desert_l_0.svg",
+      "dest": "assets/world-tiles/desert_l_0.svg"
+    },
+    {
+      "url": "https://152.136.97.198/assets/world-tiles/water_c_0.svg",
+      "dest": "assets/world-tiles/water_c_0.svg"
+    },
+    {
+      "url": "https://152.136.97.198/assets/world-tiles/desert_r_0.svg",
+      "dest": "assets/world-tiles/desert_r_0.svg"
+    },
+    {
+      "url": "https://152.136.97.198/assets/world-tiles/water_tl_0.svg",
+      "dest": "assets/world-tiles/water_tl_0.svg"
+    },
+    {
+      "url": "https://152.136.97.198/assets/world-tiles/grate_c_0.svg",
+      "dest": "assets/world-tiles/grate_c_0.svg"
+    },
+    {
+      "url": "https://152.136.97.198/assets/world-tiles/sewer_entrance.svg",
+      "dest": "assets/world-tiles/sewer_entrance.svg"
+    },
+    {
+      "url": "https://152.136.97.198/assets/world-tiles/sewage_c_0.svg",
+      "dest": "assets/world-tiles/sewage_c_0.svg"
+    },
+    {
+      "url": "https://152.136.97.198/assets/world-tiles/cobblestone_c_0.svg",
+      "dest": "assets/world-tiles/cobblestone_c_0.svg"
+    },
+    {
+      "url": "https://152.136.97.198/assets/world-tiles/desert_b_0.svg",
+      "dest": "assets/world-tiles/desert_b_0.svg"
+    },
+    {
+      "url": "https://152.136.97.198/assets/world-tiles/grate_l_0.svg",
+      "dest": "assets/world-tiles/grate_l_0.svg"
+    },
+    {
+      "url": "https://152.136.97.198/assets/world-tiles/anthole.svg",
+      "dest": "assets/world-tiles/anthole.svg"
+    },
+    {
+      "url": "https://152.136.97.198/assets/world-tiles/sewer_entrance2.svg",
+      "dest": "assets/world-tiles/sewer_entrance2.svg"
+    },
+    {
+      "url": "https://152.136.97.198/assets/world-tiles/grate_tli_0.svg",
+      "dest": "assets/world-tiles/grate_tli_0.svg"
+    },
+    {
+      "url": "https://152.136.97.198/assets/world-tiles/grate_tr_0.svg",
+      "dest": "assets/world-tiles/grate_tr_0.svg"
+    },
+    {
+      "url": "https://152.136.97.198/assets/world-tiles/hel_c_0.svg",
+      "dest": "assets/world-tiles/hel_c_0.svg"
+    },
+    {
+      "url": "https://152.136.97.198/assets/world-tiles/hel_c_1.svg",
+      "dest": "assets/world-tiles/hel_c_1.svg"
+    },
+    {
+      "url": "https://152.136.97.198/assets/world-tiles/grass2_c_0.svg",
+      "dest": "assets/world-tiles/grass2_c_0.svg"
+    },
+    {
+      "url": "https://152.136.97.198/assets/world-tiles/hel_c_2.svg",
+      "dest": "assets/world-tiles/hel_c_2.svg"
+    },
+    {
+      "url": "https://152.136.97.198/assets/world-tiles/hel_c_4.svg",
+      "dest": "assets/world-tiles/hel_c_4.svg"
+    },
+    {
+      "url": "https://152.136.97.198/assets/world-tiles/hel_c_3.svg",
+      "dest": "assets/world-tiles/hel_c_3.svg"
+    },
+    {
+      "url": "https://152.136.97.198/assets/world-tiles/grass2_c_1.svg",
+      "dest": "assets/world-tiles/grass2_c_1.svg"
+    },
+    {
+      "url": "https://152.136.97.198/assets/world-tiles/hut_c_0.svg",
+      "dest": "assets/world-tiles/hut_c_0.svg"
+    },
+    {
+      "url": "https://152.136.97.198/assets/world-tiles/grass2_c_2.svg",
+      "dest": "assets/world-tiles/grass2_c_2.svg"
+    },
+    {
+      "url": "https://152.136.97.198/assets/world-tiles/desert_t_0.svg",
+      "dest": "assets/world-tiles/desert_t_0.svg"
+    },
+    {
+      "url": "https://152.136.97.198/assets/world-tiles/termite_mound.svg",
+      "dest": "assets/world-tiles/termite_mound.svg"
+    },
+    {
+      "url": "https://152.136.97.198/assets/world-tiles/grass2_c_3.svg",
+      "dest": "assets/world-tiles/grass2_c_3.svg"
+    },
+    {
+      "url": "https://152.136.97.198/assets/world-tiles/hut_br_0.svg",
+      "dest": "assets/world-tiles/hut_br_0.svg"
+    },
+    {
+      "url": "https://152.136.97.198/assets/world-tiles/hut_r_0.svg",
+      "dest": "assets/world-tiles/hut_r_0.svg"
+    },
+    {
+      "url": "https://152.136.97.198/assets/world-tiles/hut_l_0.svg",
+      "dest": "assets/world-tiles/hut_l_0.svg"
+    },
+    {
+      "url": "https://152.136.97.198/assets/world-tiles/hut_bl_0.svg",
+      "dest": "assets/world-tiles/hut_bl_0.svg"
+    },
+    {
+      "url": "https://152.136.97.198/assets/world-tiles/hut_bri_0.svg",
+      "dest": "assets/world-tiles/hut_bri_0.svg"
+    },
+    {
+      "url": "https://152.136.97.198/assets/world-tiles/hut_b_0.svg",
+      "dest": "assets/world-tiles/hut_b_0.svg"
+    },
+    {
+      "url": "https://152.136.97.198/assets/world-tiles/hut_tri_0.svg",
+      "dest": "assets/world-tiles/hut_tri_0.svg"
+    },
+    {
+      "url": "https://152.136.97.198/assets/world-tiles/hut_tr_0.svg",
+      "dest": "assets/world-tiles/hut_tr_0.svg"
+    },
+    {
+      "url": "https://152.136.97.198/assets/world-tiles/hut_tli_0.svg",
+      "dest": "assets/world-tiles/hut_tli_0.svg"
+    },
+    {
+      "url": "https://152.136.97.198/assets/world-tiles/wood_c_0.svg",
+      "dest": "assets/world-tiles/wood_c_0.svg"
+    },
+    {
+      "url": "https://152.136.97.198/assets/world-tiles/hut_t_0.svg",
+      "dest": "assets/world-tiles/hut_t_0.svg"
+    },
+    {
+      "url": "https://152.136.97.198/assets/world-tiles/hut_tl_0.svg",
+      "dest": "assets/world-tiles/hut_tl_0.svg"
+    },
+    {
+      "url": "https://152.136.97.198/assets/world-tiles/organic_wall_c_0.svg",
+      "dest": "assets/world-tiles/organic_wall_c_0.svg"
+    },
+    {
+      "url": "https://152.136.97.198/assets/world-tiles/worm_c_1.svg",
+      "dest": "assets/world-tiles/worm_c_1.svg"
+    },
+    {
+      "url": "https://152.136.97.198/assets/world-tiles/grass2_t_0.svg",
+      "dest": "assets/world-tiles/grass2_t_0.svg"
+    },
+    {
+      "url": "https://152.136.97.198/assets/world-tiles/organic_wall_l_0.svg",
+      "dest": "assets/world-tiles/organic_wall_l_0.svg"
+    },
+    {
+      "url": "https://152.136.97.198/assets/world-tiles/grass2_b_0.svg",
+      "dest": "assets/world-tiles/grass2_b_0.svg"
+    },
+    {
+      "url": "https://152.136.97.198/assets/world-tiles/worm_c_0.svg",
+      "dest": "assets/world-tiles/worm_c_0.svg"
+    },
+    {
+      "url": "https://152.136.97.198/assets/world-tiles/organic_wall_tl_0.svg",
+      "dest": "assets/world-tiles/organic_wall_tl_0.svg"
+    },
+    {
+      "url": "https://152.136.97.198/assets/world-tiles/organic_wall_tli_0.svg",
+      "dest": "assets/world-tiles/organic_wall_tli_0.svg"
+    },
+    {
+      "url": "https://152.136.97.198/assets/world-tiles/factory_entrance.svg",
+      "dest": "assets/world-tiles/factory_entrance.svg"
+    },
+    {
+      "url": "https://152.136.97.198/assets/world-tiles/factory_floor_c_2.svg",
+      "dest": "assets/world-tiles/factory_floor_c_2.svg"
+    },
+    {
+      "url": "https://152.136.97.198/assets/world-tiles/factory_floor_c_0.svg",
+      "dest": "assets/world-tiles/factory_floor_c_0.svg"
+    },
+    {
+      "url": "https://152.136.97.198/assets/world-tiles/factory_floor_c_1.svg",
+      "dest": "assets/world-tiles/factory_floor_c_1.svg"
+    },
+    {
+      "url": "https://152.136.97.198/assets/world-tiles/factory_floor_c_3.svg",
+      "dest": "assets/world-tiles/factory_floor_c_3.svg"
+    },
+    {
+      "url": "https://152.136.97.198/assets/world-tiles/factory_wall_tl_0.svg",
+      "dest": "assets/world-tiles/factory_wall_tl_0.svg"
+    },
+    {
+      "url": "https://152.136.97.198/assets/world-tiles/factory_exit.svg",
+      "dest": "assets/world-tiles/factory_exit.svg"
+    },
+    {
+      "url": "https://152.136.97.198/assets/world-tiles/factory_wall_tli.svg",
+      "dest": "assets/world-tiles/factory_wall_tli.svg"
+    },
+    {
+      "url": "https://152.136.97.198/assets/world-tiles/factory_wall_l_0.svg",
+      "dest": "assets/world-tiles/factory_wall_l_0.svg"
+    },
+    {
+      "url": "https://152.136.97.198/assets/world-tiles/factory_wall_c_0.svg",
+      "dest": "assets/world-tiles/factory_wall_c_0.svg"
+    },
+    {
+      "url": "https://152.136.97.198/assets/world-tiles/bush_c_0.svg",
+      "dest": "assets/world-tiles/bush_c_0.svg"
+    },
+    {
+      "url": "https://152.136.97.198/assets/world-tiles/coral_t_0.svg",
+      "dest": "assets/world-tiles/coral_t_0.svg"
+    },
+    {
+      "url": "https://152.136.97.198/assets/world-tiles/bush_tri_0.svg",
+      "dest": "assets/world-tiles/bush_tri_0.svg"
+    },
+    {
+      "url": "https://152.136.97.198/assets/world-tiles/coral_c_0.svg",
+      "dest": "assets/world-tiles/coral_c_0.svg"
+    },
+    {
+      "url": "https://152.136.97.198/assets/world-tiles/bush_t_0.svg",
+      "dest": "assets/world-tiles/bush_t_0.svg"
+    },
+    {
+      "url": "https://152.136.97.198/assets/world-tiles/bush_tl_0.svg",
+      "dest": "assets/world-tiles/bush_tl_0.svg"
+    },
+    {
+      "url": "https://152.136.97.198/assets/world-tiles/coral_tl_0.svg",
+      "dest": "assets/world-tiles/coral_tl_0.svg"
+    },
+    {
+      "url": "https://152.136.97.198/assets/world-tiles/coral_tri_0.svg",
+      "dest": "assets/world-tiles/coral_tri_0.svg"
+    },
+    {
+      "url": "https://152.136.97.198/assets/world-tiles/scliff_tli_0.svg",
+      "dest": "assets/world-tiles/scliff_tli_0.svg"
+    },
+    {
+      "url": "https://152.136.97.198/assets/world-tiles/scliff_c_0.svg",
+      "dest": "assets/world-tiles/scliff_c_0.svg"
+    },
+    {
+      "url": "https://152.136.97.198/assets/world-tiles/scliff_l_0.svg",
+      "dest": "assets/world-tiles/scliff_l_0.svg"
+    },
+    {
+      "url": "https://152.136.97.198/assets/world-tiles/scliff_tl_0.svg",
+      "dest": "assets/world-tiles/scliff_tl_0.svg"
+    },
+    {
+      "url": "https://152.136.97.198/assets/world-tiles/pyramid.svg",
+      "dest": "assets/world-tiles/pyramid.svg"
+    },
+    {
+      "url": "https://152.136.97.198/assets/world-tiles/cellar_door.svg",
+      "dest": "assets/world-tiles/cellar_door.svg"
+    },
+    {
+      "url": "https://152.136.97.198/assets/world-tiles/foliage_tl_0.svg",
+      "dest": "assets/world-tiles/foliage_tl_0.svg"
+    },
+    {
+      "url": "https://152.136.97.198/assets/world-tiles/foliage_t_0.svg",
+      "dest": "assets/world-tiles/foliage_t_0.svg"
+    },
+    {
+      "url": "https://152.136.97.198/assets/world-tiles/vent_bri_0.svg",
+      "dest": "assets/world-tiles/vent_bri_0.svg"
+    },
+    {
+      "url": "https://152.136.97.198/assets/world-tiles/foliage_bri_0.svg",
+      "dest": "assets/world-tiles/foliage_bri_0.svg"
+    },
+    {
+      "url": "https://152.136.97.198/assets/world-tiles/vent_l_0.svg",
+      "dest": "assets/world-tiles/vent_l_0.svg"
+    },
+    {
+      "url": "https://152.136.97.198/assets/world-tiles/vent_tl_0.svg",
+      "dest": "assets/world-tiles/vent_tl_0.svg"
+    },
+    {
+      "url": "https://152.136.97.198/assets/world-tiles/seaweed_tl_0.svg",
+      "dest": "assets/world-tiles/seaweed_tl_0.svg"
+    },
+    {
+      "url": "https://152.136.97.198/assets/world-tiles/root_bri_0.svg",
+      "dest": "assets/world-tiles/root_bri_0.svg"
+    },
+    {
+      "url": "https://152.136.97.198/assets/world-tiles/seaweed_t_0.svg",
+      "dest": "assets/world-tiles/seaweed_t_0.svg"
+    },
+    {
+      "url": "https://152.136.97.198/assets/world-tiles/seaweed_bri_0.svg",
+      "dest": "assets/world-tiles/seaweed_bri_0.svg"
+    },
+    {
+      "url": "https://152.136.97.198/assets/world-tiles/root_t_0.svg",
+      "dest": "assets/world-tiles/root_t_0.svg"
+    },
+    {
+      "url": "https://152.136.97.198/assets/world-tiles/root_tl_0.svg",
+      "dest": "assets/world-tiles/root_tl_0.svg"
+    },
+    {
+      "url": "https://152.136.97.198/assets/world-tiles/tumbleweed_t_0.svg",
+      "dest": "assets/world-tiles/tumbleweed_t_0.svg"
+    },
+    {
+      "url": "https://152.136.97.198/assets/world-tiles/tumbleweed_tl_0.svg",
+      "dest": "assets/world-tiles/tumbleweed_tl_0.svg"
+    },
+    {
+      "url": "https://152.136.97.198/assets/wiki-petals/basic.png",
+      "dest": "assets/wiki-petals/basic.png"
+    },
+    {
+      "url": "https://152.136.97.198/assets/world-tiles/tumbleweed_bri_0.svg",
+      "dest": "assets/world-tiles/tumbleweed_bri_0.svg"
+    },
+    {
+      "url": "https://152.136.97.198/assets/wiki-petals/rose.png",
+      "dest": "assets/wiki-petals/rose.png"
+    },
+    {
+      "url": "https://152.136.97.198/assets/talents/health.svg",
+      "dest": "assets/talents/health.svg"
+    },
+    {
+      "url": "https://152.136.97.198/assets/talents/medic.svg",
+      "dest": "assets/talents/medic.svg"
+    },
+    {
+      "url": "https://152.136.97.198/assets/talents/summoner.svg",
+      "dest": "assets/talents/summoner.svg"
+    },
+    {
+      "url": "https://152.136.97.198/assets/talents/secondChance.svg",
+      "dest": "assets/talents/secondChance.svg"
+    },
+    {
+      "url": "https://152.136.97.198/assets/talents/reload.svg",
+      "dest": "assets/talents/reload.svg"
+    },
+    {
+      "url": "https://152.136.97.198/assets/talents/rotation.svg",
+      "dest": "assets/talents/rotation.svg"
+    },
+    {
+      "url": "https://152.136.97.198/assets/wiki-flower.webp",
+      "dest": "assets/wiki-flower.webp"
+    },
+    {
+      "url": "https://152.136.97.198/_next/static/mob-rig-bounds.worker-BUdnT_kv.js",
+      "dest": "_next/static/mob-rig-bounds.worker-BUdnT_kv.js"
+    },
+    {
+      "url": "https://152.136.97.198/manifest.webmanifest",
+      "dest": "manifest.webmanifest"
+    },
+    {
+      "url": "https://152.136.97.198/assets/wiki-petals/stinger.png",
+      "dest": "assets/wiki-petals/stinger.png"
+    },
+    {
+      "url": "https://152.136.97.198/assets/wiki-petals/light.png",
+      "dest": "assets/wiki-petals/light.png"
+    },
+    {
+      "url": "https://152.136.97.198/assets/wiki-petals/iris.png",
+      "dest": "assets/wiki-petals/iris.png"
+    },
+    {
+      "url": "https://152.136.97.198/assets/wiki-petals/faster.png",
+      "dest": "assets/wiki-petals/faster.png"
+    },
+    {
+      "url": "https://152.136.97.198/assets/wiki-petals/cactus.png",
+      "dest": "assets/wiki-petals/cactus.png"
+    },
+    {
+      "url": "https://152.136.97.198/assets/wiki-petals/bubble.png",
+      "dest": "assets/wiki-petals/bubble.png"
+    },
+    {
+      "url": "https://152.136.97.198/assets/wiki-petals/leaf.png",
+      "dest": "assets/wiki-petals/leaf.png"
+    },
+    {
+      "url": "https://152.136.97.198/assets/wiki-petals/rock.png",
+      "dest": "assets/wiki-petals/rock.png"
+    },
+    {
+      "url": "https://152.136.97.198/assets/wiki-petals/peas.png",
+      "dest": "assets/wiki-petals/peas.png"
+    },
+    {
+      "url": "https://152.136.97.198/assets/wiki-petals/wing.png",
+      "dest": "assets/wiki-petals/wing.png"
+    },
+    {
+      "url": "https://152.136.97.198/assets/wiki-petals/sand.png",
+      "dest": "assets/wiki-petals/sand.png"
+    },
+    {
+      "url": "https://152.136.97.198/assets/wiki-petals/pollen.png",
+      "dest": "assets/wiki-petals/pollen.png"
+    },
+    {
+      "url": "https://152.136.97.198/assets/wiki-petals/missile.png",
+      "dest": "assets/wiki-petals/missile.png"
+    },
+    {
+      "url": "https://152.136.97.198/assets/wiki-petals/antennae.png",
+      "dest": "assets/wiki-petals/antennae.png"
+    },
+    {
+      "url": "https://152.136.97.198/assets/mobs/ladybug.6c822c504f77.png",
+      "dest": "assets/mobs/ladybug.6c822c504f77.png"
+    },
+    {
+      "url": "https://152.136.97.198/assets/mobs/spider.a3f725cb605e.png",
+      "dest": "assets/mobs/spider.a3f725cb605e.png"
+    },
+    {
+      "url": "https://152.136.97.198/assets/mobs/worker-ant.ddaca227458d.png",
+      "dest": "assets/mobs/worker-ant.ddaca227458d.png"
+    },
+    {
+      "url": "https://152.136.97.198/assets/mobs/bee.e2508cc369c6.png",
+      "dest": "assets/mobs/bee.e2508cc369c6.png"
+    },
+    {
+      "url": "https://152.136.97.198/assets/mobs/baby-ant.f52c650977a0.png",
+      "dest": "assets/mobs/baby-ant.f52c650977a0.png"
+    },
+    {
+      "url": "https://152.136.97.198/assets/mobs/soldier-ant.6cf96ef6f6a7.png",
+      "dest": "assets/mobs/soldier-ant.6cf96ef6f6a7.png"
+    },
+    {
+      "url": "https://152.136.97.198/assets/mobs/scorpion.610eace8736e.png",
+      "dest": "assets/mobs/scorpion.610eace8736e.png"
+    },
+    {
+      "url": "https://152.136.97.198/assets/wiki-petals/audit-24-mjolnir.png",
+      "dest": "assets/wiki-petals/audit-24-mjolnir.png"
+    },
+    {
+      "url": "https://152.136.97.198/assets/mobs/beetle.aa5c7aeaac2b.png",
+      "dest": "assets/mobs/beetle.aa5c7aeaac2b.png"
+    },
+    {
+      "url": "https://152.136.97.198/assets/mobs/jellyfish.07e8a06e428f.png",
+      "dest": "assets/mobs/jellyfish.07e8a06e428f.png"
+    },
+    {
+      "url": "https://152.136.97.198/assets/mobs/starfish.b7562a2bc1e7.png",
+      "dest": "assets/mobs/starfish.b7562a2bc1e7.png"
+    },
+    {
+      "url": "https://152.136.97.198/assets/mobs/crab.d4a74ab752dc.png",
+      "dest": "assets/mobs/crab.d4a74ab752dc.png"
+    },
+    {
+      "url": "https://152.136.97.198/assets/wiki-petals/corn.png",
+      "dest": "assets/wiki-petals/corn.png"
+    },
+    {
+      "url": "https://152.136.97.198/assets/wiki-petals/grapes.png",
+      "dest": "assets/wiki-petals/grapes.png"
+    },
+    {
+      "url": "https://152.136.97.198/assets/wiki-petals/pincer.png",
+      "dest": "assets/wiki-petals/pincer.png"
+    },
+    {
+      "url": "https://152.136.97.198/assets/wiki-petals/rice.png",
+      "dest": "assets/wiki-petals/rice.png"
+    },
+    {
+      "url": "https://152.136.97.198/assets/mobs/shell.1d3c240638ed.png",
+      "dest": "assets/mobs/shell.1d3c240638ed.png"
+    },
+    {
+      "url": "https://152.136.97.198/assets/mobs/mob-rock.8f27006e151f.png",
+      "dest": "assets/mobs/mob-rock.8f27006e151f.png"
+    },
+    {
+      "url": "https://152.136.97.198/assets/wiki-petals/pearl.webp",
+      "dest": "assets/wiki-petals/pearl.webp"
+    },
+    {
+      "url": "https://152.136.97.198/assets/wiki-petals/honey.png",
+      "dest": "assets/wiki-petals/honey.png"
+    },
+    {
+      "url": "https://152.136.97.198/assets/wiki-petals/heavy.png",
+      "dest": "assets/wiki-petals/heavy.png"
+    },
+    {
+      "url": "https://152.136.97.198/assets/wiki-petals/lentil-audit23.png",
+      "dest": "assets/wiki-petals/lentil-audit23.png"
+    },
+    {
+      "url": "https://152.136.97.198/assets/wiki-petals/dahlia.webp",
+      "dest": "assets/wiki-petals/dahlia.webp"
+    },
+    {
+      "url": "https://152.136.97.198/assets/wiki-petals/audit-24-bean.png",
+      "dest": "assets/wiki-petals/audit-24-bean.png"
+    },
+    {
+      "url": "https://152.136.97.198/assets/wiki-petals/dandelion.png",
+      "dest": "assets/wiki-petals/dandelion.png"
+    },
+    {
+      "url": "https://152.136.97.198/assets/wiki-petals/bone-audit12.png",
+      "dest": "assets/wiki-petals/bone-audit12.png"
+    },
+    {
+      "url": "https://152.136.97.198/assets/wiki-petals/jelly.png",
+      "dest": "assets/wiki-petals/jelly.png"
+    },
+    {
+      "url": "https://152.136.97.198/assets/mobs/sandstorm.59176b6b7063.png",
+      "dest": "assets/mobs/sandstorm.59176b6b7063.png"
+    },
+    {
+      "url": "https://152.136.97.198/assets/wiki-petals/fang.png",
+      "dest": "assets/wiki-petals/fang.png"
+    },
+    {
+      "url": "https://152.136.97.198/assets/wiki-petals/salt.png",
+      "dest": "assets/wiki-petals/salt.png"
+    },
+    {
+      "url": "https://152.136.97.198/assets/wiki-petals/orange-audit10.png",
+      "dest": "assets/wiki-petals/orange-audit10.png"
+    },
+    {
+      "url": "https://152.136.97.198/assets/wiki-petals/coin-audit15.png",
+      "dest": "assets/wiki-petals/coin-audit15.png"
+    },
+    {
+      "url": "https://152.136.97.198/assets/wiki-petals/shell.webp",
+      "dest": "assets/wiki-petals/shell.webp"
+    },
+    {
+      "url": "https://152.136.97.198/assets/wiki-petals/soil.png",
+      "dest": "assets/wiki-petals/soil.png"
+    },
+    {
+      "url": "https://152.136.97.198/assets/wiki-petals/claw.webp",
+      "dest": "assets/wiki-petals/claw.webp"
+    },
+    {
+      "url": "https://152.136.97.198/assets/wiki-petals/starfish.webp",
+      "dest": "assets/wiki-petals/starfish.webp"
+    },
+    {
+      "url": "https://152.136.97.198/assets/wiki-petals/audit22-sawblade.png",
+      "dest": "assets/wiki-petals/audit22-sawblade.png"
+    },
+    {
+      "url": "https://152.136.97.198/assets/wiki-petals/plank-audit12.png",
+      "dest": "assets/wiki-petals/plank-audit12.png"
+    },
+    {
+      "url": "https://152.136.97.198/assets/laser.ba66f84ab2bc.png",
+      "dest": "assets/laser.ba66f84ab2bc.png"
+    },
+    {
+      "url": "https://152.136.97.198/assets/wiki-petals/yucca.png",
+      "dest": "assets/wiki-petals/yucca.png"
+    },
+    {
+      "url": "https://152.136.97.198/assets/wiki-petals/rubber-source-cutout.png",
+      "dest": "assets/wiki-petals/rubber-source-cutout.png"
+    },
+    {
+      "url": "https://152.136.97.198/assets/wiki-petals/web.png",
+      "dest": "assets/wiki-petals/web.png"
+    },
+    {
+      "url": "https://152.136.97.198/assets/wiki-petals/lightning.webp",
+      "dest": "assets/wiki-petals/lightning.webp"
+    },
+    {
+      "url": "https://152.136.97.198/assets/wiki-petals/third-eye.png",
+      "dest": "assets/wiki-petals/third-eye.png"
+    },
+    {
+      "url": "https://152.136.97.198/assets/wiki-petals/magnet.png",
+      "dest": "assets/wiki-petals/magnet.png"
+    },
+    {
+      "url": "https://152.136.97.198/assets/wiki-petals/tomato-audit12.png",
+      "dest": "assets/wiki-petals/tomato-audit12.png"
+    },
+    {
+      "url": "https://152.136.97.198/assets/wiki-batch14/talisman-of-evasion.png",
+      "dest": "assets/wiki-batch14/talisman-of-evasion.png"
+    },
+    {
+      "url": "https://152.136.97.198/assets/wiki-petals/cutter.webp",
+      "dest": "assets/wiki-petals/cutter.webp"
+    },
+    {
+      "url": "https://152.136.97.198/assets/wiki-petals/dead-leaf-audit23.png",
+      "dest": "assets/wiki-petals/dead-leaf-audit23.png"
+    },
+    {
+      "url": "https://152.136.97.198/assets/audit20-wax.png",
+      "dest": "assets/audit20-wax.png"
+    },
+    {
+      "url": "https://152.136.97.198/assets/wiki-petals/dust-audit23.png",
+      "dest": "assets/wiki-petals/dust-audit23.png"
+    },
+    {
+      "url": "https://152.136.97.198/assets/wiki-batch14/dice.png",
+      "dest": "assets/wiki-batch14/dice.png"
+    },
+    {
+      "url": "https://152.136.97.198/assets/wiki-petals/bur-source-cutout.png",
+      "dest": "assets/wiki-petals/bur-source-cutout.png"
+    },
+    {
+      "url": "https://152.136.97.198/assets/wiki-petals/clover-3-audit10.png",
+      "dest": "assets/wiki-petals/clover-3-audit10.png"
+    },
+    {
+      "url": "https://152.136.97.198/assets/wiki-petals/audit22-electric-web.png",
+      "dest": "assets/wiki-petals/audit22-electric-web.png"
+    },
+    {
+      "url": "https://152.136.97.198/assets/wiki-petals/poo-audit11.png",
+      "dest": "assets/wiki-petals/poo-audit11.png"
+    },
+    {
+      "url": "https://152.136.97.198/assets/wiki-petals/broccoli-audit23.png",
+      "dest": "assets/wiki-petals/broccoli-audit23.png"
+    },
+    {
+      "url": "https://152.136.97.198/assets/wiki-petals/disc-audit15.png",
+      "dest": "assets/wiki-petals/disc-audit15.png"
+    },
+    {
+      "url": "https://152.136.97.198/assets/wiki-petals/mysterious-powder-audit10.png",
+      "dest": "assets/wiki-petals/mysterious-powder-audit10.png"
+    },
+    {
+      "url": "https://152.136.97.198/assets/wiki-petals/root-source-cutout.png",
+      "dest": "assets/wiki-petals/root-source-cutout.png"
+    },
+    {
+      "url": "https://152.136.97.198/assets/wiki-petals/sponge.webp",
+      "dest": "assets/wiki-petals/sponge.webp"
+    },
+    {
+      "url": "https://152.136.97.198/assets/wiki-petals/audit22-clay.png",
+      "dest": "assets/wiki-petals/audit22-clay.png"
+    },
+    {
+      "url": "https://152.136.97.198/assets/wiki-petals/uranium.webp",
+      "dest": "assets/wiki-petals/uranium.webp"
+    },
+    {
+      "url": "https://152.136.97.198/assets/wiki-petals/audit16-glass.png",
+      "dest": "assets/wiki-petals/audit16-glass.png"
+    },
+    {
+      "url": "https://152.136.97.198/assets/wiki-petals/yin-yang.png",
+      "dest": "assets/wiki-petals/yin-yang.png"
+    },
+    {
+      "url": "https://152.136.97.198/assets/wiki-petals/air-audit10.png",
+      "dest": "assets/wiki-petals/air-audit10.png"
+    },
+    {
+      "url": "https://152.136.97.198/assets/wiki-petals/audit22-triangle.png",
+      "dest": "assets/wiki-petals/audit22-triangle.png"
+    },
+    {
+      "url": "https://152.136.97.198/assets/wiki-petals/blood-stinger-source-cutout.png",
+      "dest": "assets/wiki-petals/blood-stinger-source-cutout.png"
+    },
+    {
+      "url": "https://152.136.97.198/assets/wiki-petals/lotus-audit11.png",
+      "dest": "assets/wiki-petals/lotus-audit11.png"
+    },
+    {
+      "url": "https://152.136.97.198/assets/wiki-petals/carrot-audit12.png",
+      "dest": "assets/wiki-petals/carrot-audit12.png"
+    },
+    {
+      "url": "https://152.136.97.198/assets/wiki-petals/nazar-amulet-audit19.png",
+      "dest": "assets/wiki-petals/nazar-amulet-audit19.png"
+    },
+    {
+      "url": "https://152.136.97.198/assets/petal-coral-wiki-b18.png",
+      "dest": "assets/petal-coral-wiki-b18.png"
+    },
+    {
+      "url": "https://152.136.97.198/assets/audit20-golden-leaf.png",
+      "dest": "assets/audit20-golden-leaf.png"
+    },
+    {
+      "url": "https://152.136.97.198/assets/wiki-petals/basil-audit10.png",
+      "dest": "assets/wiki-petals/basil-audit10.png"
+    },
+    {
+      "url": "https://152.136.97.198/assets/wiki-petals/cotton-audit12.png",
+      "dest": "assets/wiki-petals/cotton-audit12.png"
+    },
+    {
+      "url": "https://152.136.97.198/assets/wiki-petals/audit16-privet.png",
+      "dest": "assets/wiki-petals/audit16-privet.png"
+    },
+    {
+      "url": "https://152.136.97.198/assets/wiki-petals/compass-audit15.png",
+      "dest": "assets/wiki-petals/compass-audit15.png"
+    },
+    {
+      "url": "https://152.136.97.198/assets/wiki-batch14/amulet.png",
+      "dest": "assets/wiki-batch14/amulet.png"
+    },
+    {
+      "url": "https://152.136.97.198/assets/wiki-petals/light-bulb-audit11.png",
+      "dest": "assets/wiki-petals/light-bulb-audit11.png"
+    },
+    {
+      "url": "https://152.136.97.198/assets/wiki-petals/audit16-moon-0.png",
+      "dest": "assets/wiki-petals/audit16-moon-0.png"
+    },
+    {
+      "url": "https://152.136.97.198/assets/wiki-petals/shovel-audit15.png",
+      "dest": "assets/wiki-petals/shovel-audit15.png"
+    },
+    {
+      "url": "https://152.136.97.198/assets/totem.766511a86d6c.png",
+      "dest": "assets/totem.766511a86d6c.png"
+    },
+    {
+      "url": "https://152.136.97.198/assets/wiki-batch14/ankh.png",
+      "dest": "assets/wiki-batch14/ankh.png"
+    },
+    {
+      "url": "https://152.136.97.198/assets/wiki-petals/poker-chip-audit15.png",
+      "dest": "assets/wiki-petals/poker-chip-audit15.png"
+    },
+    {
+      "url": "https://152.136.97.198/assets/wiki-petals/yggdrasil.png",
+      "dest": "assets/wiki-petals/yggdrasil.png"
+    },
+    {
+      "url": "https://152.136.97.198/assets/audit20-monstera.png",
+      "dest": "assets/audit20-monstera.png"
+    },
+    {
+      "url": "https://152.136.97.198/assets/wiki-petals/audit16-card-spade.png",
+      "dest": "assets/wiki-petals/audit16-card-spade.png"
+    },
+    {
+      "url": "https://152.136.97.198/assets/wiki-petals/audit16-corruption.png",
+      "dest": "assets/wiki-petals/audit16-corruption.png"
+    },
+    {
+      "url": "https://152.136.97.198/assets/wiki-batch14/battery.png",
+      "dest": "assets/wiki-batch14/battery.png"
+    },
+    {
+      "url": "https://152.136.97.198/assets/wiki-petals/audit-24-champion-s-crown.png",
+      "dest": "assets/wiki-petals/audit-24-champion-s-crown.png"
+    },
+    {
+      "url": "https://152.136.97.198/assets/wiki-petals/audit-24-paranormal-goggles.png",
+      "dest": "assets/wiki-petals/audit-24-paranormal-goggles.png"
+    },
+    {
+      "url": "https://152.136.97.198/assets/wiki-petals/square.png",
+      "dest": "assets/wiki-petals/square.png"
+    },
+    {
+      "url": "https://152.136.97.198/assets/wiki-petals/beetle-egg.png",
+      "dest": "assets/wiki-petals/beetle-egg.png"
+    },
+    {
+      "url": "https://152.136.97.198/assets/wiki-petals/mysterious-stick.png",
+      "dest": "assets/wiki-petals/mysterious-stick.png"
+    },
+    {
+      "url": "https://152.136.97.198/assets/wiki-petals/dark-mark-source-cutout.png",
+      "dest": "assets/wiki-petals/dark-mark-source-cutout.png"
+    },
+    {
+      "url": "https://152.136.97.198/assets/wiki-petals/relic-audit11.png",
+      "dest": "assets/wiki-petals/relic-audit11.png"
+    },
+    {
+      "url": "https://152.136.97.198/assets/audit20-cogwheel.png",
+      "dest": "assets/audit20-cogwheel.png"
+    },
+    {
+      "url": "https://152.136.97.198/assets/petal-audit-batch17/mana-orb-source-cutout.png",
+      "dest": "assets/petal-audit-batch17/mana-orb-source-cutout.png"
+    },
+    {
+      "url": "https://152.136.97.198/assets/petal-audit-batch17/blueberries-source-cutout.png",
+      "dest": "assets/petal-audit-batch17/blueberries-source-cutout.png"
+    },
+    {
+      "url": "https://152.136.97.198/assets/petal-audit-batch17/magic-stinger-source-cutout.png",
+      "dest": "assets/petal-audit-batch17/magic-stinger-source-cutout.png"
+    },
+    {
+      "url": "https://152.136.97.198/assets/petal-audit-batch17/magic-cotton-source-cutout.png",
+      "dest": "assets/petal-audit-batch17/magic-cotton-source-cutout.png"
+    },
+    {
+      "url": "https://152.136.97.198/assets/petal-magic-missile-wiki-b18.png",
+      "dest": "assets/petal-magic-missile-wiki-b18.png"
+    },
+    {
+      "url": "https://152.136.97.198/assets/petal-audit-batch17/magic-leaf-source-cutout.png",
+      "dest": "assets/petal-audit-batch17/magic-leaf-source-cutout.png"
+    },
+    {
+      "url": "https://152.136.97.198/assets/petal-magic-cactus-wiki-b18.png",
+      "dest": "assets/petal-magic-cactus-wiki-b18.png"
+    },
+    {
+      "url": "https://152.136.97.198/assets/pharaohs-crown.d1f782d8dcfc.png",
+      "dest": "assets/pharaohs-crown.d1f782d8dcfc.png"
+    },
+    {
+      "url": "https://152.136.97.198/assets/wiki-petals/mimic-audit19.png",
+      "dest": "assets/wiki-petals/mimic-audit19.png"
+    },
+    {
+      "url": "https://152.136.97.198/assets/petal-magic-stick-wiki-b18.png",
+      "dest": "assets/petal-magic-stick-wiki-b18.png"
+    },
+    {
+      "url": "https://152.136.97.198/assets/petal-magic-eye-wiki-b18.png",
+      "dest": "assets/petal-magic-eye-wiki-b18.png"
+    },
+    {
+      "url": "https://152.136.97.198/assets/domino.4a9bf667f4c7.png",
+      "dest": "assets/domino.4a9bf667f4c7.png"
+    },
+    {
+      "url": "https://152.136.97.198/assets/wiki-petals/fragment-audit19.png",
+      "dest": "assets/wiki-petals/fragment-audit19.png"
+    },
+    {
+      "url": "https://152.136.97.198/assets/mobs/mummy-beetle.f8eb68f37318.png",
+      "dest": "assets/mobs/mummy-beetle.f8eb68f37318.png"
+    },
+    {
+      "url": "https://152.136.97.198/assets/wiki-petals/soul-splitter-audit23.png",
+      "dest": "assets/wiki-petals/soul-splitter-audit23.png"
+    },
+    {
+      "url": "https://152.136.97.198/assets/mobs/mob-cactus.acb3e8f558da.png",
+      "dest": "assets/mobs/mob-cactus.acb3e8f558da.png"
+    },
+    {
+      "url": "https://152.136.97.198/assets/mobs/mob-ant-hole.7bf55807837d.png",
+      "dest": "assets/mobs/mob-ant-hole.7bf55807837d.png"
+    },
+    {
+      "url": "https://152.136.97.198/assets/mobs/mob-queen-ant.ccfd5e5fd14c.png",
+      "dest": "assets/mobs/mob-queen-ant.ccfd5e5fd14c.png"
+    },
+    {
+      "url": "https://152.136.97.198/assets/wiki-petals/audit22-blood-sacrifice.png",
+      "dest": "assets/wiki-petals/audit22-blood-sacrifice.png"
+    },
+    {
+      "url": "https://152.136.97.198/assets/mobs/mob-jungle-centipede.25d2b88e2ce1.png",
+      "dest": "assets/mobs/mob-jungle-centipede.25d2b88e2ce1.png"
+    },
+    {
+      "url": "https://152.136.97.198/assets/mobs/mob-centipede.6c8a48dc49f4.png",
+      "dest": "assets/mobs/mob-centipede.6c8a48dc49f4.png"
+    },
+    {
+      "url": "https://152.136.97.198/assets/wiki-petals/magic-bubble-audit19.png",
+      "dest": "assets/wiki-petals/magic-bubble-audit19.png"
+    },
+    {
+      "url": "https://152.136.97.198/assets/mobs/mob-desert-ladybug.836df3bdca0e.png",
+      "dest": "assets/mobs/mob-desert-ladybug.836df3bdca0e.png"
+    },
+    {
+      "url": "https://152.136.97.198/assets/mobs/mob-hornet.c7ab81ce9ac2.png",
+      "dest": "assets/mobs/mob-hornet.c7ab81ce9ac2.png"
+    },
+    {
+      "url": "https://152.136.97.198/assets/mobs/mob-desert-centipede.3457b4ea89dc.png",
+      "dest": "assets/mobs/mob-desert-centipede.3457b4ea89dc.png"
+    },
+    {
+      "url": "https://152.136.97.198/assets/mobs/mob-jungle-ladybug.652a61b6583e.png",
+      "dest": "assets/mobs/mob-jungle-ladybug.652a61b6583e.png"
+    },
+    {
+      "url": "https://152.136.97.198/assets/mobs/mob-soldier-fire-ant.528fb42dd8e6.png",
+      "dest": "assets/mobs/mob-soldier-fire-ant.528fb42dd8e6.png"
+    },
+    {
+      "url": "https://152.136.97.198/assets/mobs/mob-fire-ant-burrow.009ff1bb1d0c.png",
+      "dest": "assets/mobs/mob-fire-ant-burrow.009ff1bb1d0c.png"
+    },
+    {
+      "url": "https://152.136.97.198/assets/mobs/mob-bubble.71e4db708edd.png",
+      "dest": "assets/mobs/mob-bubble.71e4db708edd.png"
+    },
+    {
+      "url": "https://152.136.97.198/assets/mobs/mob-bumble-bee.8476e53e5ca4.png",
+      "dest": "assets/mobs/mob-bumble-bee.8476e53e5ca4.png"
+    },
+    {
+      "url": "https://152.136.97.198/assets/mobs/mob-dandelion.08022a9bbeea.png",
+      "dest": "assets/mobs/mob-dandelion.08022a9bbeea.png"
+    },
+    {
+      "url": "https://152.136.97.198/assets/mobs/mob-sponge.1c593d51ce08.png",
+      "dest": "assets/mobs/mob-sponge.1c593d51ce08.png"
+    },
+    {
+      "url": "https://152.136.97.198/assets/audit20-mecha-antennae.png",
+      "dest": "assets/audit20-mecha-antennae.png"
+    },
+    {
+      "url": "https://152.136.97.198/assets/wiki-petals/ant-egg-audit11.png",
+      "dest": "assets/wiki-petals/ant-egg-audit11.png"
+    },
+    {
+      "url": "https://152.136.97.198/assets/mobs/mob-baby-fire-ant.3c5f7c4f83db.png",
+      "dest": "assets/mobs/mob-baby-fire-ant.3c5f7c4f83db.png"
+    },
+    {
+      "url": "https://152.136.97.198/assets/mobs/mob-digger.f2d16f4524cc.png",
+      "dest": "assets/mobs/mob-digger.f2d16f4524cc.png"
+    },
+    {
+      "url": "https://152.136.97.198/assets/mobs/mob-worker-fire-ant.875b355b5efc.png",
+      "dest": "assets/mobs/mob-worker-fire-ant.875b355b5efc.png"
+    },
+    {
+      "url": "https://152.136.97.198/assets/mobs/mob-leech.24d716eb40e8.png",
+      "dest": "assets/mobs/mob-leech.24d716eb40e8.png"
+    },
+    {
+      "url": "https://152.136.97.198/assets/mobs/mob-ant-egg.d70573bb4190.png",
+      "dest": "assets/mobs/mob-ant-egg.d70573bb4190.png"
+    },
+    {
+      "url": "https://152.136.97.198/assets/mobs/mob-fire-ant-egg.a85266bad874.png",
+      "dest": "assets/mobs/mob-fire-ant-egg.a85266bad874.png"
+    },
+    {
+      "url": "https://152.136.97.198/assets/mobs/mob-queen-fire-ant.bb9e382393e6.png",
+      "dest": "assets/mobs/mob-queen-fire-ant.bb9e382393e6.png"
+    },
+    {
+      "url": "https://152.136.97.198/assets/mobs/mob-fly.88657be3ed1f.png",
+      "dest": "assets/mobs/mob-fly.88657be3ed1f.png"
+    },
+    {
+      "url": "https://152.136.97.198/assets/mobs/mob-baby-termite.28414474a9ab.png",
+      "dest": "assets/mobs/mob-baby-termite.28414474a9ab.png"
+    },
+    {
+      "url": "https://152.136.97.198/assets/mobs/mob-worker-termite.dd6b984da074.png",
+      "dest": "assets/mobs/mob-worker-termite.dd6b984da074.png"
+    },
+    {
+      "url": "https://152.136.97.198/assets/mobs/mob-soldier-termite.688c996ba450.png",
+      "dest": "assets/mobs/mob-soldier-termite.688c996ba450.png"
+    },
+    {
+      "url": "https://152.136.97.198/assets/mobs/mob-termite-overmind.913d7df8332c.png",
+      "dest": "assets/mobs/mob-termite-overmind.913d7df8332c.png"
+    },
+    {
+      "url": "https://152.136.97.198/assets/mobs/mob-termite-egg.d70573bb4190.png",
+      "dest": "assets/mobs/mob-termite-egg.d70573bb4190.png"
+    },
+    {
+      "url": "https://152.136.97.198/assets/mobs/mob-bush.09bd97a53bf7.png",
+      "dest": "assets/mobs/mob-bush.09bd97a53bf7.png"
+    },
+    {
+      "url": "https://152.136.97.198/assets/mobs/mob-leafbug.6eb3b62db4e4.png",
+      "dest": "assets/mobs/mob-leafbug.6eb3b62db4e4.png"
+    },
+    {
+      "url": "https://152.136.97.198/assets/mobs/mob-mantis.eb9c188c5bf9.png",
+      "dest": "assets/mobs/mob-mantis.eb9c188c5bf9.png"
+    },
+    {
+      "url": "https://152.136.97.198/assets/mobs/mob-termite-mound.3241e772d9ce.png",
+      "dest": "assets/mobs/mob-termite-mound.3241e772d9ce.png"
+    },
+    {
+      "url": "https://152.136.97.198/assets/mobs/mob-moth.a8195a1c39d9.png",
+      "dest": "assets/mobs/mob-moth.a8195a1c39d9.png"
+    },
+    {
+      "url": "https://152.136.97.198/assets/mobs/mob-firefly.8d9984b0dce8.png",
+      "dest": "assets/mobs/mob-firefly.8d9984b0dce8.png"
+    },
+    {
+      "url": "https://152.136.97.198/assets/mobs/mob-roach.a1512dd36f56.png",
+      "dest": "assets/mobs/mob-roach.a1512dd36f56.png"
+    },
+    {
+      "url": "https://152.136.97.198/assets/mobs/mob-hel-spider.d83b23854f52.png",
+      "dest": "assets/mobs/mob-hel-spider.d83b23854f52.png"
+    },
+    {
+      "url": "https://152.136.97.198/assets/mobs/mob-hel-centipede.1e99285dcaea.png",
+      "dest": "assets/mobs/mob-hel-centipede.1e99285dcaea.png"
+    },
+    {
+      "url": "https://152.136.97.198/assets/mobs/mob-hel-wasp.ed2524865af0.png",
+      "dest": "assets/mobs/mob-hel-wasp.ed2524865af0.png"
+    },
+    {
+      "url": "https://152.136.97.198/assets/mobs/mob-hel-beetle.59a30e923d5c.png",
+      "dest": "assets/mobs/mob-hel-beetle.59a30e923d5c.png"
+    },
+    {
+      "url": "https://152.136.97.198/assets/mobs/mob-worm.a3c14a596a60.png",
+      "dest": "assets/mobs/mob-worm.a3c14a596a60.png"
+    },
+    {
+      "url": "https://152.136.97.198/assets/mobs/mob-wasp.aaccb153bdd3.png",
+      "dest": "assets/mobs/mob-wasp.aaccb153bdd3.png"
+    },
+    {
+      "url": "https://152.136.97.198/assets/mobs/mob-nazar-beetle.adcc004f0dca.png",
+      "dest": "assets/mobs/mob-nazar-beetle.adcc004f0dca.png"
+    },
+    {
+      "url": "https://152.136.97.198/assets/mobs/mob-gambler.41bb696d9ade.png",
+      "dest": "assets/mobs/mob-gambler.41bb696d9ade.png"
+    },
+    {
+      "url": "https://152.136.97.198/assets/mobs/mob-magic-firefly.0b44ab77bac2.png",
+      "dest": "assets/mobs/mob-magic-firefly.0b44ab77bac2.png"
+    },
+    {
+      "url": "https://152.136.97.198/assets/mobs/mob-mecha-wasp.90f205aca861.png",
+      "dest": "assets/mobs/mob-mecha-wasp.90f205aca861.png"
+    },
+    {
+      "url": "https://152.136.97.198/assets/mobs/mob-mecha-flower.9b2784f79065.png",
+      "dest": "assets/mobs/mob-mecha-flower.9b2784f79065.png"
+    },
+    {
+      "url": "https://152.136.97.198/assets/wiki-petals/mecha-missile-audit19.png",
+      "dest": "assets/wiki-petals/mecha-missile-audit19.png"
+    },
+    {
+      "url": "https://152.136.97.198/assets/mobs/mob-golden-leafbug.e5680bbc474b.png",
+      "dest": "assets/mobs/mob-golden-leafbug.e5680bbc474b.png"
+    },
+    {
+      "url": "https://152.136.97.198/assets/mobs/mob-mecha-crab.a79ade2d287a.png",
+      "dest": "assets/mobs/mob-mecha-crab.a79ade2d287a.png"
+    },
+    {
+      "url": "https://152.136.97.198/assets/mobs/mob-barrel.731489c6b5e0.png",
+      "dest": "assets/mobs/mob-barrel.731489c6b5e0.png"
+    },
+    {
+      "url": "https://152.136.97.198/assets/mobs/mob-pharaoh-beetle.050607ca4c90.png",
+      "dest": "assets/mobs/mob-pharaoh-beetle.050607ca4c90.png"
+    },
+    {
+      "url": "https://152.136.97.198/assets/mobs/mob-garbage.e68f4e57bad5.png",
+      "dest": "assets/mobs/mob-garbage.e68f4e57bad5.png"
+    },
+    {
+      "url": "https://152.136.97.198/assets/mobs/mob-soldier-diver-ant.bd72bca9da83.png",
+      "dest": "assets/mobs/mob-soldier-diver-ant.bd72bca9da83.png"
+    },
+    {
+      "url": "https://152.136.97.198/assets/mobs/mob-tomb.c68e3c7d9c09.png",
+      "dest": "assets/mobs/mob-tomb.c68e3c7d9c09.png"
+    },
+    {
+      "url": "https://152.136.97.198/assets/mobs/mob-ghost.0908a6e66628.png",
+      "dest": "assets/mobs/mob-ghost.0908a6e66628.png"
+    },
+    {
+      "url": "https://152.136.97.198/assets/mobs/mob-jungle-centipede-segment.dc13b200b64c.png",
+      "dest": "assets/mobs/mob-jungle-centipede-segment.dc13b200b64c.png"
+    },
+    {
+      "url": "https://152.136.97.198/assets/mobs/mob-hel-centipede-segment.7e9d548427fe.png",
+      "dest": "assets/mobs/mob-hel-centipede-segment.7e9d548427fe.png"
+    },
+    {
+      "url": "https://152.136.97.198/assets/mobs/mob-desert-centipede-segment.d0ba5fccfa44.png",
+      "dest": "assets/mobs/mob-desert-centipede-segment.d0ba5fccfa44.png"
+    },
+    {
+      "url": "https://152.136.97.198/assets/bandage.3ac311643784.png",
+      "dest": "assets/bandage.3ac311643784.png"
+    },
+    {
+      "url": "https://152.136.97.198/assets/mobs/mob-mecha-spider.f00ce1938ca3.png",
+      "dest": "assets/mobs/mob-mecha-spider.f00ce1938ca3.png"
+    },
+    {
+      "url": "https://152.136.97.198/assets/wiki-petals/super-square.png",
+      "dest": "assets/wiki-petals/super-square.png"
+    },
+    {
+      "url": "https://152.136.97.198/assets/wiki-petals/summon-square.png",
+      "dest": "assets/wiki-petals/summon-square.png"
+    },
+    {
+      "url": "https://152.136.97.198/assets/wiki-petals/light-2.png",
+      "dest": "assets/wiki-petals/light-2.png"
+    },
+    {
+      "url": "https://152.136.97.198/assets/wiki-petals/light-5.png",
+      "dest": "assets/wiki-petals/light-5.png"
+    },
+    {
+      "url": "https://152.136.97.198/assets/wiki-petals/grape-unit.png",
+      "dest": "assets/wiki-petals/grape-unit.png"
+    },
+    {
+      "url": "https://152.136.97.198/assets/wiki-petals/light-3.png",
+      "dest": "assets/wiki-petals/light-3.png"
+    },
+    {
+      "url": "https://152.136.97.198/assets/mobs/mob-silverfish.0860039d3752.png",
+      "dest": "assets/mobs/mob-silverfish.0860039d3752.png"
+    },
+    {
+      "url": "https://152.136.97.198/assets/wiki-petals/pollen-2.png",
+      "dest": "assets/wiki-petals/pollen-2.png"
+    },
+    {
+      "url": "https://152.136.97.198/assets/wiki-petals/stinger-3.png",
+      "dest": "assets/wiki-petals/stinger-3.png"
+    },
+    {
+      "url": "https://152.136.97.198/assets/wiki-petals/stinger-5.png",
+      "dest": "assets/wiki-petals/stinger-5.png"
+    },
+    {
+      "url": "https://152.136.97.198/assets/mobs/mob-centipede-segment.8599195a3413.png",
+      "dest": "assets/mobs/mob-centipede-segment.8599195a3413.png"
+    },
+    {
+      "url": "https://152.136.97.198/assets/wiki-petals/pollen-3.png",
+      "dest": "assets/wiki-petals/pollen-3.png"
+    },
+    {
+      "url": "https://152.136.97.198/assets/wiki-petals/sand-grain.png",
+      "dest": "assets/wiki-petals/sand-grain.png"
+    },
+    {
+      "url": "https://152.136.97.198/assets/wiki-petals/dahlia-grain.png",
+      "dest": "assets/wiki-petals/dahlia-grain.png"
+    },
+    {
+      "url": "https://152.136.97.198/assets/wiki-petals/dandelion-3.png",
+      "dest": "assets/wiki-petals/dandelion-3.png"
+    },
+    {
+      "url": "https://152.136.97.198/assets/wiki-petals/dandelion-2.png",
+      "dest": "assets/wiki-petals/dandelion-2.png"
+    },
+    {
+      "url": "https://152.136.97.198/assets/wiki-petals/pea-unit.png",
+      "dest": "assets/wiki-petals/pea-unit.png"
+    },
+    {
+      "url": "https://152.136.97.198/assets/wiki-petals/third-eye-socket.png",
+      "dest": "assets/wiki-petals/third-eye-socket.png"
+    },
+    {
+      "url": "https://152.136.97.198/assets/wiki-petals/third-eye-pupil.png",
+      "dest": "assets/wiki-petals/third-eye-pupil.png"
+    },
+    {
+      "url": "https://152.136.97.198/assets/wiki-batch14/dice-pip.png",
+      "dest": "assets/wiki-batch14/dice-pip.png"
+    },
+    {
+      "url": "https://152.136.97.198/assets/wiki-petals/web-ground.png",
+      "dest": "assets/wiki-petals/web-ground.png"
+    },
+    {
+      "url": "https://152.136.97.198/assets/wiki-petals/orange-grain-audit10.png",
+      "dest": "assets/wiki-petals/orange-grain-audit10.png"
+    },
+    {
+      "url": "https://152.136.97.198/assets/wiki-petals/clover-5-audit10.png",
+      "dest": "assets/wiki-petals/clover-5-audit10.png"
+    },
+    {
+      "url": "https://152.136.97.198/assets/wiki-petals/clover-4-audit10.png",
+      "dest": "assets/wiki-petals/clover-4-audit10.png"
+    },
+    {
+      "url": "https://152.136.97.198/assets/wiki-petals/clover-6-audit10.png",
+      "dest": "assets/wiki-petals/clover-6-audit10.png"
+    },
+    {
+      "url": "https://152.136.97.198/assets/petal-coral-piece-1a-wiki-b18.png",
+      "dest": "assets/petal-coral-piece-1a-wiki-b18.png"
+    },
+    {
+      "url": "https://152.136.97.198/assets/petal-coral-piece-1b-wiki-b18.png",
+      "dest": "assets/petal-coral-piece-1b-wiki-b18.png"
+    },
+    {
+      "url": "https://152.136.97.198/assets/petal-coral-piece-2-wiki-b18.png",
+      "dest": "assets/petal-coral-piece-2-wiki-b18.png"
+    },
+    {
+      "url": "https://152.136.97.198/assets/wiki-petals/audit-24-paranormal-goggles-worn.png",
+      "dest": "assets/wiki-petals/audit-24-paranormal-goggles-worn.png"
+    },
+    {
+      "url": "https://152.136.97.198/assets/wiki-petals/audit-24-champion-crown-worn.png",
+      "dest": "assets/wiki-petals/audit-24-champion-crown-worn.png"
+    },
+    {
+      "url": "https://152.136.97.198/assets/wiki-petals/compass-broken-audit15.png",
+      "dest": "assets/wiki-petals/compass-broken-audit15.png"
+    },
+    {
+      "url": "https://152.136.97.198/assets/wiki-petals/chip-1-audit15.png",
+      "dest": "assets/wiki-petals/chip-1-audit15.png"
+    },
+    {
+      "url": "https://152.136.97.198/assets/wiki-petals/chip-4-audit15.png",
+      "dest": "assets/wiki-petals/chip-4-audit15.png"
+    },
+    {
+      "url": "https://152.136.97.198/assets/wiki-petals/ant-egg-grain-audit11.png",
+      "dest": "assets/wiki-petals/ant-egg-grain-audit11.png"
+    },
+    {
+      "url": "https://152.136.97.198/assets/wiki-petals/chip-3-audit15.png",
+      "dest": "assets/wiki-petals/chip-3-audit15.png"
+    },
+    {
+      "url": "https://152.136.97.198/assets/wiki-batch14/dice-body.png",
+      "dest": "assets/wiki-batch14/dice-body.png"
+    },
+    {
+      "url": "https://152.136.97.198/assets/audit20-mecha-antennae-lights.png",
+      "dest": "assets/audit20-mecha-antennae-lights.png"
+    },
+    {
+      "url": "https://152.136.97.198/assets/wiki-petals/chip-5-audit15.png",
+      "dest": "assets/wiki-petals/chip-5-audit15.png"
+    },
+    {
+      "url": "https://152.136.97.198/assets/wiki-petals/chip-6-audit15.png",
+      "dest": "assets/wiki-petals/chip-6-audit15.png"
+    },
+    {
+      "url": "https://152.136.97.198/assets/wiki-petals/chip-2-audit15.png",
+      "dest": "assets/wiki-petals/chip-2-audit15.png"
+    },
+    {
+      "url": "https://152.136.97.198/assets/wiki-petals/chip-7-audit15.png",
+      "dest": "assets/wiki-petals/chip-7-audit15.png"
+    },
+    {
+      "url": "https://152.136.97.198/assets/wiki-petals/chip-8-audit15.png",
+      "dest": "assets/wiki-petals/chip-8-audit15.png"
+    },
+    {
+      "url": "https://152.136.97.198/assets/wiki-petals/dust-grain-audit23.png",
+      "dest": "assets/wiki-petals/dust-grain-audit23.png"
+    },
+    {
+      "url": "https://152.136.97.198/assets/wiki-petals/mecha-missile-loaded-audit19.png",
+      "dest": "assets/wiki-petals/mecha-missile-loaded-audit19.png"
+    },
+    {
+      "url": "https://152.136.97.198/assets/wiki-petals/audit22-electric-web-ground-blue.png",
+      "dest": "assets/wiki-petals/audit22-electric-web-ground-blue.png"
+    },
+    {
+      "url": "https://152.136.97.198/assets/wiki-petals/nazar-eye-audit19.png",
+      "dest": "assets/wiki-petals/nazar-eye-audit19.png"
+    },
+    {
+      "url": "https://152.136.97.198/assets/audit20-mecha-antennae-stems.png",
+      "dest": "assets/audit20-mecha-antennae-stems.png"
+    },
+    {
+      "url": "https://152.136.97.198/assets/wiki-petals/nazar-ring-audit19.png",
+      "dest": "assets/wiki-petals/nazar-ring-audit19.png"
+    },
+    {
+      "url": "https://152.136.97.198/assets/domino-pip.05f6909e1881.png",
+      "dest": "assets/domino-pip.05f6909e1881.png"
+    },
+    {
+      "url": "https://152.136.97.198/assets/petal-audit-batch17/blueberry-grain-source-cutout.png",
+      "dest": "assets/petal-audit-batch17/blueberry-grain-source-cutout.png"
+    },
+    {
+      "url": "https://152.136.97.198/assets/wiki-petals/fragment-2-audit19.png",
+      "dest": "assets/wiki-petals/fragment-2-audit19.png"
+    },
+    {
+      "url": "https://152.136.97.198/assets/wiki-petals/blood-stinger-3-source-cutout.png",
+      "dest": "assets/wiki-petals/blood-stinger-3-source-cutout.png"
+    },
+    {
+      "url": "https://152.136.97.198/assets/wiki-petals/blood-stinger-5-source-cutout.png",
+      "dest": "assets/wiki-petals/blood-stinger-5-source-cutout.png"
+    },
+    {
+      "url": "https://152.136.97.198/assets/wiki-petals/fragment-3-audit19.png",
+      "dest": "assets/wiki-petals/fragment-3-audit19.png"
+    },
+    {
+      "url": "https://152.136.97.198/assets/wiki-petals/audit16-moon-2.png",
+      "dest": "assets/wiki-petals/audit16-moon-2.png"
+    },
+    {
+      "url": "https://152.136.97.198/assets/wiki-petals/audit16-card-joker.png",
+      "dest": "assets/wiki-petals/audit16-card-joker.png"
+    },
+    {
+      "url": "https://152.136.97.198/assets/wiki-petals/audit16-card-heart.png",
+      "dest": "assets/wiki-petals/audit16-card-heart.png"
+    },
+    {
+      "url": "https://152.136.97.198/assets/account-apple.svg",
+      "dest": "assets/account-apple.svg"
+    },
+    {
+      "url": "https://152.136.97.198/assets/svg/bee.8c23aecb33e3.svg",
+      "dest": "assets/svg/bee.8c23aecb33e3.svg"
+    },
+    {
+      "url": "https://152.136.97.198/assets/wiki-petals/audit16-card-club.png",
+      "dest": "assets/wiki-petals/audit16-card-club.png"
+    },
+    {
+      "url": "https://152.136.97.198/assets/sprite-bee.webp",
+      "dest": "assets/sprite-bee.webp"
+    },
+    {
+      "url": "https://152.136.97.198/assets/bandage-cloth.74e721b6b9d2.png",
+      "dest": "assets/bandage-cloth.74e721b6b9d2.png"
+    },
+    {
+      "url": "https://152.136.97.198/assets/wiki-ladybug.webp",
+      "dest": "assets/wiki-ladybug.webp"
+    },
+    {
+      "url": "https://152.136.97.198/assets/svg/ladybug.b7b772ae8306.svg",
+      "dest": "assets/svg/ladybug.b7b772ae8306.svg"
+    },
+    {
+      "url": "https://152.136.97.198/assets/svg/spider.082c2bda214e.svg",
+      "dest": "assets/svg/spider.082c2bda214e.svg"
+    },
+    {
+      "url": "https://152.136.97.198/assets/wiki-spider.webp",
+      "dest": "assets/wiki-spider.webp"
+    },
+    {
+      "url": "https://152.136.97.198/assets/svg/worker-ant.6991cc61a4cc.svg",
+      "dest": "assets/svg/worker-ant.6991cc61a4cc.svg"
+    },
+    {
+      "url": "https://152.136.97.198/assets/wiki-worker-ant.webp",
+      "dest": "assets/wiki-worker-ant.webp"
+    },
+    {
+      "url": "https://152.136.97.198/assets/domino-body.8a1466b9566a.png",
+      "dest": "assets/domino-body.8a1466b9566a.png"
+    },
+    {
+      "url": "https://152.136.97.198/assets/svg/soldier-ant.fa17a6790dec.svg",
+      "dest": "assets/svg/soldier-ant.fa17a6790dec.svg"
+    },
+    {
+      "url": "https://152.136.97.198/assets/wiki-soldier-ant.webp",
+      "dest": "assets/wiki-soldier-ant.webp"
+    },
+    {
+      "url": "https://152.136.97.198/assets/svg/baby-ant.de7bd50baceb.svg",
+      "dest": "assets/svg/baby-ant.de7bd50baceb.svg"
+    },
+    {
+      "url": "https://152.136.97.198/assets/wiki-baby-ant.webp",
+      "dest": "assets/wiki-baby-ant.webp"
+    },
+    {
+      "url": "https://152.136.97.198/assets/svg/beetle.1b9c7d699291.svg",
+      "dest": "assets/svg/beetle.1b9c7d699291.svg"
+    },
+    {
+      "url": "https://152.136.97.198/assets/wiki-beetle.webp",
+      "dest": "assets/wiki-beetle.webp"
+    },
+    {
+      "url": "https://152.136.97.198/assets/svg/jellyfish.bca5ebb1b267.svg",
+      "dest": "assets/svg/jellyfish.bca5ebb1b267.svg"
+    },
+    {
+      "url": "https://152.136.97.198/assets/svg/scorpion.a31ae9d6eb04.svg",
+      "dest": "assets/svg/scorpion.a31ae9d6eb04.svg"
+    },
+    {
+      "url": "https://152.136.97.198/assets/svg/starfish.922638fa3ac4.svg",
+      "dest": "assets/svg/starfish.922638fa3ac4.svg"
+    },
+    {
+      "url": "https://152.136.97.198/assets/wiki-jellyfish.webp",
+      "dest": "assets/wiki-jellyfish.webp"
+    },
+    {
+      "url": "https://152.136.97.198/assets/wiki-scorpion.webp",
+      "dest": "assets/wiki-scorpion.webp"
+    },
+    {
+      "url": "https://152.136.97.198/assets/pharaoh-crown-wearable.0d18dccc3c5e.png",
+      "dest": "assets/pharaoh-crown-wearable.0d18dccc3c5e.png"
+    },
+    {
+      "url": "https://152.136.97.198/assets/svg/crab.6f43e2dd51a9.svg",
+      "dest": "assets/svg/crab.6f43e2dd51a9.svg"
+    },
+    {
+      "url": "https://152.136.97.198/assets/wiki-petals/audit16-card-diamond.png",
+      "dest": "assets/wiki-petals/audit16-card-diamond.png"
+    },
+    {
+      "url": "https://152.136.97.198/assets/wiki-petals/audit16-moon-1.png",
+      "dest": "assets/wiki-petals/audit16-moon-1.png"
+    },
+    {
+      "url": "https://152.136.97.198/assets/wiki-shell.webp",
+      "dest": "assets/wiki-shell.webp"
+    },
+    {
+      "url": "https://152.136.97.198/assets/svg/shell.3ad695497f6f.svg",
+      "dest": "assets/svg/shell.3ad695497f6f.svg"
+    },
+    {
+      "url": "https://152.136.97.198/assets/wiki-starfish.webp",
+      "dest": "assets/wiki-starfish.webp"
+    },
+    {
+      "url": "https://152.136.97.198/assets/svg/sandstorm.f02d0ccd4ca4.svg",
+      "dest": "assets/svg/sandstorm.f02d0ccd4ca4.svg"
+    },
+    {
+      "url": "https://152.136.97.198/assets/wiki-sandstorm.webp",
+      "dest": "assets/wiki-sandstorm.webp"
+    },
+    {
+      "url": "https://152.136.97.198/assets/svg/mob-rock.f4936bc12cd3.svg",
+      "dest": "assets/svg/mob-rock.f4936bc12cd3.svg"
+    },
+    {
+      "url": "https://152.136.97.198/assets/wiki-mob-rock.webp",
+      "dest": "assets/wiki-mob-rock.webp"
+    },
+    {
+      "url": "https://152.136.97.198/assets/wiki-crab.webp",
+      "dest": "assets/wiki-crab.webp"
+    },
+    {
+      "url": "https://152.136.97.198/assets/petal-audit-originals/dust.ca6853b8b985378d.png",
+      "dest": "assets/petal-audit-originals/dust.ca6853b8b985378d.png"
+    },
+    {
+      "url": "https://152.136.97.198/assets/petal-audit-originals/root.8f053c2a8cd3576a.png",
+      "dest": "assets/petal-audit-originals/root.8f053c2a8cd3576a.png"
+    },
+    {
+      "url": "https://152.136.97.198/assets/wiki-batch14/talisman-of-evasion-original.png",
+      "dest": "assets/wiki-batch14/talisman-of-evasion-original.png"
+    },
+    {
+      "url": "https://152.136.97.198/assets/petal-audit-originals/dead-leaf.a143f1202230709e.png",
+      "dest": "assets/petal-audit-originals/dead-leaf.a143f1202230709e.png"
+    },
+    {
+      "url": "https://152.136.97.198/assets/svg/mummy-beetle.41b9f4adc8ac.svg",
+      "dest": "assets/svg/mummy-beetle.41b9f4adc8ac.svg"
+    },
+    {
+      "url": "https://152.136.97.198/assets/svg/mummy-beetle.svg",
+      "dest": "assets/svg/mummy-beetle.svg"
+    },
+    {
+      "url": "https://152.136.97.198/assets/wiki-batch14/battery-original.png",
+      "dest": "assets/wiki-batch14/battery-original.png"
+    },
+    {
+      "url": "https://152.136.97.198/assets/svg/mob-cactus.034360f4e081.svg",
+      "dest": "assets/svg/mob-cactus.034360f4e081.svg"
+    },
+    {
+      "url": "https://152.136.97.198/assets/mob-sources/mob-cactus.svg",
+      "dest": "assets/mob-sources/mob-cactus.svg"
+    },
+    {
+      "url": "https://152.136.97.198/assets/mob-sources/mob-ant-hole.svg",
+      "dest": "assets/mob-sources/mob-ant-hole.svg"
+    },
+    {
+      "url": "https://152.136.97.198/assets/mob-sources/mob-queen-ant.svg",
+      "dest": "assets/mob-sources/mob-queen-ant.svg"
+    },
+    {
+      "url": "https://152.136.97.198/assets/wiki-batch14/dice-original.png",
+      "dest": "assets/wiki-batch14/dice-original.png"
+    },
+    {
+      "url": "https://152.136.97.198/assets/svg/mob-ant-hole.9901cce68db2.svg",
+      "dest": "assets/svg/mob-ant-hole.9901cce68db2.svg"
+    },
+    {
+      "url": "https://152.136.97.198/assets/mob-sources/mob-hornet.svg",
+      "dest": "assets/mob-sources/mob-hornet.svg"
+    },
+    {
+      "url": "https://152.136.97.198/assets/wiki-batch14/ankh-original.png",
+      "dest": "assets/wiki-batch14/ankh-original.png"
+    },
+    {
+      "url": "https://152.136.97.198/assets/svg/mob-queen-ant.2a0519a0fdd4.svg",
+      "dest": "assets/svg/mob-queen-ant.2a0519a0fdd4.svg"
+    },
+    {
+      "url": "https://152.136.97.198/assets/petal-audit-originals/sawblade.3f17b6890126ea1c.png",
+      "dest": "assets/petal-audit-originals/sawblade.3f17b6890126ea1c.png"
+    },
+    {
+      "url": "https://152.136.97.198/assets/svg/mob-hornet.d6f1a7ac6da5.svg",
+      "dest": "assets/svg/mob-hornet.d6f1a7ac6da5.svg"
+    },
+    {
+      "url": "https://152.136.97.198/assets/svg/mob-centipede.f32a5bfa9279.svg",
+      "dest": "assets/svg/mob-centipede.f32a5bfa9279.svg"
+    },
+    {
+      "url": "https://152.136.97.198/assets/mob-sources/mob-centipede.svg",
+      "dest": "assets/mob-sources/mob-centipede.svg"
+    },
+    {
+      "url": "https://152.136.97.198/assets/mob-sources/mob-jungle-ladybug.svg",
+      "dest": "assets/mob-sources/mob-jungle-ladybug.svg"
+    },
+    {
+      "url": "https://152.136.97.198/assets/mob-sources/mob-jungle-centipede.svg",
+      "dest": "assets/mob-sources/mob-jungle-centipede.svg"
+    },
+    {
+      "url": "https://152.136.97.198/assets/svg/mob-jungle-centipede.7e56fdadfb1f.svg",
+      "dest": "assets/svg/mob-jungle-centipede.7e56fdadfb1f.svg"
+    },
+    {
+      "url": "https://152.136.97.198/assets/svg/mob-desert-centipede.16f5edd084e3.svg",
+      "dest": "assets/svg/mob-desert-centipede.16f5edd084e3.svg"
+    },
+    {
+      "url": "https://152.136.97.198/assets/mob-sources/mob-desert-centipede.svg",
+      "dest": "assets/mob-sources/mob-desert-centipede.svg"
+    },
+    {
+      "url": "https://152.136.97.198/assets/mob-sources/mob-desert-ladybug.svg",
+      "dest": "assets/mob-sources/mob-desert-ladybug.svg"
+    },
+    {
+      "url": "https://152.136.97.198/assets/svg/mob-jungle-ladybug.4d3b0fe6891f.svg",
+      "dest": "assets/svg/mob-jungle-ladybug.4d3b0fe6891f.svg"
+    },
+    {
+      "url": "https://152.136.97.198/assets/mob-sources/mob-fire-ant-burrow.svg",
+      "dest": "assets/mob-sources/mob-fire-ant-burrow.svg"
+    },
+    {
+      "url": "https://152.136.97.198/assets/svg/mob-fire-ant-burrow.bd3549724c7f.svg",
+      "dest": "assets/svg/mob-fire-ant-burrow.bd3549724c7f.svg"
+    },
+    {
+      "url": "https://152.136.97.198/assets/mob-sources/mob-bubble.svg",
+      "dest": "assets/mob-sources/mob-bubble.svg"
+    },
+    {
+      "url": "https://152.136.97.198/assets/svg/mob-desert-ladybug.30fe9c560e68.svg",
+      "dest": "assets/svg/mob-desert-ladybug.30fe9c560e68.svg"
+    },
+    {
+      "url": "https://152.136.97.198/assets/mob-sources/mob-soldier-fire-ant.svg",
+      "dest": "assets/mob-sources/mob-soldier-fire-ant.svg"
+    },
+    {
+      "url": "https://152.136.97.198/assets/svg/mob-soldier-fire-ant.867a52652293.svg",
+      "dest": "assets/svg/mob-soldier-fire-ant.867a52652293.svg"
+    },
+    {
+      "url": "https://152.136.97.198/assets/svg/mob-bubble.028380600dc1.svg",
+      "dest": "assets/svg/mob-bubble.028380600dc1.svg"
+    },
+    {
+      "url": "https://152.136.97.198/assets/mob-sources/mob-bumble-bee.svg",
+      "dest": "assets/mob-sources/mob-bumble-bee.svg"
+    },
+    {
+      "url": "https://152.136.97.198/assets/svg/mob-bumble-bee.89be53e4d7b6.svg",
+      "dest": "assets/svg/mob-bumble-bee.89be53e4d7b6.svg"
+    },
+    {
+      "url": "https://152.136.97.198/assets/mob-sources/mob-digger.svg",
+      "dest": "assets/mob-sources/mob-digger.svg"
+    },
+    {
+      "url": "https://152.136.97.198/assets/svg/mob-digger.330d564e50b3.svg",
+      "dest": "assets/svg/mob-digger.330d564e50b3.svg"
+    },
+    {
+      "url": "https://152.136.97.198/assets/mob-sources/mob-leech.svg",
+      "dest": "assets/mob-sources/mob-leech.svg"
+    },
+    {
+      "url": "https://152.136.97.198/assets/svg/mob-leech.94468dab7e78.svg",
+      "dest": "assets/svg/mob-leech.94468dab7e78.svg"
+    },
+    {
+      "url": "https://152.136.97.198/assets/mob-sources/mob-baby-fire-ant.svg",
+      "dest": "assets/mob-sources/mob-baby-fire-ant.svg"
+    },
+    {
+      "url": "https://152.136.97.198/assets/svg/mob-baby-fire-ant.cf925bbd68c5.svg",
+      "dest": "assets/svg/mob-baby-fire-ant.cf925bbd68c5.svg"
+    },
+    {
+      "url": "https://152.136.97.198/assets/mob-sources/mob-worker-fire-ant.svg",
+      "dest": "assets/mob-sources/mob-worker-fire-ant.svg"
+    },
+    {
+      "url": "https://152.136.97.198/assets/mob-sources/mob-queen-fire-ant.svg",
+      "dest": "assets/mob-sources/mob-queen-fire-ant.svg"
+    },
+    {
+      "url": "https://152.136.97.198/assets/svg/mob-worker-fire-ant.122511b04bc3.svg",
+      "dest": "assets/svg/mob-worker-fire-ant.122511b04bc3.svg"
+    },
+    {
+      "url": "https://152.136.97.198/assets/svg/mob-sponge.7d47d6103e38.svg",
+      "dest": "assets/svg/mob-sponge.7d47d6103e38.svg"
+    },
+    {
+      "url": "https://152.136.97.198/assets/svg/mob-dandelion.6e962cf14c56.svg",
+      "dest": "assets/svg/mob-dandelion.6e962cf14c56.svg"
+    },
+    {
+      "url": "https://152.136.97.198/assets/mob-sources/mob-ant-egg.svg",
+      "dest": "assets/mob-sources/mob-ant-egg.svg"
+    },
+    {
+      "url": "https://152.136.97.198/assets/svg/mob-queen-fire-ant.89fe321c8b14.svg",
+      "dest": "assets/svg/mob-queen-fire-ant.89fe321c8b14.svg"
+    },
+    {
+      "url": "https://152.136.97.198/assets/svg/mob-ant-egg.ae380244d413.svg",
+      "dest": "assets/svg/mob-ant-egg.ae380244d413.svg"
+    },
+    {
+      "url": "https://152.136.97.198/assets/mob-sources/mob-dandelion.svg",
+      "dest": "assets/mob-sources/mob-dandelion.svg"
+    },
+    {
+      "url": "https://152.136.97.198/assets/mob-sources/mob-fire-ant-egg.svg",
+      "dest": "assets/mob-sources/mob-fire-ant-egg.svg"
+    },
+    {
+      "url": "https://152.136.97.198/assets/svg/mob-fire-ant-egg.8cc4ac5eef51.svg",
+      "dest": "assets/svg/mob-fire-ant-egg.8cc4ac5eef51.svg"
+    },
+    {
+      "url": "https://152.136.97.198/assets/svg/mob-fly.574864b20df5.svg",
+      "dest": "assets/svg/mob-fly.574864b20df5.svg"
+    },
+    {
+      "url": "https://152.136.97.198/assets/mob-sources/mob-fly.svg",
+      "dest": "assets/mob-sources/mob-fly.svg"
+    },
+    {
+      "url": "https://152.136.97.198/assets/mob-sources/mob-leafbug.svg",
+      "dest": "assets/mob-sources/mob-leafbug.svg"
+    },
+    {
+      "url": "https://152.136.97.198/assets/svg/mob-leafbug.ed15c81ad534.svg",
+      "dest": "assets/svg/mob-leafbug.ed15c81ad534.svg"
+    },
+    {
+      "url": "https://152.136.97.198/assets/mob-sources/mob-mantis.svg",
+      "dest": "assets/mob-sources/mob-mantis.svg"
+    },
+    {
+      "url": "https://152.136.97.198/assets/mob-sources/mob-baby-termite.svg",
+      "dest": "assets/mob-sources/mob-baby-termite.svg"
+    },
+    {
+      "url": "https://152.136.97.198/assets/svg/mob-mantis.a611311d456f.svg",
+      "dest": "assets/svg/mob-mantis.a611311d456f.svg"
+    },
+    {
+      "url": "https://152.136.97.198/assets/svg/mob-baby-termite.bf8cb1926744.svg",
+      "dest": "assets/svg/mob-baby-termite.bf8cb1926744.svg"
+    },
+    {
+      "url": "https://152.136.97.198/assets/mob-sources/mob-worker-termite.svg",
+      "dest": "assets/mob-sources/mob-worker-termite.svg"
+    },
+    {
+      "url": "https://152.136.97.198/assets/svg/mob-worker-termite.9511e7074bae.svg",
+      "dest": "assets/svg/mob-worker-termite.9511e7074bae.svg"
+    },
+    {
+      "url": "https://152.136.97.198/assets/mob-sources/mob-soldier-termite.svg",
+      "dest": "assets/mob-sources/mob-soldier-termite.svg"
+    },
+    {
+      "url": "https://152.136.97.198/assets/svg/mob-soldier-termite.30d7a69017c6.svg",
+      "dest": "assets/svg/mob-soldier-termite.30d7a69017c6.svg"
+    },
+    {
+      "url": "https://152.136.97.198/assets/mob-sources/mob-termite-overmind.svg",
+      "dest": "assets/mob-sources/mob-termite-overmind.svg"
+    },
+    {
+      "url": "https://152.136.97.198/assets/mob-sources/mob-termite-mound.svg",
+      "dest": "assets/mob-sources/mob-termite-mound.svg"
+    },
+    {
+      "url": "https://152.136.97.198/assets/svg/mob-termite-overmind.26eb06f2b653.svg",
+      "dest": "assets/svg/mob-termite-overmind.26eb06f2b653.svg"
+    },
+    {
+      "url": "https://152.136.97.198/assets/svg/mob-termite-mound.e6e1d60a754c.svg",
+      "dest": "assets/svg/mob-termite-mound.e6e1d60a754c.svg"
+    },
+    {
+      "url": "https://152.136.97.198/assets/svg/mob-termite-egg.e182b8a43ba8.svg",
+      "dest": "assets/svg/mob-termite-egg.e182b8a43ba8.svg"
+    },
+    {
+      "url": "https://152.136.97.198/assets/mob-sources/mob-sponge.svg",
+      "dest": "assets/mob-sources/mob-sponge.svg"
+    },
+    {
+      "url": "https://152.136.97.198/assets/mob-sources/mob-termite-egg.svg",
+      "dest": "assets/mob-sources/mob-termite-egg.svg"
+    },
+    {
+      "url": "https://152.136.97.198/assets/mob-sources/mob-bush.svg",
+      "dest": "assets/mob-sources/mob-bush.svg"
+    },
+    {
+      "url": "https://152.136.97.198/assets/svg/mob-bush.5b3462e222b6.svg",
+      "dest": "assets/svg/mob-bush.5b3462e222b6.svg"
+    },
+    {
+      "url": "https://152.136.97.198/assets/mob-sources/mob-roach.svg",
+      "dest": "assets/mob-sources/mob-roach.svg"
+    },
+    {
+      "url": "https://152.136.97.198/assets/svg/mob-moth.e0aca44acd3e.svg",
+      "dest": "assets/svg/mob-moth.e0aca44acd3e.svg"
+    },
+    {
+      "url": "https://152.136.97.198/assets/mob-sources/mob-firefly.svg",
+      "dest": "assets/mob-sources/mob-firefly.svg"
+    },
+    {
+      "url": "https://152.136.97.198/assets/svg/mob-roach.0944e7ed6949.svg",
+      "dest": "assets/svg/mob-roach.0944e7ed6949.svg"
+    },
+    {
+      "url": "https://152.136.97.198/assets/mob-sources/mob-hel-beetle.svg",
+      "dest": "assets/mob-sources/mob-hel-beetle.svg"
+    },
+    {
+      "url": "https://152.136.97.198/assets/svg/mob-firefly.c7291ddf8796.svg",
+      "dest": "assets/svg/mob-firefly.c7291ddf8796.svg"
+    },
+    {
+      "url": "https://152.136.97.198/assets/svg/mob-hel-beetle.f324cf08c7bd.svg",
+      "dest": "assets/svg/mob-hel-beetle.f324cf08c7bd.svg"
+    },
+    {
+      "url": "https://152.136.97.198/assets/mob-sources/mob-wasp.svg",
+      "dest": "assets/mob-sources/mob-wasp.svg"
+    },
+    {
+      "url": "https://152.136.97.198/assets/svg/mob-wasp.daa384d4a4df.svg",
+      "dest": "assets/svg/mob-wasp.daa384d4a4df.svg"
+    },
+    {
+      "url": "https://152.136.97.198/assets/wiki-batch14/amulet-original.png",
+      "dest": "assets/wiki-batch14/amulet-original.png"
+    },
+    {
+      "url": "https://152.136.97.198/assets/mob-sources/mob-moth.svg",
+      "dest": "assets/mob-sources/mob-moth.svg"
+    },
+    {
+      "url": "https://152.136.97.198/assets/svg/mob-hel-spider.602ed8bb893e.svg",
+      "dest": "assets/svg/mob-hel-spider.602ed8bb893e.svg"
+    },
+    {
+      "url": "https://152.136.97.198/assets/mob-sources/mob-hel-spider.svg",
+      "dest": "assets/mob-sources/mob-hel-spider.svg"
+    },
+    {
+      "url": "https://152.136.97.198/assets/mob-sources/mob-hel-centipede.svg",
+      "dest": "assets/mob-sources/mob-hel-centipede.svg"
+    },
+    {
+      "url": "https://152.136.97.198/assets/svg/mob-hel-centipede.c55c12158ec1.svg",
+      "dest": "assets/svg/mob-hel-centipede.c55c12158ec1.svg"
+    },
+    {
+      "url": "https://152.136.97.198/assets/mob-sources/mob-nazar-beetle.svg",
+      "dest": "assets/mob-sources/mob-nazar-beetle.svg"
+    },
+    {
+      "url": "https://152.136.97.198/assets/mob-sources/mob-hel-wasp.svg",
+      "dest": "assets/mob-sources/mob-hel-wasp.svg"
+    },
+    {
+      "url": "https://152.136.97.198/assets/mob-sources/mob-magic-firefly.svg",
+      "dest": "assets/mob-sources/mob-magic-firefly.svg"
+    },
+    {
+      "url": "https://152.136.97.198/assets/svg/mob-magic-firefly.480178f63a46.svg",
+      "dest": "assets/svg/mob-magic-firefly.480178f63a46.svg"
+    },
+    {
+      "url": "https://152.136.97.198/assets/svg/mob-nazar-beetle.5e43e6d3248d.svg",
+      "dest": "assets/svg/mob-nazar-beetle.5e43e6d3248d.svg"
+    },
+    {
+      "url": "https://152.136.97.198/assets/mob-sources/mob-worm.svg",
+      "dest": "assets/mob-sources/mob-worm.svg"
+    },
+    {
+      "url": "https://152.136.97.198/assets/svg/mob-worm.468b862691b3.svg",
+      "dest": "assets/svg/mob-worm.468b862691b3.svg"
+    },
+    {
+      "url": "https://152.136.97.198/assets/mob-sources/mob-mecha-wasp.svg",
+      "dest": "assets/mob-sources/mob-mecha-wasp.svg"
+    },
+    {
+      "url": "https://152.136.97.198/assets/svg/mob-hel-wasp.a65491b1e6c1.svg",
+      "dest": "assets/svg/mob-hel-wasp.a65491b1e6c1.svg"
+    },
+    {
+      "url": "https://152.136.97.198/assets/svg/mob-gambler.9a4b28bce2c6.svg",
+      "dest": "assets/svg/mob-gambler.9a4b28bce2c6.svg"
+    },
+    {
+      "url": "https://152.136.97.198/assets/mob-sources/mob-golden-leafbug.svg",
+      "dest": "assets/mob-sources/mob-golden-leafbug.svg"
+    },
+    {
+      "url": "https://152.136.97.198/assets/svg/mob-mecha-flower.927934c90548.svg",
+      "dest": "assets/svg/mob-mecha-flower.927934c90548.svg"
+    },
+    {
+      "url": "https://152.136.97.198/assets/mob-sources/mob-mecha-spider.svg",
+      "dest": "assets/mob-sources/mob-mecha-spider.svg"
+    },
+    {
+      "url": "https://152.136.97.198/assets/svg/mob-golden-leafbug.7f4a97d7f64b.svg",
+      "dest": "assets/svg/mob-golden-leafbug.7f4a97d7f64b.svg"
+    },
+    {
+      "url": "https://152.136.97.198/assets/mob-sources/mob-mecha-crab.svg",
+      "dest": "assets/mob-sources/mob-mecha-crab.svg"
+    },
+    {
+      "url": "https://152.136.97.198/assets/svg/mob-barrel.a2f625f3108f.svg",
+      "dest": "assets/svg/mob-barrel.a2f625f3108f.svg"
+    },
+    {
+      "url": "https://152.136.97.198/assets/svg/mob-mecha-crab.ba93178069d4.svg",
+      "dest": "assets/svg/mob-mecha-crab.ba93178069d4.svg"
+    },
+    {
+      "url": "https://152.136.97.198/assets/mob-sources/mob-barrel.svg",
+      "dest": "assets/mob-sources/mob-barrel.svg"
+    },
+    {
+      "url": "https://152.136.97.198/assets/mob-sources/mob-gambler.svg",
+      "dest": "assets/mob-sources/mob-gambler.svg"
+    },
+    {
+      "url": "https://152.136.97.198/assets/svg/mob-mecha-wasp.09f4a41908ac.svg",
+      "dest": "assets/svg/mob-mecha-wasp.09f4a41908ac.svg"
+    },
+    {
+      "url": "https://152.136.97.198/assets/wiki-petals/soul-splitter-3-card-audit23.png",
+      "dest": "assets/wiki-petals/soul-splitter-3-card-audit23.png"
+    },
+    {
+      "url": "https://152.136.97.198/assets/mob-sources/mob-mecha-flower.svg",
+      "dest": "assets/mob-sources/mob-mecha-flower.svg"
+    },
+    {
+      "url": "https://152.136.97.198/assets/mob-sources/mob-tomb.svg",
+      "dest": "assets/mob-sources/mob-tomb.svg"
+    },
+    {
+      "url": "https://152.136.97.198/assets/mob-sources/mob-pharaoh-beetle.svg",
+      "dest": "assets/mob-sources/mob-pharaoh-beetle.svg"
+    },
+    {
+      "url": "https://152.136.97.198/assets/mob-sources/mob-garbage.svg",
+      "dest": "assets/mob-sources/mob-garbage.svg"
+    },
+    {
+      "url": "https://152.136.97.198/assets/svg/mob-garbage.7eb44698dac1.svg",
+      "dest": "assets/svg/mob-garbage.7eb44698dac1.svg"
+    },
+    {
+      "url": "https://152.136.97.198/assets/mob-sources/mob-silverfish.svg",
+      "dest": "assets/mob-sources/mob-silverfish.svg"
+    },
+    {
+      "url": "https://152.136.97.198/assets/svg/mob-silverfish.3e5b887942d3.svg",
+      "dest": "assets/svg/mob-silverfish.3e5b887942d3.svg"
+    },
+    {
+      "url": "https://152.136.97.198/assets/svg/mob-tomb.0a91ef661595.svg",
+      "dest": "assets/svg/mob-tomb.0a91ef661595.svg"
+    },
+    {
+      "url": "https://152.136.97.198/assets/mob-sources/mob-soldier-diver-ant.svg",
+      "dest": "assets/mob-sources/mob-soldier-diver-ant.svg"
+    },
+    {
+      "url": "https://152.136.97.198/assets/svg/mob-mecha-spider.1026f2a0249d.svg",
+      "dest": "assets/svg/mob-mecha-spider.1026f2a0249d.svg"
+    },
+    {
+      "url": "https://152.136.97.198/assets/svg/mob-soldier-diver-ant.acf612e65789.svg",
+      "dest": "assets/svg/mob-soldier-diver-ant.acf612e65789.svg"
+    },
+    {
+      "url": "https://152.136.97.198/assets/mob-sources/mob-centipede-segment.svg",
+      "dest": "assets/mob-sources/mob-centipede-segment.svg"
+    },
+    {
+      "url": "https://152.136.97.198/assets/svg/mob-centipede-segment.390c2d226259.svg",
+      "dest": "assets/svg/mob-centipede-segment.390c2d226259.svg"
+    },
+    {
+      "url": "https://152.136.97.198/assets/mob-sources/mob-jungle-centipede-segment.svg",
+      "dest": "assets/mob-sources/mob-jungle-centipede-segment.svg"
+    },
+    {
+      "url": "https://152.136.97.198/assets/svg/mob-pharaoh-beetle.46c36764de54.svg",
+      "dest": "assets/svg/mob-pharaoh-beetle.46c36764de54.svg"
+    },
+    {
+      "url": "https://152.136.97.198/assets/mob-sources/mob-ghost.svg",
+      "dest": "assets/mob-sources/mob-ghost.svg"
+    },
+    {
+      "url": "https://152.136.97.198/assets/svg/mob-jungle-centipede-segment.55e5ca553370.svg",
+      "dest": "assets/svg/mob-jungle-centipede-segment.55e5ca553370.svg"
+    },
+    {
+      "url": "https://152.136.97.198/assets/mob-sources/mob-desert-centipede-segment.svg",
+      "dest": "assets/mob-sources/mob-desert-centipede-segment.svg"
+    },
+    {
+      "url": "https://152.136.97.198/assets/svg/mob-desert-centipede-segment.a201c7796037.svg",
+      "dest": "assets/svg/mob-desert-centipede-segment.a201c7796037.svg"
+    },
+    {
+      "url": "https://152.136.97.198/assets/mob-sources/mob-hel-centipede-segment.svg",
+      "dest": "assets/mob-sources/mob-hel-centipede-segment.svg"
+    },
+    {
+      "url": "https://152.136.97.198/assets/svg/mob-hel-centipede-segment.0e5013723fb4.svg",
+      "dest": "assets/svg/mob-hel-centipede-segment.0e5013723fb4.svg"
+    },
+    {
+      "url": "https://152.136.97.198/assets/svg/audit16-corrupted-digger.svg",
+      "dest": "assets/svg/audit16-corrupted-digger.svg"
+    },
+    {
+      "url": "https://152.136.97.198/assets/svg/mob-ghost.652ea943febf.svg",
+      "dest": "assets/svg/mob-ghost.652ea943febf.svg"
+    },
+    {
+      "url": "https://152.136.97.198/assets/talents/antennae.svg",
+      "dest": "assets/talents/antennae.svg"
+    },
+    {
+      "url": "https://152.136.97.198/assets/talents/luck.svg",
+      "dest": "assets/talents/luck.svg"
+    },
+    {
+      "url": "https://152.136.97.198/assets/talents/petalHealth.svg",
+      "dest": "assets/talents/petalHealth.svg"
+    },
+    {
+      "url": "https://152.136.97.198/assets/talents/poison.svg",
+      "dest": "assets/talents/poison.svg"
+    },
+    {
+      "url": "https://152.136.97.198/assets/talents/reach.svg",
+      "dest": "assets/talents/reach.svg"
+    },
+    {
+      "url": "https://152.136.97.198/assets/talents/sharpEdges.svg",
+      "dest": "assets/talents/sharpEdges.svg"
+    },
+    {
+      "url": "https://152.136.97.198/assets/talents/magnetism.svg",
+      "dest": "assets/talents/magnetism.svg"
+    },
+    {
+      "url": "https://152.136.97.198/assets/talents/duplicator.svg",
+      "dest": "assets/talents/duplicator.svg"
+    },
+    {
+      "url": "https://152.136.97.198/assets/talents/bodyToxicity.svg",
+      "dest": "assets/talents/bodyToxicity.svg"
+    },
+    {
+      "url": "https://152.136.97.198/assets/talents/concentratedPoison.svg",
+      "dest": "assets/talents/concentratedPoison.svg"
+    },
+    {
+      "url": "https://152.136.97.198/assets/talents/loadout.svg",
+      "dest": "assets/talents/loadout.svg"
+    }
+  ]
+}

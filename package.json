@@ -1,0 +1,21 @@
+{
+  "name": "clone",
+  "version": "1.0.0",
+  "description": "Local authoritative protocol 3 server for the captured viep client",
+  "main": "index.js",
+  "scripts": {
+    "start": "node server/server.js",
+    "build": "node scripts/build-server.js",
+    "test": "node --test test/*.test.js",
+    "test:browser": "node test/browser-smoke.js",
+    "test:combat": "node test/combat-browser.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "dependencies": {
+    "playwright": "^1.64.1",
+    "ws": "^8.22.1"
+  }
+}
