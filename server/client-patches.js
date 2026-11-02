@@ -7,6 +7,20 @@ function patchClient(source){
     if(source.split(before).length!==2)throw Error('Client playback patch no longer matches the pinned capture');
     source=source.replace(before,after);
   }
+  // A failed first request must not poison the shared image/manifest cache.
+  // Keep the original component promise pending through bounded retries so
+  // memoized card canvases repaint when their own image finally arrives.
+  replaceOnce('async function gn(e=[]){','async function gn(e=[]){for(let attempt=0;;attempt++){try{return await ashLoadSpriteBatch(e)}catch(error){if(attempt>=3)throw error;await new Promise(resolve=>setTimeout(resolve,300*2**attempt))}}}async function ashLoadSpriteBatch(e=[]){');
+  replaceOnce('Object.assign(sn,await e.json())})()),await Promise.all(e.map',
+    'Object.assign(sn,await e.json())})().catch(error=>{pn=void 0;throw error})),await Promise.all(e.map');
+  replaceOnce('hn.set(t,r)),r}))}',
+    'hn.set(t,r),r.catch(()=>{if(hn.get(t)===r)hn.delete(t)})),r}))}');
+  replaceOnce('this.width=e.map.width,this.height=e.map.height;let u={...this.face};',
+    'this.specialEntities=e.specialEntities??[];this.width=e.map.width,this.height=e.map.height;let u={...this.face};');
+  replaceOnce('for(let e of n.mobs){if(e.hp<=0)continue;if(e.type===`Firefly`',
+    'ashDrawNpcs(t,n);for(let e of n.mobs){if(e.hp<=0)continue;if(e.type===`Firefly`');
+  replaceOnce('await Promise.all([gn(),h().then(()=>{e||b.render(0)})])',
+    'await Promise.all([gn([`Flower`,...c.save.loadout.concat(c.save.reserve).filter(Boolean).map(item=>co(item.type,item.rarity))]),h().then(()=>{e||b.render(0)})])');
   replaceOnce('className:`guild-squad`,disabled:h,onClick:()=>void _(()=>Xc(e.id)),children:`Squad`',
     'className:`guild-squad`,disabled:h,onClick:()=>void _(()=>Xc(e.id)),children:`Invite to squad`');
   replaceOnce('(0,b.jsx)(`h3`,{className:`guild-title`,children:r.guild.name})',
@@ -292,6 +306,6 @@ function patchClient(source){
   replaceOnce('Rj(e.petal.type)','(Rj(e.petal.type)||[`coral-piece-1a`,`coral-piece-1b`,`coral-piece-2`].includes(e.petal.type))');
   replaceOnce('e.petalBreaks.every(e=>Aj(e)&&Uj(e)&&Rj(e.type)',
     'e.petalBreaks.every(e=>Aj(e)&&Uj(e)&&(Rj(e.type)||[`coral-piece-1a`,`coral-piece-1b`,`coral-piece-2`].includes(e.type))');
-  return source+'\n'+['wire.js','client-terrain.js','client-motion.js','client-builds.js','client-qq.js','client-ux.js','client-mobile.js','client-display.js'].map(file=>fs.readFileSync(path.join(__dirname,file),'utf8')).join('\n')+'\n'+fs.readFileSync(path.join(__dirname,'client-touch-guard.js'),'utf8')+'\n'+fs.readFileSync(path.join(__dirname,'client-lobby.js'),'utf8');
+  return source+'\n'+['wire.js','client-terrain.js','client-motion.js','client-builds.js','client-qq.js','client-ux.js','client-mobile.js','client-display.js','client-npcs.js'].map(file=>fs.readFileSync(path.join(__dirname,file),'utf8')).join('\n')+'\n'+fs.readFileSync(path.join(__dirname,'client-touch-guard.js'),'utf8')+'\n'+fs.readFileSync(path.join(__dirname,'client-lobby.js'),'utf8');
 }
 module.exports={patchClient};

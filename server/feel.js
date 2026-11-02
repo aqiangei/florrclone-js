@@ -10,6 +10,17 @@ function patchFeel(source){
     if(source.split(before).length!==2)throw Error('Movement/reload/drop tuning boundary changed');
     source=source.replace(before,after);
   }
+  // Server policy: the captured Super scheduler used 900 seconds and one
+  // spawn per cycle. A cycle now opens after 180 seconds and issues four
+  // ordinary spawn groups, preserving each region's placement/ownership.
+  const superInitial='rareReady:{super:e+900,';
+  const superAdvance='t>=7&&(n.super=Math.max(n.super,e.time+900))';
+  if(source.split(superInitial).length!==2||source.split(superAdvance).length!==2)throw Error('Super scheduler boundary changed');
+  source=source.replace(superInitial,'rareReady:{super:e+180,');
+  source=source.replace(superAdvance,'t>=7&&((e.superSpawnRemaining=(e.superSpawnRemaining??4)-1)>0?n.super=Math.min(n.super,e.time):(e.superSpawnRemaining=4,n.super=Math.max(n.super,e.time+180)))');
+  const highestPassive='[`Root`,`Disc`,`Shovel`,`Magic Eye`';
+  if(source.split(highestPassive).length!==2)throw Error('Powder passive selection boundary changed');
+  source=source.replace(highestPassive,'[`Mysterious Powder`,`Root`,`Disc`,`Shovel`,`Magic Eye`');
   // Every multiplier means another complete, independent loot-table roll.
   // XP, kill counts and kill effects still run once in grantKill().
   const copies="let i=this.save.shop,a=t!==`Pharaoh's Crown`&&i&&(i.bonusUntil??0)>Date.now()&&e.rarity<7?(i.bonusCount??0)%7==0?3:2:1;for(let e=1;e<a;e++){let t={...r,id:this.nextWorldId?this.nextWorldId():this.id++,x:r.x+e*12};this.drops.push(t),this.onDropCreated?.(t)}";

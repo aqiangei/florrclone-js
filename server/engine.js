@@ -200,7 +200,7 @@ function loadEngine(webRoot) {
   code += ';'+source.slice(craftStart,source.indexOf('\n',craftStart));
   const contactStart=source.indexOf('var viepBodyContact=');
   code += ';'+source.slice(contactStart,source.indexOf('\n',contactStart));
-  code += ';globalThis.api={Engine:lj,defaults:ij,normalize:aj,petals:et,rarityCount:L.length,mobs:B,maps:Et,constants:V,craft:Mt,canCraft:viepCanCraft,slots:Ct,resolvePlayerContacts:viepBodyContact.resolvePlayerContacts,BatchDecoder:fM,commands:serverCommands,session:kj,validate:rM,validateVisual:eM,snapshotSchema,findPortal:eS,portalExit:tS,portals:$x,mapSize:zx,enterMound:vA,exitMound:yA};';
+  code += ';globalThis.api={Engine:lj,defaults:ij,normalize:aj,petals:et,rarityCount:L.length,mobs:B,spawnRegions:go,maps:Et,constants:V,craft:Mt,canCraft:viepCanCraft,slots:Ct,resolvePlayerContacts:viepBodyContact.resolvePlayerContacts,BatchDecoder:fM,commands:serverCommands,session:kj,validate:rM,validateVisual:eM,snapshotSchema,findPortal:eS,portalExit:tS,portals:$x,mapSize:zx,enterMound:vA,exitMound:yA};';
   // UI declarations occur before the engine in this compiled module. Imports
   // are inert here; no browser, network, or rendering API is supplied.
   const inert = new Proxy(function () { return inert; }, { get: () => inert });

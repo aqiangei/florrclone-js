@@ -85,6 +85,7 @@ class World {
     this.time+=dt;
     const transfers=[];
     for(const room of this.rooms.values()){
+      this.npcs?.tick(room,dt);
       room.snapshotGeneration=(room.snapshotGeneration??0)+1;
       room.deaths=room.deaths.filter(d=>this.time-d.born<.5).slice(-96);
       const active=[...room.clients].filter(c=>c.engine.state==='playing');

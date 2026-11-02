@@ -2,6 +2,18 @@
 const {test}=require('node:test'),assert=require('node:assert/strict'),fs=require('node:fs'),path=require('node:path');
 const {loadEngine,BUNDLE}=require('../server/engine'),{patchClient}=require('../server/client-patches'),{snapshot}=require('../server/snapshot'),{World}=require('../server/world');
 const root=path.join(__dirname,'../florr-local-site'),api=loadEngine(root);
+
+test('Super cycles open in 180 seconds and schedule four spawns without resizing mobs',()=>{
+  const e=new api.Engine(api.defaults(),()=>.5,false);e.seedMobs();
+  assert.equal(e.referenceSpawnState.rareReady.super-e.referenceSpawnState.time,180);
+  e.mobs=[];e.referenceSpawnState.regions.clear();e.referenceSpawnState.time=180;
+  e.populateReferenceRegions();
+  const supers=e.mobs.filter(m=>m.rarity===7);assert.equal(supers.length,4);
+  assert.equal(e.referenceSpawnState.rareReady.super,360);
+  const sample=supers[0],other=new api.Engine(api.defaults(),()=>.5,false);other.addMob(sample.type,1000,1000,7);
+  assert.equal(sample.radius,other.mobs[0].radius);
+  e.populateReferenceRegions();assert.equal(e.mobs.filter(m=>m.rarity===7).length,4);
+});
 test('server and client use 1125 speed, 20Hz contact hits, and the same real cooldown multiplier',()=>{
   const source=patchClient(fs.readFileSync(path.join(root,BUNDLE),'utf8'));
   assert.ok(source.includes('V={speed:1125,attackRadius:104'));assert.ok(source.includes('contactInterval:1/20'));assert.ok(!source.includes('contactInterval:1/10'));assert.ok(source.includes('this.reloadMult=yt(c,this.save.talents)*.5,this.shortcutSuppressed'));

@@ -15,10 +15,12 @@ const {TICK_HZ,SNAPSHOT_HZ}=require('./config');
 const {FixedStepper}=require('./scheduler');
 const Wire=require('./wire');
 const {captureRun,restoreRun}=require('./active-run');
+const {Npcs}=require('./npcs');
 function createServer(options={}){
   const webRoot=path.resolve(options.webRoot??path.join(__dirname,'../florr-local-site'));
   const dbPath=path.resolve(options.dbPath??path.join(__dirname,'../data/inventory.json'));
   const api=loadEngine(webRoot), world=new World(api), clients=new Map();
+  const npcs=new Npcs(world);
   const clientCode=Buffer.from(patchClient(fs.readFileSync(path.join(webRoot,BUNDLE),'utf8')));
   let db={version:1,sessions:{}};
   if(fs.existsSync(dbPath))db=JSON.parse(fs.readFileSync(dbPath,'utf8'));
@@ -83,6 +85,16 @@ function createServer(options={}){
         if(req.headers.origin&&new URL(req.headers.origin).host!==req.headers.host)return json(res,403,{error:'Invalid origin'});
         if(action)limitAuth(req);
         const result=await social.request(account,action,action?await readBody(req):{});if(action)await persist();return json(res,200,result);
+      }
+      if(pathname==='/api/npc'){
+        const account=accounts.accountFor(tokenOf(req)),c=account&&clients.get(account.id);
+        if(!c)return json(res,401,{error:'Sign in and enter the world first.'});
+        if(req.method==='GET')return json(res,200,npcs.view(c));
+        if(req.method!=='POST')return json(res,405,{error:'Method not allowed'});
+        if(req.headers.origin&&new URL(req.headers.origin).host!==req.headers.host)return json(res,403,{error:'Invalid origin'});
+        const now=Date.now();if(!c.npcControlWindow||now-c.npcControlWindow.at>=1000)c.npcControlWindow={at:now,count:0};
+        if(++c.npcControlWindow.count>10)return json(res,429,{error:'Please wait before exchanging again.'});
+        try{const result=npcs.interact(c,await readBody(req));await persist();return json(res,200,result);}catch(error){return json(res,400,{error:error.message});}
       }
       if(pathname.startsWith('/api/'))return json(res,404,{error:'This local server currently uses browser guest sessions.'});
       if(!['GET','HEAD'].includes(req.method))return json(res,405,{error:'Method not allowed'});

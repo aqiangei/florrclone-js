@@ -52,6 +52,7 @@ function snapshot(client, room, api, hz=TICK_HZ, sharedCache=false) {
   const visuals=visualRecords.filter(event=>api.validateVisual(event));
   client.invalidVisuals=(client.invalidVisuals??0)+visualRecords.length-visuals.length;
   return {type:'snapshot',protocol:3,gameMode:'adventure',self,
+    specialEntities:api.specialEntities?.(client)??[],
     ...(e.localVisuals?{visuals,visualAck:e.visualEvents.sequence}:{}),
     motion:{x:e.x,y:e.y,vx:e.moveVX,vy:e.moveVY,speed:api.constants.speed*e.speedMult*(1+e.speedBonus),rotation:e.currentRotationSpeed,pushX:e.pushX,pushY:e.pushY},
     inputAck:client.inputAck,time:e.time,rates:{hz,snapshotHz:SNAPSHOT_HZ},save:e.save,
