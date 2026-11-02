@@ -21,7 +21,7 @@ test('portal cooldown blocks bounce, then the Ant Hell exit returns to Garden',(
   const world=new World(api),c=add(world,'round-trip');atDoor(c,'Ant Hell');world.tick(1/60);assert.equal(c.engine.save.biome,'Ant Hell');
   atDoor(c,'Garden');world.tick(1/60);assert.equal(c.engine.save.biome,'Ant Hell');
   c.engine.portalCooldown=0;world.tick(1/60);assert.equal(c.engine.save.biome,'Garden');assert.equal(c.room.id,'adventure:Garden');
-  assert.ok(api.validate(snapshot(c,c.room,api)));assert.equal(world.rooms.size,1);
+  assert.ok(api.validate(snapshot(c,c.room,api)));assert.equal(world.rooms.size,2);assert.ok(world.rooms.get('Ant Hell').mobs.length>0,'leaving a map must not erase its living population');
 });
 test('lobby, dead and paused players cannot activate a map portal',()=>{
   for(const state of ['lobby','dead','paused']){

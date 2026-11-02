@@ -15,7 +15,7 @@ function startCraft(c,raw,api){
 function stepCraft(c,api){const job=c.craftJob;if(!job?.running)return;let budget=40,changed=false;
   const entries=job.scope==='selected'?[[`${job.item.type}:${job.item.rarity}`,c.engine.save.inventory[`${job.item.type}:${job.item.rarity}`]??0]]:Object.entries(c.engine.save.inventory).sort(([a],[b])=>Number(a.slice(a.lastIndexOf(':')+1))-Number(b.slice(b.lastIndexOf(':')+1)));
   for(const [key,count]of entries){if(count<5||budget<=0)continue;const colon=key.lastIndexOf(':'),item={type:key.slice(0,colon),rarity:Number(key.slice(colon+1))};if(item.rarity>job.maxRarity||!api.canCraft(item))continue;
-    const r=api.craft(c.engine.save.inventory,item,Math.random,budget);job.attempts+=r.attempts;job.successes+=r.successes;job.lost+=r.lost??0;budget-=r.attempts;changed||=r.attempts>0;
+    const r=api.craft(c.engine.save.inventory,item,Math.random,budget);c.onCraft?.(item,r);job.attempts+=r.attempts;job.successes+=r.successes;job.lost+=r.lost??0;budget-=r.attempts;changed||=r.attempts>0;
   }
   if(!changed){job.running=false;job.status='completed';c.events.push(`Crafted ${job.successes} of ${job.attempts} attempt(s)`);}
 }

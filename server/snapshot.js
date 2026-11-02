@@ -40,7 +40,8 @@ function snapshot(client, room, api, hz=TICK_HZ, sharedCache=false) {
     drops:visibleDrops.map(d=>pick(d,'x y id type rarity life'.split(' ')))};
   const range=client.viewRadius??1800;
   const nearby=[];for(const m of room.mobs){const distance=(m.x-e.x)**2+(m.y-e.y)**2;if(distance<(range+m.radius)**2)nearby.push({m,distance});}
-  const mobs=nearby.sort((a,b)=>a.distance-b.distance).slice(0,200).map(({m})=>{
+  // Bosses must not disappear from playback when ordinary mobs fill 200 slots.
+  const mobs=nearby.sort((a,b)=>Number(b.m.rarity>=7)-Number(a.m.rarity>=7)||a.distance-b.distance).slice(0,200).map(({m})=>{
     if(cache?.mobs.has(m))return cache.mobs.get(m);
     const record={
     ...pick(m,MOB_KEYS),...pick(m,'hornetReload hornetTelegraph shellRecallTime shellShield scorpionArmed jellyWindup jellyWaves helTeleport leechRootId corruptedDigger'.split(' ')),
@@ -59,7 +60,7 @@ function snapshot(client, room, api, hz=TICK_HZ, sharedCache=false) {
     mobs,players:[...room.clients].filter(c=>c!==client&&c.engine.state!=='lobby').map(c=>{
       if(cache?.players.has(c))return cache.players.get(c);const record=player(c,api);cache?.players.set(c,record);return record;
     }),
-    deaths:(room.deaths??[]).map(d=>({...d,...d.leechBody?{leechBody:d.leechBody.map(p=>({...p}))}:{}})),deathAck:room.deathSeq??0,map:{biome:e.save.biome,width:e.width,height:e.height,seed:1,roomId:room.id,...room.dungeon?{dungeon:{kind:'termite',rarity:room.dungeon.mound.rarity}}:{}},
+    deaths:(room.deaths??[]).map(d=>({...d,...d.leechBody?{leechBody:d.leechBody.map(p=>({...p}))}:{}})),deathAck:room.deathSeq??0,map:{biome:e.save.biome,width:e.width,height:e.height,seed:1,roomId:room.id,...room.crystal?{instance:'crystal'}:{},...room.dungeon?{dungeon:{kind:'termite',rarity:room.dungeon.mound.rarity}}:{}},
     mapMobs:mobs.map(m=>({x:m.x,y:m.y,rarity:m.rarity})),online:room.clients.size,events:client.events.splice(0,32)};
 }
 module.exports={snapshot};

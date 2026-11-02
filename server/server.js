@@ -16,20 +16,27 @@ const {FixedStepper}=require('./scheduler');
 const Wire=require('./wire');
 const {captureRun,restoreRun}=require('./active-run');
 const {Npcs}=require('./npcs');
+const BossState=require('./boss-state');
+const {Announcements}=require('./announcements');
 function createServer(options={}){
   const webRoot=path.resolve(options.webRoot??path.join(__dirname,'../florr-local-site'));
   const dbPath=path.resolve(options.dbPath??path.join(__dirname,'../data/inventory.json'));
   const api=loadEngine(webRoot), world=new World(api), clients=new Map();
+  const announcements=new Announcements(clients);world.onKill=(c,m)=>announcements.kill(c,m);
+  const announcementTimer=setInterval(()=>announcements.flush(),1000);announcementTimer.unref();
   const npcs=new Npcs(world);
   const clientCode=Buffer.from(patchClient(fs.readFileSync(path.join(webRoot,BUNDLE),'utf8')));
   let db={version:1,sessions:{}};
   if(fs.existsSync(dbPath))db=JSON.parse(fs.readFileSync(dbPath,'utf8'));
   if(db.version!==1||!db.sessions)throw Error('Unsupported save database');
+  const bossTransfer=path.join(path.dirname(dbPath),'bosses-transfer.json');
+  if(fs.existsSync(bossTransfer)){BossState.restore(world,JSON.parse(fs.readFileSync(bossTransfer,'utf8')));fs.renameSync(bossTransfer,bossTransfer+'.restored-'+Date.now());}
+  else BossState.restore(world,db.worldBosses);
   const accounts=new Accounts(db,api);
   const social=new Social(db,clients,world);
   let writing=Promise.resolve();
   const persist=()=>{for(const c of clients.values()){c.account.save=c.engine.save;captureRun(c);}
-    const data=JSON.stringify(db);
+    db.worldBosses=BossState.capture(world);const data=JSON.stringify(db);
     const next=writing.then(async()=>{await fs.promises.mkdir(path.dirname(dbPath),{recursive:true});await fs.promises.writeFile(dbPath+'.tmp',data);await fs.promises.rename(dbPath+'.tmp',dbPath);});
     writing=next.catch(err=>console.error('Save failed:',err.message));return next;};
   const json=(res,status,data)=>{res.writeHead(status,{'Content-Type':'application/json; charset=utf-8','Cache-Control':'no-store'});res.end(JSON.stringify(data));};
@@ -71,6 +78,9 @@ function createServer(options={}){
         const account=await accounts[pathname.endsWith('/register')?'register':'login'](username,body?.password);
         const token=accounts.issue(account);setCookie(res,token);await persist();
         return json(res,200,{protocol:3,save:clients.get(account.id)?.engine.save??account.save,account:accounts.public(account)});
+      }
+      if(pathname==='/feedback-identity'){
+        res.writeHead(200,{'Content-Type':'text/html; charset=utf-8','Cache-Control':'no-store'});return res.end("<!doctype html><meta charset=utf-8><title>正在获取游戏身份</title><p>正在获取游戏登录身份……</p><script>fetch('/api/account',{cache:'no-store',credentials:'same-origin'}).then(r=>r.json()).catch(()=>({})).then(d=>{const u=new URL('https://ashflor.com/feedback.html?v=prog5&identity_checked=1');u.searchParams.set('from',location.origin);if(d.account?.username)u.searchParams.set('name',d.account.username);location.replace(u.href)});</script>");
       }
       if(pathname==='/api/session'||pathname==='/api/account'){
         if(req.method!=='GET')return json(res,405,{error:'Method not allowed'});
@@ -167,6 +177,7 @@ function createServer(options={}){
     c.engine.input={x:0,y:0};
     if(!previous)attachCombat(c,clients);
     c.engine.onEvent=event=>{if(event==='dead')c.combatStats.deaths++;if(event!=='save')c.events.push(event);};
+    c.onCraft=(item,result)=>announcements.craft(c,item,result,api.craftOutput(item));c.engine.onRareSpawn=m=>announcements.spawn(c,m);
     clients.set(c.id,c);if(!previous){world.join(c);restoreRun(c,world);}sendSafely(c);
     ws.on('message',(data,binary)=>{
       if(clients.get(c.id)!==c||c.ws!==ws)return;
@@ -189,10 +200,17 @@ function createServer(options={}){
           for(const peer of social.recipients(c,raw.channel))if(peer.ws.readyState===WebSocket.OPEN)peer.ws.send(JSON.stringify(message));
         }return;
       }
-      if(['craftBatch','craftCancel','swapAll','combatReset','saveBuild','loadBuild'].includes(raw?.type)){
-        const allowed={craftBatch:['type','scope','item','maxRarity'],craftCancel:['type'],swapAll:['type'],combatReset:['type'],saveBuild:['type','slot'],loadBuild:['type','slot']}[raw.type];
+      if(['safeSpawn','craftBatch','craftCancel','swapAll','combatReset','saveBuild','loadBuild'].includes(raw?.type)){
+        const allowed={safeSpawn:['type'],craftBatch:['type','scope','item','maxRarity'],craftCancel:['type'],swapAll:['type'],combatReset:['type'],saveBuild:['type','slot'],loadBuild:['type','slot']}[raw.type];
         if(Object.keys(raw).some(k=>!allowed.includes(k)))return ws.close(4002,'Invalid command');
         try{if(raw.type==='craftBatch')startCraft(c,raw,api);
+          if(raw.type==='safeSpawn'){
+            if(c.engine.crystalVisit)world.crystals.exit(c);
+            if(c.engine.moundVisit){api.exitMound(c.engine);world.join(c);}
+            const e=c.engine,spawn=api.spawnPoint(e.save.biome,e.width,e.height),point=e.geometry.projectInside(spawn.x,spawn.y,e.radius);
+            e.x=point.x;e.y=point.y;e.moveVX=e.moveVY=e.pushX=e.pushY=0;e.input={x:0,y:0};e.portalCooldown=3;e.invuln=Math.max(3,e.invuln);c.lastInput=Date.now();
+            for(const p of e.petals)if(p){p.x=e.x;p.y=e.y;p.motion=undefined;}c.events.push('Returned to the map spawn.');
+          }
           if(raw.type==='craftCancel'&&c.craftJob){c.craftJob.running=false;c.craftJob.status='cancelled';}
           if(raw.type==='swapAll'){const e=c.engine;for(let slot=0;slot<api.slots(e.save.level,e.save.talents.loadout);slot++)e.swap(slot);}
           if(raw.type==='combatReset'){for(const key of ['dealt','taken','kills','deaths'])c.combatStats[key]=0;}
@@ -212,8 +230,8 @@ function createServer(options={}){
           // Keep the death map for Adventure respawns on every biome.
           if(e.state==='dead')e.save.previousBiome=undefined;
           e.start();world.join(c);}break;
-        case 'lobby':e.state='lobby';e.input={x:0,y:0};delete c.account.activeRun;social.leave(c);break;
-        case 'biome':if(e.state==='lobby'){const squad=social.squad(c);if(squad){if(squad.leaderId!==c.id)throw Error('Only the leader can change the squad map');squad.biome=m.biome;squad.ready.clear();squad.countdown=0;squad.phase='waiting';for(const id of squad.members){const p=clients.get(id);p.engine.setBiome(m.biome);world.join(p);}}else{e.setBiome(m.biome);world.join(c);}}break;
+        case 'lobby':if(e.crystalVisit)world.crystals.exit(c);e.state='lobby';e.input={x:0,y:0};delete c.account.activeRun;social.leave(c);break;
+        case 'biome':if(e.state==='lobby'){const squad=social.squad(c);if(squad){if(squad.leaderId!==c.id)throw Error('Only the leader can change the squad map');squad.biome=m.biome;squad.ready.clear();squad.countdown=0;squad.phase='waiting';for(const id of squad.members){const p=clients.get(id);p.engine.setBiome(m.biome);p.engine.save.previousBiome=undefined;world.join(p);}}else{e.setBiome(m.biome);e.save.previousBiome=undefined;world.join(c);}}break;
         case 'equip':e.equip(m.slot,m.item,m.reserve);break;
         case 'unequip':e.unequip(m.slot,m.reserve);break;
         case 'swap':e.swap(m.slot);break;
@@ -223,8 +241,8 @@ function createServer(options={}){
         case 'resetTalents':e.resetTalents();break;
         case 'equipDrops':e.setEquipDrops(m.enabled);break;
         case 'shop':e.useShop(m.action,m.offer);break;
-        case 'craft':{if(c.craftJob?.running)throw Error('A crafting job is already running');const result=api.craft(e.save.inventory,m.item,Math.random,m.repeat?100:1);c.events.push(result.attempts?`Crafted ${result.successes} of ${result.attempts} attempt(s)`:'Need 5 craftable identical petals');break;}
-        case 'absorb':{const key=`${m.item.type}:${m.item.rarity}`;if(m.item.type==='Fragment'||(e.save.inventory[key]??0)<1)throw Error('This petal cannot be absorbed');e.save.inventory[key]--;e.gainXP(5**m.item.rarity);break;}
+        case 'craft':{if(c.craftJob?.running)throw Error('A crafting job is already running');const result=api.craft(e.save.inventory,m.item,Math.random,m.repeat?100:1);c.onCraft(m.item,result);c.events.push(result.attempts?`Crafted ${result.successes} of ${result.attempts} attempt(s)`:'Need 5 craftable identical petals');break;}
+        case 'absorb':{world.crystals.absorb(c,{item:m.item,count:1});break;}
         case 'gameMode':if(m.mode!=='adventure')c.events.push('Wave mode is not available on this server yet');break;
         default:c.events.push('This local server currently supports Adventure rooms. This action is not implemented.');
       }}catch(err){c.events.push(err.message||'Command could not be completed.');}
@@ -260,7 +278,7 @@ function createServer(options={}){
   function broadcast(){if(closing)return;for(const c of clients.values())sendSafely(c);nextSnapshot=Math.max(nextSnapshot+1000/SNAPSHOT_HZ,performance.now()+1);snapshotTimer=setTimeout(broadcast,Math.max(1,Math.ceil(nextSnapshot-performance.now())));}
   snapshotTimer=setTimeout(broadcast,Math.ceil(1000/SNAPSHOT_HZ));
   const saveTimer=setInterval(()=>persist().catch(()=>{}),10000);
-  async function close(){closing=true;clearTimeout(timer);clearTimeout(snapshotTimer);clearInterval(saveTimer);await persist();for(const c of clients.values()){clearTimeout(c.disconnectTimer);c.ws.terminate();}await new Promise(resolve=>wss.close(resolve));await new Promise(resolve=>server.close(resolve));await writing;}
+  async function close(){closing=true;clearInterval(announcementTimer);announcements.flush();clearTimeout(timer);clearTimeout(snapshotTimer);clearInterval(saveTimer);await persist();for(const c of clients.values()){clearTimeout(c.disconnectTimer);c.ws.terminate();}await new Promise(resolve=>wss.close(resolve));await new Promise(resolve=>server.close(resolve));await writing;}
   return {server,world,clients,api,social,close,persist,stats};
 }
 if(require.main===module){

@@ -26,13 +26,13 @@ test('waking respects the active budget without deleting already active combatan
   population.census(room,[{x:9000,y:9000}],.3);
   assert.equal(room.mobs.length,2);assert.equal(population.records.size,2);assert.ok(room.mobs.some(m=>m.id===4));
 });
-test('the captured replenisher counts sleeping ids as alive instead of replacing them',()=>{
+test('world updates keep distant mobs active rather than sleeping or replacing them',()=>{
   const {loadEngine}=require('../server/engine'),{World}=require('../server/world');
   const api=loadEngine(require('node:path').join(__dirname,'../florr-local-site')),world=new World(api);
   const c={id:'latent-census',events:[],inputAck:0,lastInput:Date.now(),engine:new api.Engine(api.normalize({...api.defaults(),biome:'Desert'}),()=>.5,false)};
   world.join(c);c.engine.start();world.bind(c);c.engine.spawnTimer=-10000;c.room.mobs.length=0;
   c.engine.addMob('Rock',c.engine.x+8000,c.engine.y,0);const m=c.engine.mobs.at(-1);
   const [region,state]=[...c.room.spawn.regions][0];m.spawnRegionId=region;state.alive.add(m.id);(state.groups??=[]).push(new Set([m.id]));
-  c.room.latent.grace=0;world.tick(1/30);assert.ok(c.room.latent.records.has(m.id));assert.ok(!c.room.mobs.some(n=>n.id===m.id));
-  c.engine.populateReferenceRegions();assert.ok(state.alive.has(m.id),'sleeping mobs retain their regional population credit');
+  c.room.latent.grace=0;world.tick(1/30);assert.equal(c.room.latent.records.size,0);assert.ok(c.room.mobs.some(n=>n.id===m.id));
+  c.engine.populateReferenceRegions();assert.ok(state.alive.has(m.id),'living mobs retain their regional population credit');
 });

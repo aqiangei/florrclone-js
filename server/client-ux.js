@@ -6,6 +6,7 @@ function ashDrawSquare(ctx,x,y,radius,angle=0){
   ctx.lineWidth=radius*.13;ctx.lineJoin='miter';ctx.fillRect(-radius*.85,-radius*.85,radius*1.7,radius*1.7);
   ctx.strokeRect(-radius*.85,-radius*.85,radius*1.7,radius*1.7);ctx.restore();return true;
 }
+function AshSafeLocate({engine}){useAshLanguage();const[ready,setReady]=(0,O.useState)(false);(0,O.useEffect)(()=>setReady(true),[]);if(!ready)return null;return(0,b.jsx)('button',{className:'ash-safe-locate',type:'button',onClick:()=>{engine.current?.sendCommand?.({type:'safeSpawn'});},children:ashLanguage==='zh'?'安全定位':'Safe location'});}
 function ashDrawPlayerNameplate(ctx,player){
   const guild=player.guildName?`[${player.guildName}]`:'',name=player.name||'Player';
   ctx.save();ctx.font='700 10px Ubuntu,sans-serif';
@@ -146,17 +147,6 @@ function AshDeathSummary({engine}){
   useAshLanguage();
   const [,bump]=(0,O.useState)(0);
   (0,O.useEffect)(()=>{const timer=setInterval(()=>bump(n=>n+1),200);return()=>clearInterval(timer);},[]);
-  // Death Continue only mounts when no panel is open — dismiss craft/inventory on death.
-  // Stock keeps closed panels mounted with [inert]; only non-inert ones still block.
-  (0,O.useEffect)(()=>{
-    const close=()=>{
-      if(engine.current?.state!=='dead')return;
-      document.querySelector('.game-panel:not([inert]) header button[aria-label="Close panel"]')?.click();
-    };
-    close();
-    const timer=setInterval(close,200);
-    return()=>clearInterval(timer);
-  },[engine]);
   const e=engine.current;
   if(!e||e.state!=='dead')return null;
   // Match stock death loot: stay out of the way while inventory/craft/etc. is open.
@@ -199,8 +189,14 @@ function AshOnlineTools({engine}){useAshLanguage();const data=useAshEngine(engin
   if(!data.state)return null;
   return(0,ce.createPortal)((0,b.jsxs)(b.Fragment,{children:[
     data.state!=='lobby'&&(0,b.jsxs)('aside',{ref:roster,className:'ashflor-roster','aria-label':'Online players',children:[(0,b.jsxs)('button',{className:'ashflor-roster-heading',onClick:()=>setCollapsed(v=>!v),'aria-expanded':!collapsed,children:[ashTr('Online players'),' · ',data.roster.length,collapsed?' ▸':' ▾']}),!collapsed&&(0,b.jsx)('ul',{children:data.roster.map(p=>(0,b.jsxs)('li',{'data-self':p.id===engine.current?.squad?.selfId,children:[(0,b.jsx)('strong',{children:p.name}),(0,b.jsxs)('small',{children:['Lv.',p.level,' · ',p.biome,' · ',ashTr(p.state==='playing'?'Playing':p.state==='dead'?'Dead':'Lobby')]})]},p.id))})]})]}),document.body);}
+function AshRaritySelect({value,onChange,disabled}){
+  const[open,setOpen]=(0,O.useState)(false),[position,setPosition]=(0,O.useState)({}),[cursor,setCursor]=(0,O.useState)(value),button=(0,O.useRef)(null),popup=(0,O.useRef)(null);
+  const show=()=>{if(disabled)return;const r=button.current.getBoundingClientRect(),height=Math.min(270,innerHeight-24);setPosition({position:'fixed',zIndex:1000,left:Math.max(8,Math.min(innerWidth-188,r.left)),top:r.bottom+height+8<innerHeight?r.bottom+4:Math.max(8,r.top-height-4),width:180,maxHeight:height,overflowY:'auto',padding:5,border:'2px solid #446b54',borderRadius:9,background:'#173e2f',boxShadow:'0 8px 30px #0006',WebkitTextStroke:0,textShadow:'none',font:'700 14px Ubuntu,sans-serif'});setCursor(value);setOpen(true);};
+  (0,O.useEffect)(()=>{if(!open)return;const close=event=>{if(!button.current?.contains(event.target)&&!popup.current?.contains(event.target))setOpen(false);},resize=()=>setOpen(false);document.addEventListener('pointerdown',close,true);window.addEventListener('resize',resize);return()=>{document.removeEventListener('pointerdown',close,true);window.removeEventListener('resize',resize);};},[open]);
+  return(0,b.jsxs)('span',{children:[(0,b.jsx)('button',{ref:button,type:'button',role:'combobox','aria-label':'Highest input rarity','aria-expanded':open,'aria-haspopup':'listbox',disabled,onClick:()=>open?setOpen(false):show(),onKeyDown:event=>{if(['ArrowDown','ArrowUp'].includes(event.key)){event.preventDefault();event.stopPropagation();if(!open)show();else setCursor(n=>(n+(event.key==='ArrowDown'?1:8))%9);}if(event.key==='Escape'&&open){event.preventDefault();event.stopPropagation();setOpen(false);}if(event.key==='Enter'&&open){event.preventDefault();event.stopPropagation();onChange(cursor);setOpen(false);}},children:ashTr(L[value].name)+' ▾'}),open&&(0,ce.createPortal)((0,b.jsx)('div',{ref:popup,role:'listbox','aria-label':'Input rarity choices',style:position,children:L.slice(0,9).map((rarity,i)=>(0,b.jsx)('button',{type:'button',role:'option','aria-selected':i===value,onPointerEnter:()=>setCursor(i),onClick:()=>{onChange(i);setOpen(false);button.current?.focus();},style:{display:'block',width:'100%',minHeight:28,padding:'5px 9px',border:0,borderRadius:5,textAlign:'left',background:i===cursor?'#426d4e':'transparent',color:rarity.color,font:'inherit',WebkitTextStroke:0,textShadow:'none',cursor:'pointer'},children:ashTr(rarity.name)},i))}),document.body)]});
+}
 function AshPanelTools({engine,selected,panel}){useAshLanguage();const data=useAshEngine(engine),[max,setMax]=(0,O.useState)(6);if(panel!=='craft'||!engine.current?.sendCommand)return null;const send=c=>ashSend(engine,c),running=!!data.job?.running;
-  return(0,b.jsxs)('div',{className:'ashflor-panel-tools',children:[(0,b.jsx)('strong',{children:'One-click crafting'}),(0,b.jsx)('p',{children:'Only inventory petals are consumed. Equipped petals are protected.'}),(0,b.jsxs)('label',{children:['Highest input rarity',' ',(0,b.jsx)('select',{'aria-label':'Highest input rarity',value:max,disabled:running,onChange:e=>setMax(Number(e.target.value)),children:L.slice(0,9).map((r,i)=>(0,b.jsx)('option',{value:i,children:r.name},i))})]}),(0,b.jsxs)('div',{className:'ashflor-action-row',children:[(0,b.jsx)('button',{disabled:running||!selected||selected.rarity>8,onClick:()=>send({type:'craftBatch',scope:'selected',item:selected,maxRarity:selected.rarity}),children:'Craft selected stack'}),(0,b.jsx)('button',{disabled:running,onClick:()=>send({type:'craftBatch',scope:'inventory',maxRarity:max}),children:'Craft inventory'}),running&&(0,b.jsx)('button',{onClick:()=>send({type:'craftCancel'}),children:'Cancel crafting'})]}),data.job&&(0,b.jsxs)('p',{role:'status',children:[ashTr(running?'Running':data.job.status==='cancelled'?'Cancelled':'Completed'),' · ',data.job.attempts,' ',ashTr('attempts'),' · ',data.job.successes,' ',ashTr('successes')]})]});}
+  return(0,b.jsxs)('div',{className:'ashflor-panel-tools',children:[(0,b.jsx)('strong',{children:'One-click crafting'}),(0,b.jsx)('p',{children:'Only inventory petals are consumed. Equipped petals are protected.'}),(0,b.jsxs)('label',{children:['Highest input rarity',' ',(0,b.jsx)(AshRaritySelect,{value:max,disabled:running,onChange:setMax})]}),(0,b.jsxs)('div',{className:'ashflor-action-row',children:[(0,b.jsx)('button',{disabled:running||!selected||selected.rarity>8,onClick:()=>send({type:'craftBatch',scope:'selected',item:selected,maxRarity:selected.rarity}),children:'Craft selected stack'}),(0,b.jsx)('button',{disabled:running,onClick:()=>send({type:'craftBatch',scope:'inventory',maxRarity:max}),children:'Craft inventory'}),running&&(0,b.jsx)('button',{onClick:()=>send({type:'craftCancel'}),children:'Cancel crafting'})]}),data.job&&(0,b.jsxs)('p',{role:'status',children:[ashTr(running?'Running':data.job.status==='cancelled'?'Cancelled':'Completed'),' · ',data.job.attempts,' ',ashTr('attempts'),' · ',data.job.successes,' ',ashTr('successes')]})]});}
 function useAshTouchReset(input){(0,O.useEffect)(()=>{const reset=()=>Object.assign(input.current,{x:0,y:0,attack:false,defend:false});window.addEventListener('blur',reset);document.addEventListener('visibilitychange',reset);window.addEventListener('ashflor-clear-input',reset);return()=>{reset();window.removeEventListener('blur',reset);document.removeEventListener('visibilitychange',reset);window.removeEventListener('ashflor-clear-input',reset);};},[input]);}
 var ASH_CHAT_COMMANDS=[
   {command:'/help',description:'List chat and squad commands'},

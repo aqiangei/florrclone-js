@@ -49,8 +49,9 @@ function forceDead(client){
     await page.keyboard.press('c');
     await page.locator('.craft-panel:not([inert])').waitFor({timeout:5000});
     forceDead(c);
-    // Closed panels stay mounted with [inert]; wait until no live craft panel blocks Continue.
-    await page.waitForFunction(()=>!document.querySelector('.craft-panel:not([inert])'),null,{timeout:8000});
+    // Death keeps the panel usable; the player closes it to reveal Continue.
+    await page.waitForTimeout(500);assert.ok(await page.locator('.craft-panel:not([inert])').isVisible());
+    await page.locator('.craft-panel:not([inert]) header button[aria-label="Close panel"]').click();
     assert.equal(c.engine.state,'dead');
     const continueBtn=page.getByRole('button',{name:'Continue',exact:true});
     await continueBtn.waitFor({timeout:5000});
@@ -72,7 +73,7 @@ function forceDead(client){
     assert.equal(c.engine.state,'playing');
     await page.screenshot({path:'test-results/death-craft-mobile.png'});
     assert.deepEqual(errors,[]);
-    console.log(JSON.stringify({ok:true,craftClosedOnDeath:true,continueClickable:true,respawned:true,hit},null,2));
+    console.log(JSON.stringify({ok:true,craftUsableOnDeath:true,continueClickable:true,respawned:true,hit},null,2));
   }catch(e){
     try{
       const pages=browser.contexts()[0]?.pages()??[];

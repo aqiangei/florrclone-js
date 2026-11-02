@@ -2,16 +2,19 @@
 const {LatentPopulation}=require('./latent');
 const {LootField}=require('./loot');
 const {Dungeons}=require('./dungeons');
+const {Population,POLICY}=require('./population');
+const {Crystals}=require('./crystals');
 class World {
-  constructor(api) {this.api=api;this.rooms=new Map();this.nextId=1;this.time=0;this.dungeons=new Dungeons(this);}
+  constructor(api) {this.api=api;this.rooms=new Map();this.nextId=1;this.time=0;this.dungeons=new Dungeons(this);this.population=new Population(this);this.crystals=new Crystals(this);}
   join(client) {
-    const e=client.engine, dungeon=e.moundVisit?.room,key=dungeon?.key??e.save.biome;
+    const e=client.engine, dungeon=e.moundVisit?.room,crystal=e.crystalVisit?.room,key=crystal?.key??dungeon?.key??e.save.biome;
     let room=this.rooms.get(key);
     if(!room){
       // Seed a single authoritative world without seeding a private copy per player.
       const seed=new this.api.Engine(this.api.normalize({...this.api.defaults(),biome:e.save.biome}),Math.random,false);
-      seed.sharedReferenceRoom=true;seed.referenceSeedCap=96;if(!dungeon)seed.seedMobs();
+      seed.sharedReferenceRoom=true;seed.referenceSeedCap=POLICY.localCap;if(!dungeon&&!crystal)seed.seedMobs();
       room={key,biome:e.save.biome,dungeon,id:`adventure:${key}`,clients:new Set(),mobs:dungeon?e.mobs:seed.mobs,drops:dungeon?e.drops:[],deaths:[],deathSeq:0,spawn:seed.referenceSpawnState,latent:new LatentPopulation(),loot:new LootField(this.api)};
+      if(crystal){room.crystal=crystal;room.mobs=[];}
       this.nextId=Math.max(this.nextId,...room.mobs.map(m=>m.id+1));
       this.rooms.set(key,room);
     }
@@ -19,13 +22,15 @@ class World {
     room.clients.add(client);client.room=room;
     room.flowers=[...room.clients].map(c=>c.engine);
     e.playerId=client.id;e.nextWorldId=()=>this.nextId++;
-    e.sharedReferenceRoom=true;e.referenceSeedCap=96;e.externalDropLifetime=true;e.externalMobShotCollision=true;e.simulationViewRadius=1800;
+    e.sharedReferenceRoom=true;e.referenceSeedCap=POLICY.localCap;e.externalDropLifetime=true;e.externalMobShotCollision=true;e.simulationViewRadius=1800;
+    room.spawn.serverPopulationBoost=true;room.spawn.serverSuperManaged=true;
     e.time=this.time;e.worldFlowers=()=>room.flowers;
     e.ownsWorldMob=m=>m.serverOwner===client.id&&m.serverAiDue!==false;
     e.ownsWorldDrop=d=>!d.ownerId||d.ownerId===client.id||!!client.squadCode&&d.squadId===client.squadCode;
     e.onMobKill=m=>{if(m.serverRewarded)return;m.serverRewarded=true;
       const owner=[...room.clients].find(c=>c.id===m.lastHitBy)??client;
       owner.engine.grantKill(m,true,true);
+      if(!m.friendly)this.onKill?.(owner,m);
       if(owner.combatStats)owner.combatStats.kills++;
       const death=owner.engine.mobDeaths.at(-1);
       if(death)room.deaths.push({...death,born:this.time,seq:++room.deathSeq});
@@ -63,7 +68,7 @@ class World {
   }
   enterPortal(c){
     const e=c.engine;
-    if(e.state!=='playing'||e.hp<=0||e.paused||e.portalCooldown>0||e.waveMode||e.moundVisit||e.wormVisit||e.corrupted)return false;
+    if(e.state!=='playing'||e.hp<=0||e.paused||e.portalCooldown>0||e.waveMode||e.moundVisit||e.crystalVisit||e.wormVisit||e.corrupted)return false;
     const source=e.save.biome,portal=this.api.findPortal(source,e.x,e.y,e.width,e.height);
     if(!portal)return false;
     const size=this.api.mapSize(portal.to),exit=this.safePortalExit(source,portal.to,size.width,size.height);
@@ -94,7 +99,8 @@ class World {
       const present=[...room.clients].filter(c=>c.engine.state==='playing'||c.engine.state==='dead');
       const viewers=present.map(c=>c.engine);
       for(const c of present)c.engine.simulationViewRadius=Math.max(1800,c.viewRadius??1800);
-      room.latent.census(room,viewers,this.time);room.latentRecords=[...room.latent.records.values()];
+      // Preserve every entity. The previous hide/sleep path is disabled.
+      room.latent.wakeAll(room);room.latentRecords=[];
       const starts=new Map(active.map(c=>[c.id,{x:c.engine.x,y:c.engine.y}]));
       const referenced=new Set();for(const m of room.mobs)for(const key of ['leaderId','summonerId','lootParentId','carrierId','carryingId','leechRootId'])if(m[key]!==undefined)referenced.add(m[key]);
       for(const m of room.mobs){
@@ -113,9 +119,11 @@ class World {
         e.simulationViewers=viewers;e.simulationViewRadius=Math.max(1800,c.viewRadius??1800);
         if(Date.now()-c.lastInput>500)e.input={x:0,y:0};
         e.serverFrameDt=dt;e.update(dt);room.mobs=e.mobs;room.drops=e.drops;room.loot.moved(c.dropCandidates);
+        if(room.crystal){room.mobs=room.mobs.filter(m=>m.friendly&&m.type==='Sandstorm');transfers.push(c);}
         if(e.save.biome!==room.biome||e.moundVisit?.room?.key!==(room.dungeon?.key))transfers.push(c);
       }
       for(const c of room.clients)this.bind(c);
+      this.population.tick(room,dt);
       // Resolve each shared projectile once, against all flowers and petals,
       // after all players have moved. The first swept collision wins.
       if(host){for(const m of room.mobs)if(m.shots?.some(s=>s.life>0))host.engine.collideMobShots(m,dt,viewers,room.mobs);}
@@ -139,10 +147,10 @@ class World {
     // cannot receive another physics step or collide in two rooms this tick.
     for(const c of new Set(transfers)){
       if(c.engine.save.biome!==c.room.biome||c.engine.moundVisit?.room?.key!==(c.room.dungeon?.key))this.join(c);
-      else if(!c.room.dungeon&&!this.dungeons.approach(c,dt))this.enterPortal(c);
+      else if(!c.room.dungeon&&!this.crystals.approach(c)&&!this.dungeons.approach(c,dt))this.enterPortal(c);
     }
   }
-  releaseRoom(room){if(room.clients.size||room.dungeon)return;if([...this.rooms.values()].some(r=>r.dungeon?.parentRoom===room))return;this.rooms.delete(room.key);}
+  releaseRoom(room){if(room.clients.size||room.dungeon||room.mobs.some(m=>m.hp>0&&!m.friendly))return;if([...this.rooms.values()].some(r=>r.dungeon?.parentRoom===room||r.crystal?.parentRoom===room))return;this.rooms.delete(room.key);}
   leave(c){c.room?.clients.delete(c);if(c.room)c.room.flowers=[...c.room.clients].map(c=>c.engine);for(const r of this.rooms.values())this.releaseRoom(r);}
 }
 module.exports={World};

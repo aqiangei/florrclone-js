@@ -5,6 +5,7 @@ const LINKS=['leaderId','summonerId','lootParentId','carrierId','carryingId','le
 // entity query. Restore the exact state/id rather than rolling another mob.
 // Wounded mobs, summons, linked packs and bosses remain live.
 class LatentPopulation{
+  wakeAll(room){for(const record of this.records.values())room.mobs.push(v8.deserialize(record.data));this.records.clear();this.farSince.clear();}
   constructor({grace=5,limit=2048,wakeBudget=32,activeLimit=256}={}){this.records=new Map();this.farSince=new Map();this.grace=grace;this.limit=limit;this.wakeBudget=wakeBudget;this.activeLimit=activeLimit;this.nextCensus=0;this.restored=0;this.slept=0;}
   near(m,viewers,margin){return viewers.some(e=>(m.x-e.x)**2+(m.y-e.y)**2<=(Math.max(1800,e.simulationViewRadius??1800)+(m.radius??0)+margin)**2);}
   eligible(m,referenced){

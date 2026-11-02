@@ -27,7 +27,7 @@ class Npcs{
     return {...p,id:`npc:${++this.sequence}`,kind:site.kind,rarity:site.rarity,radius:site.kind==='Assembler'?65:35,recipe:site.kind==='Assembler'?RECIPES[Math.floor(this.rng()*RECIPES.length)]:null,refreshAt:site.kind==='Assembler'?this.world.time+1800:Infinity,site,home:{...p},phase:this.rng()*Math.PI*2};
   }
   tick(room,dt){
-    if(room.dungeon||!['Factory','Desert'].includes(room.biome))return;
+    if(room.dungeon||room.crystal||!['Factory','Desert'].includes(room.biome))return;
     const engine=[...room.clients][0]?.engine;if(!engine)return;
     if(!room.specialEntities){
       const sites=[];
@@ -42,15 +42,20 @@ class Npcs{
     });
     if(this.requests.size>2000){const expiry=this.now()-600000;for(const [id,r]of this.requests)if(r.at<expiry)this.requests.delete(id);}
   }
-  visible(c){return(c.room?.specialEntities??[]).filter(n=>Math.hypot(n.x-c.engine.x,n.y-c.engine.y)<(c.viewRadius??1800)+n.radius).map(({id,kind,x,y,radius,rarity,recipe})=>({id,kind,x,y,radius,rarity,recipe}));}
+  visible(c){return[...(c.room?.specialEntities??[]),...this.world.crystals.entities(c)].filter(n=>Math.hypot(n.x-c.engine.x,n.y-c.engine.y)<(c.viewRadius??1800)+n.radius).map(({id,kind,x,y,radius,rarity,recipe})=>({id,kind,x,y,radius,rarity,recipe}));}
   nearest(c,id){const e=c.engine;if(e.state!=='playing'||e.hp<=0||e.paused)throw Error('You must be alive and playing.');const n=c.room?.specialEntities?.find(n=>n.id===id);if(!n||Math.hypot(n.x-e.x,n.y-e.y)>n.radius+e.radius+120)throw Error('Move closer to the NPC.');return n;}
-  view(c){return{entities:this.visible(c),traderReadyAt:c.account.traderReadyAt??0,now:this.now()};}
+  view(c){return{entities:this.visible(c),traderReadyAt:c.account.traderReadyAt??0,now:this.now(),...(c.room.crystal?{crystal:this.world.crystals.status(c)}:{})};}
   interact(c,raw){
     if(typeof raw.requestId!=='string'||raw.requestId.length<8||raw.requestId.length>80)throw Error('Invalid interaction request.');
     const key=c.id+':'+raw.requestId,previous=this.requests.get(key);if(previous){if(previous.command!==JSON.stringify(raw))throw Error('Request already used.');return previous.result;}
     const receipt=c.account.npcReceipts?.find(r=>r.requestId===raw.requestId);
     if(receipt){if(receipt.command!==JSON.stringify(raw))throw Error('Request already used.');return{ok:true,message:'Exchange already completed.',inventory:{...c.engine.save.inventory},...this.view(c)};}
     const n=this.nearest(c,raw.id),inventory=c.engine.save.inventory;
+    if(n.kind==='Crystal'){
+      const result={...this.world.crystals.absorb(c,raw),...this.view(c)};
+      c.account.npcReceipts=[...(c.account.npcReceipts??[]),{requestId:raw.requestId,command:JSON.stringify(raw)}].slice(-128);
+      this.requests.set(key,{at:this.now(),command:JSON.stringify(raw),result});return result;
+    }
     let input,output,rarity;
     if(n.kind==='Trader'){
       if(!tradable(raw.item,this.world.api))throw Error('This petal cannot be traded.');

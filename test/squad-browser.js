@@ -15,7 +15,7 @@ const assert=require('node:assert/strict'),crypto=require('node:crypto'),fs=requ
     await a.context.request.post(base+'/api/guild/invite',{data:{username:b.username}});await b.context.request.post(base+'/api/guild/respond',{data:{accept:true}});
     for(const p of players){await p.page.getByRole('button',{name:'Ready',exact:true}).click();await p.page.waitForTimeout(1700);p.client.engine.invuln=100000;p.client.room.mobs=[];app.world.bind(p.client);p.client.engine.spawnTimer=-10000;}
     await a.page.getByRole('button',{name:'Guild',exact:true}).click();const guild=a.page.getByRole('dialog',{name:'Guild',exact:true});
-    await guild.locator('.guild-title').waitFor();const desktopPanel=await guild.boundingBox();assert.ok(desktopPanel.x>=0&&desktopPanel.x+desktopPanel.width<=1280&&Math.abs(desktopPanel.x+desktopPanel.width/2-640)<2);await a.page.screenshot({path:'test-results/guild-after-desktop.png'});
+    await guild.locator('.guild-title').waitFor();await a.page.waitForTimeout(250);const desktopPanel=await guild.boundingBox();assert.ok(desktopPanel.x>=0&&desktopPanel.x+desktopPanel.width<=1280&&desktopPanel.x<=16&&desktopPanel.y<=80);await a.page.screenshot({path:'test-results/guild-after-desktop.png'});
     await a.page.setViewportSize({width:390,height:844});await a.page.waitForTimeout(200);
     const panel=await guild.boundingBox();assert.ok(panel.width>=350&&panel.x>=0&&panel.y>=0&&panel.y+panel.height<=844);
     await a.page.screenshot({path:'test-results/guild-after-mobile.png'});await a.page.setViewportSize({width:1280,height:800});

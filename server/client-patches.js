@@ -7,6 +7,24 @@ function patchClient(source){
     if(source.split(before).length!==2)throw Error('Client playback patch no longer matches the pinned capture');
     source=source.replace(before,after);
   }
+  replaceOnce('let ir=P.biome===`Hel`&&rr>tr,ar=!ft||P.helUnlocked||!!P.debug||P.biome===`Hel`,or=Object.keys(Et).filter(e=>ir?e!==`Hel`:e===`Hel`&&!ar),sr=e=>',
+    'let ir=!be&&P.biome===`Hel`&&rr>tr,ar=be||!ft||P.helUnlocked||!!P.debug||P.biome===`Hel`,or=be?[]:Object.keys(Et).filter(e=>ir?e!==`Hel`:e===`Hel`&&!ar),sr=e=>');
+  replaceOnce('[`Garden`,`Desert`,`Ocean`,`Jungle`,`Hel`].map(e=>',
+    '(be?[`Garden`,`Desert`,`Ocean`,`Jungle`,`Hel`,`Pyramid`,`Factory`,`Ant Hell`,`Sewers`]:[`Garden`,`Desert`,`Ocean`,`Jungle`,`Hel`]).map(e=>');
+  replaceOnce('}),ft&&it&&(0,b.jsxs)(`div`,{className:`account-strip`',
+    '}),(0,b.jsx)(AshSafeLocate,{engine:v}),ft&&it&&(0,b.jsxs)(`div`,{className:`account-strip`');
+  replaceOnce('n.current=e,T.current.clear(),E.current.active=E.current.down=E.current.right=!1,oe.current=0,x.current?.flushControls()',
+    'n.current=e,T.current.clear(),e&&A.current.mouse||(E.current.active=!1),E.current.down=E.current.right=!1,oe.current=0,x.current?.flushControls()');
+  replaceOnce('E.current.x=e.clientX-t.left,E.current.y=e.clientY-t.top,E.current.active=!0',
+    'E.current.x=e.clientX-t.left,E.current.y=e.clientY-t.top,E.current.ashKnown=true,E.current.active=!0');
+  replaceOnce('!r&&!i&&e&&A.current.mouse&&E.current.active&&!M.current&&!re.current',
+    '!r&&!i&&e&&A.current.mouse&&(E.current.active||n.current&&E.current.ashKnown)&&!M.current&&!re.current');
+  replaceOnce('let e=w.current,t=T.current;if(document.hidden||!document.hasFocus()||re.current||n.current)return{x:0,y:0,mode:`normal`,defend:!1};',
+    'let e=w.current,t=n.current?new Set:T.current;if(document.hidden||!document.hasFocus()||re.current||n.current&&!A.current.mouse)return{x:0,y:0,mode:`normal`,defend:!1};');
+  replaceOnce('i=(t.has(`s`)||t.has(`arrowdown`)?1:0)-(t.has(`w`)||t.has(`arrowup`)?1:0),a=D.current;',
+    'i=(t.has(`s`)||t.has(`arrowdown`)?1:0)-(t.has(`w`)||t.has(`arrowup`)?1:0),a=n.current?{x:0,y:0,attack:false,defend:false}:D.current;');
+  replaceOnce('let o=(t.has(`shift`)||E.current.right||a.defend)!==A.current.invertDefend,',
+    'if(n.current)return{x:r,y:i,mode:`normal`,defend:false};let o=(t.has(`shift`)||E.current.right||a.defend)!==A.current.invertDefend,');
   // A failed first request must not poison the shared image/manifest cache.
   // Keep the original component promise pending through bounded retries so
   // memoized card canvases repaint when their own image finally arrives.
@@ -16,7 +34,10 @@ function patchClient(source){
   replaceOnce('hn.set(t,r)),r}))}',
     'hn.set(t,r),r.catch(()=>{if(hn.get(t)===r)hn.delete(t)})),r}))}');
   replaceOnce('this.width=e.map.width,this.height=e.map.height;let u={...this.face};',
-    'this.specialEntities=e.specialEntities??[];this.width=e.map.width,this.height=e.map.height;let u={...this.face};');
+    'this.specialEntities=e.specialEntities??[];this.ashCrystalGeometry=e.map.instance===`crystal`?this.ashCrystalGeometry??new AshCrystalGeometry(e.map.width,e.map.height):null;this.width=e.map.width,this.height=e.map.height;let u={...this.face};');
+  replaceOnce('get geometry(){return this.wormVisit?', 'get geometry(){if(this.ashCrystalGeometry)return this.ashCrystalGeometry;return this.wormVisit?');
+  replaceOnce('get mobGeometry(){return this.wormVisit?', 'get mobGeometry(){if(this.ashCrystalGeometry)return this.ashCrystalGeometry;return this.wormVisit?');
+  replaceOnce('get inShortcut(){if(this.moundVisit||this.wormVisit)', 'get inShortcut(){if(this.ashCrystalGeometry)return this.y>this.height-280;if(this.moundVisit||this.wormVisit)');
   replaceOnce('for(let e of n.mobs){if(e.hp<=0)continue;if(e.type===`Firefly`',
     'ashDrawNpcs(t,n);for(let e of n.mobs){if(e.hp<=0)continue;if(e.type===`Firefly`');
   replaceOnce('await Promise.all([gn(),h().then(()=>{e||b.render(0)})])',
@@ -45,9 +66,9 @@ function patchClient(source){
   replaceOnce('this.width=e.map.width,this.height=e.map.height;let u={...this.face};',
     'this.width=e.map.width,this.height=e.map.height;if(this.ashDungeonRoom!==e.map.roomId){this.moundVisit=e.map.dungeon?{room:gA({id:0,type:\`Termite Mound\`,rarity:e.map.dungeon.rarity})}:void 0;this.ashDungeonRoom=e.map.roomId}let u={...this.face};');
   replaceOnce('const geometry=wS(snapshot.map.biome,e.width,e.height);',
-    'const geometry=e.moundVisit?.room.geometry??wS(snapshot.map.biome,e.width,e.height);');
+    'const geometry=e.ashCrystalGeometry??e.moundVisit?.room.geometry??wS(snapshot.map.biome,e.width,e.height);');
   replaceOnce('!e.waveMode&&Bx(snapshot.map.biome)?wS(snapshot.map.biome,e.width,e.height):void 0',
-    '!e.waveMode&&Bx(snapshot.map.biome)?e.moundVisit?.room.geometry??wS(snapshot.map.biome,e.width,e.height):void 0');
+    '!e.waveMode&&Bx(snapshot.map.biome)?e.ashCrystalGeometry??e.moundVisit?.room.geometry??wS(snapshot.map.biome,e.width,e.height):void 0');
   replaceOnce('function p(){return f}', 'function p(){return l.size}');
   replaceOnce('function h(){return d??=Promise.all(Object.entries(c).map(async([e,t])=>{let n=new Image;n.src=`/assets/world-tiles/${t}`,await n.decode();let r=document.createElement(`canvas`);r.width=r.height=256,r.getContext(`2d`).drawImage(n,0,0,256,256),l.set(Number(e),r)})).then(()=>{f=!0}).catch(e=>{throw d=void 0,e})}',
     'function h(){return d??=ashLoadTerrainTiles(c,l,()=>{f=l.size>0}).finally(()=>{d=void 0})}');
@@ -114,9 +135,13 @@ function patchClient(source){
   // Craft keeps one-click tools; inventory uses stock drag/tap equip only.
   replaceOnce('children:(0,b.jsx)(se,{size:21})})]}),(F===`inventory`||F===`craft`)',
     'children:(0,b.jsx)(se,{size:21})})]}),(F===`craft`)&&(0,b.jsx)(AshPanelTools,{engine:v,selected:I,slots:er,panel:F}),(F===`inventory`||F===`craft`)');
-  // Death Continue/Close only render when !F; close inventory/craft on death so respawn stays reachable.
-  replaceOnce('(0,O.useEffect)(()=>{F===`inventory`&&ze.searchOnOpen&&ue.current?.focus()},[F,ze.searchOnOpen])',
-    '(0,O.useEffect)(()=>{if(Ne===`dead`&&F)Fe(null);},[Ne,F]),(0,O.useEffect)(()=>{F===`inventory`&&ze.searchOnOpen&&ue.current?.focus()},[F,ze.searchOnOpen])');
+  // Death keeps chat and equipment panels available; closing a panel reveals respawn.
+  replaceOnce('Ne===`playing`&&ze.chat&&(0,b.jsx)(W_,',
+    '(Ne===`playing`||Ne===`dead`)&&ze.chat&&(0,b.jsx)(W_,');
+  replaceOnce('onFocusChange:fe,canOpen:!ot&&!Ve&&!Ke&&!Je&&!F&&(!a||!!a.closing)',
+    'onFocusChange:fe,canOpen:!ot&&!Ve&&!Ke&&!Je&&(!a||!!a.closing)');
+  replaceOnce('if(!this.showChat||this.engine.state!==`playing`)return;',
+    'if(!this.showChat||![`playing`,`dead`].includes(this.engine.state))return;');
   replaceOnce('hj(this,{snapshot:t,age:(this.clock.now()-this.receivedAt)/1e3,dt:e});this.hitFlash=',
     'hj(this,{snapshot:t,age:(this.clock.now()-this.receivedAt)/1e3,dt:e});smoothOnlineMotion(this);this.hitFlash=');
   // Online input was sampled at 10Hz (~100ms), which feels like sticky movement
@@ -144,8 +169,8 @@ function patchClient(source){
     'sessionKills:Q,sessionXP:Q,sessionCollected:f_(xg(),Q),sessionMobKills:f_(xg(),Q)');
   replaceOnce('Aj(e.sessionCollected)&&Object.values(e.sessionCollected).every($)&&$(e.chainKills)',
     'Aj(e.sessionCollected)&&Object.values(e.sessionCollected).every($)&&Aj(e.sessionMobKills)&&Object.values(e.sessionMobKills).every($)&&$(e.chainKills)');
-  replaceOnce('if(document.hidden||!document.hasFocus()||re.current||n.current)',
-    'if(document.querySelector(".ashflor-dialog[open]")||document.getElementById("ashflor-qq-dialog")?.open||document.hidden||!document.hasFocus()||re.current||n.current)');
+  replaceOnce('if(document.hidden||!document.hasFocus()||re.current||n.current&&!A.current.mouse)',
+    'if(document.querySelector(".ashflor-dialog[open]")||document.getElementById("ashflor-qq-dialog")?.open||document.hidden||!document.hasFocus()||re.current||n.current&&!A.current.mouse)');
   // Root armor stacks: accept in snapshot schema/validator and show on loadout badge.
   replaceOnce('amuletShield:Q,cogTimer:Q', 'amuletShield:Q,armor:Q,cogTimer:Q');
   replaceOnce('$(e.shield)&&$(e.shieldMax)&&$(e.amuletShield)&&$(e.cogTimer)',
@@ -306,6 +331,6 @@ function patchClient(source){
   replaceOnce('Rj(e.petal.type)','(Rj(e.petal.type)||[`coral-piece-1a`,`coral-piece-1b`,`coral-piece-2`].includes(e.petal.type))');
   replaceOnce('e.petalBreaks.every(e=>Aj(e)&&Uj(e)&&Rj(e.type)',
     'e.petalBreaks.every(e=>Aj(e)&&Uj(e)&&(Rj(e.type)||[`coral-piece-1a`,`coral-piece-1b`,`coral-piece-2`].includes(e.type))');
-  return source+'\n'+['wire.js','client-terrain.js','client-motion.js','client-builds.js','client-qq.js','client-ux.js','client-mobile.js','client-display.js','client-npcs.js'].map(file=>fs.readFileSync(path.join(__dirname,file),'utf8')).join('\n')+'\n'+fs.readFileSync(path.join(__dirname,'client-touch-guard.js'),'utf8')+'\n'+fs.readFileSync(path.join(__dirname,'client-lobby.js'),'utf8');
+  return source+'\n'+['crystal-geometry.js','wire.js','client-terrain.js','client-motion.js','client-builds.js','client-qq.js','client-ux.js','client-mobile.js','client-display.js','client-npcs.js'].map(file=>fs.readFileSync(path.join(__dirname,file),'utf8')).join('\n')+'\n'+fs.readFileSync(path.join(__dirname,'client-touch-guard.js'),'utf8')+'\n'+fs.readFileSync(path.join(__dirname,'client-lobby.js'),'utf8');
 }
 module.exports={patchClient};

@@ -1,11 +1,16 @@
 // NPCs remain separate from damageable mobs. Coordinates use the world canvas.
 var ashNpcEngine=null,ashNpcDialog=null,ashNpcBusy=false,ashNpcInputRestore=null;
-function ashNearestNpc(){const e=ashNpcEngine;if(!e||e.state!=='playing'||e.hp<=0)return null;return(e.specialEntities??[]).filter(n=>Math.hypot(n.x-e.x,n.y-e.y)<=n.radius+e.radius+120).sort((a,b)=>Math.hypot(a.x-e.x,a.y-e.y)-Math.hypot(b.x-e.x,b.y-e.y))[0]??null;}
+function ashNearestNpc(){const e=ashNpcEngine;if(!e||e.state!=='playing'||e.hp<=0)return null;return(e.specialEntities??[]).filter(n=>['Assembler','Trader','Crystal'].includes(n.kind)&&Math.hypot(n.x-e.x,n.y-e.y)<=n.radius+e.radius+120).sort((a,b)=>Math.hypot(a.x-e.x,a.y-e.y)-Math.hypot(b.x-e.x,b.y-e.y))[0]??null;}
 function ashDrawNpcs(ctx,engine){
   ashNpcEngine=engine;
+  if(engine.ashCrystalGeometry){ctx.save();ctx.fillStyle='#283b54';ctx.fillRect(0,0,engine.width,engine.height);ctx.strokeStyle='#657f9c';ctx.lineWidth=18;ctx.strokeRect(10,10,engine.width-20,engine.height-20);ctx.strokeStyle='#ffffff0b';ctx.lineWidth=2;for(let x=80;x<engine.width;x+=120){ctx.beginPath();ctx.moveTo(x,0);ctx.lineTo(x,engine.height);ctx.stroke();}for(let y=80;y<engine.height;y+=120){ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(engine.width,y);ctx.stroke();}ctx.restore();}
   for(const n of engine.specialEntities??[]){
     ctx.save();ctx.translate(n.x,n.y);const r=n.radius;
-    if(n.kind==='Assembler'){
+    if(n.kind==='Crystal Room'||n.kind==='Garden Portal'){
+      ctx.strokeStyle=n.kind==='Crystal Room'?'#c99cff':'#a0e29e';ctx.lineWidth=10;ctx.beginPath();ctx.arc(0,0,r,0,Math.PI*2);ctx.stroke();ctx.fillStyle='#bf9aff66';ctx.fill();for(let i=0;i<3;i++){ctx.strokeStyle='#efdbff';ctx.lineWidth=3;ctx.beginPath();ctx.arc(0,0,r*(.3+i*.2),engine.time+i,engine.time+i+Math.PI*1.5);ctx.stroke();}
+    }else if(n.kind==='Crystal'){
+      ctx.fillStyle='#c3a6ee';ctx.strokeStyle='#8775c4';ctx.lineWidth=8;ctx.beginPath();ctx.moveTo(0,-r);ctx.lineTo(r*.72,-r*.3);ctx.lineTo(r*.8,r*.55);ctx.lineTo(0,r);ctx.lineTo(-r*.8,r*.55);ctx.lineTo(-r*.72,-r*.3);ctx.closePath();ctx.fill();ctx.stroke();ctx.fillStyle='#e8dcff';ctx.beginPath();ctx.moveTo(0,-r);ctx.lineTo(r*.3,-r*.1);ctx.lineTo(0,r*.7);ctx.lineTo(-r*.3,-r*.1);ctx.closePath();ctx.fill();
+    }else if(n.kind==='Assembler'){
       ctx.fillStyle='#777f86';ctx.strokeStyle='#3a4249';ctx.lineWidth=5;ctx.beginPath();ctx.roundRect(-r,-r*.75,r*2,r*1.5,9);ctx.fill();ctx.stroke();
       ctx.fillStyle='#bec8ce';ctx.fillRect(-r*.8,-r*.55,r*.9,r*.7);ctx.fillStyle='#1e292e';ctx.fillRect(-r*.68,-r*.42,r*.65,r*.44);
       for(let i=0;i<2;i++){ctx.save();ctx.translate(r*(.35+i*.24),r*(i?.28:-.22));ctx.rotate(engine.time*(i?-1:1));ctx.strokeStyle='#d3dce0';ctx.lineWidth=6;ctx.beginPath();ctx.arc(0,0,r*.18,0,Math.PI*2);ctx.stroke();for(let j=0;j<8;j++){ctx.rotate(Math.PI/4);ctx.fillStyle='#d3dce0';ctx.fillRect(r*.13,-3,9,6);}ctx.restore();}
@@ -24,7 +29,7 @@ async function ashOpenNpc(n){
   const dialog=document.createElement('dialog');dialog.className='ash-npc-panel';dialog.setAttribute('aria-label',n.kind);ashNpcDialog=dialog;
   const header=document.createElement('header'),title=document.createElement('h2'),close=document.createElement('button');title.textContent=ashTr(n.kind);close.textContent='×';close.setAttribute('aria-label','Close NPC');close.onclick=ashCloseNpc;header.append(title,close);dialog.append(header);
   const info=document.createElement('p'),content=document.createElement('div'),status=document.createElement('p'),action=document.createElement('button');status.setAttribute('role','status');action.className='ash-npc-submit';dialog.append(info,content,status,action);document.body.append(dialog);dialog.showModal();dialog.addEventListener('cancel',ashCloseNpc);
-  const t=(en,zh)=>ashLanguage==='zh'?zh:en;let item,view;
+  const t=(en,zh)=>ashLanguage==='zh'?zh:en;let item,view,absorbCount=1;
   const inventory=()=>ashNpcEngine?.save.inventory??{};
   const describe=table=>Object.entries(table).map(([type,count])=>`${count} × ${ashTr(type)}`).join(' + ');
   const refresh=()=>{
@@ -35,6 +40,11 @@ async function ashOpenNpc(n){
       const missing=Object.entries(n.recipe.input).filter(([type,count])=>(inv[`${type}:${n.rarity}`]??0)<count);
       if(!ashNpcBusy)status.textContent=missing.length?t('Not enough ingredients. Equipped petals are protected.','材料不足，已装备花瓣不会消耗。'):t('Ingredients ready.','材料充足。');
       action.disabled=ashNpcBusy||missing.length>0;action.textContent=t('Assemble once','组装一次');
+    }else if(n.kind==='Crystal'){
+      const crystal=view?.crystal,amount=(crystal?.xp?.[item?.rarity]??0)*absorbCount;
+      info.textContent=t('Absorbing permanently consumes inventory petals. Equipped petals are protected.','吸收会永久消耗背包花瓣，已装备的花瓣受到保护。');
+      status.textContent=crystal?`${t('Crystal energy','水晶能量')} ${(crystal.energy/crystal.capacity*100).toFixed(2)}% · Lv.${ashNpcEngine.save.level} · +${amount.toLocaleString()} XP`:t('Loading Crystal…','正在读取水晶…');
+      action.disabled=ashNpcBusy||!item||!crystal||amount<=0||amount>crystal.energy||absorbCount>(inv[`${item?.type}:${item?.rarity}`]??0);action.textContent=t('Absorb selected petals','吸收所选花瓣');
     }else{
       info.textContent=t('One petal → one Coin of the same rarity. Irreversible. Once every 24 hours.','一个花瓣换取同品质的一个 Coin；不可撤销，每 24 小时一次。');
       const wait=Math.max(0,(view?.traderReadyAt??0)-(Date.now()+(view?.now?view.now-view.fetchedAt:0)));
@@ -42,20 +52,21 @@ async function ashOpenNpc(n){
       if(!ashNpcBusy)status.textContent=wait>0?`${t('Available in','距离可兑换')} ${Math.ceil(wait/60000)} ${t('minutes','分钟')}`:t('Only inventory petals can be exchanged.','仅可兑换背包中的花瓣。');
     }
   };
-  if(n.kind==='Trader'){
+  if(n.kind==='Trader'||n.kind==='Crystal'){
     const select=document.createElement('select');select.setAttribute('aria-label','Petal to trade');const empty=document.createElement('option');empty.textContent=t('Choose a petal','选择要兑换的花瓣');empty.value='';select.append(empty);
-    for(const[key,count]of Object.entries(inventory())){const i=key.lastIndexOf(':'),type=key.slice(0,i),rarity=Number(key.slice(i+1));if(count<1||rarity>8||['Fragment','Shard','Blood Sacrifice','Basic','Square','Coin'].includes(type))continue;const option=document.createElement('option');option.value=key;option.textContent=`${ashTr(L[rarity].name)} ${ashTr(type)} × ${count}`;select.append(option);}
+    for(const[key,count]of Object.entries(inventory())){const i=key.lastIndexOf(':'),type=key.slice(0,i),rarity=Number(key.slice(i+1)),excluded=n.kind==='Crystal'?['Fragment','Shard','Basic','Square']:['Fragment','Shard','Blood Sacrifice','Basic','Square','Coin'];if(count<1||rarity>(n.kind==='Crystal'?7:8)||excluded.includes(type))continue;const option=document.createElement('option');option.value=key;option.textContent=`${ashTr(L[rarity].name)} ${ashTr(type)} × ${count}`;select.append(option);}
     select.onchange=()=>{const key=select.value,i=key.lastIndexOf(':');item=key?{type:key.slice(0,i),rarity:Number(key.slice(i+1))}:null;refresh();};content.append(select);
+    if(n.kind==='Crystal'){const count=document.createElement('input');count.type='number';count.min='1';count.value='1';count.setAttribute('aria-label','Petals to absorb');count.oninput=()=>{absorbCount=Math.max(1,Math.floor(Number(count.value)||1));refresh();};content.append(count);const all=document.createElement('button');all.textContent=t('Select full stack [Shift]','选择整组 [Shift]');all.type='button';all.onclick=()=>{absorbCount=item?inventory()[`${item.type}:${item.rarity}`]??1:1;count.value=String(absorbCount);refresh();};content.append(all);select.addEventListener('change',event=>{if(event.shiftKey)all.click();});dialog.addEventListener('keydown',event=>{if(event.key==='Shift'&&item){all.click();event.preventDefault();}});}
     try{const response=await fetch('/api/npc'),data=await response.json();if(response.ok)view={...data,fetchedAt:Date.now()};else status.textContent=data.error;}catch{status.textContent=t('Connection failed.','连接失败。');}
   }
   action.onclick=async()=>{
     if(ashNpcBusy)return;ashNpcBusy=true;refresh();status.textContent=t('Processing…','处理中…');
-    try{const response=await fetch('/api/npc',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({id:n.id,recipe:n.recipe?.id,item,requestId:crypto.randomUUID()})}),data=await response.json();if(!response.ok)throw Error(data.error);view={...data,fetchedAt:Date.now()};Object.assign(ashNpcEngine.save.inventory,data.inventory);status.textContent=t('Exchange completed.','兑换成功。');}catch(error){status.textContent=error.message;}finally{ashNpcBusy=false;action.disabled=true;setTimeout(()=>{if(ashNpcDialog===dialog)refresh();},1200);}
+    try{const response=await fetch('/api/npc',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({id:n.id,recipe:n.recipe?.id,item,count:absorbCount,requestId:crypto.randomUUID()})}),data=await response.json();if(!response.ok)throw Error(data.error);view={...data,fetchedAt:Date.now()};Object.assign(ashNpcEngine.save.inventory,data.inventory);status.textContent=n.kind==='Crystal'?data.message:t('Exchange completed.','兑换成功。');}catch(error){status.textContent=error.message;}finally{ashNpcBusy=false;action.disabled=true;setTimeout(()=>{if(ashNpcDialog===dialog)refresh();},1200);}
   };
   refresh();const timer=setInterval(()=>{const current=ashNearestNpc();if(ashNpcDialog!==dialog||!current||current.id!==n.id){clearInterval(timer);if(ashNpcDialog===dialog)ashCloseNpc();}else if(!ashNpcBusy)refresh();},1000);
 }
 if(typeof document!=='undefined'){
-  Object.assign(ashStrings,{Assembler:'组装机',Trader:'交易者'});
+  Object.assign(ashStrings,{Assembler:'组装机',Trader:'交易者',Crystal:'水晶','Crystal Room':'水晶室（副本）','Garden Portal':'返回花园'});
   const style=document.createElement('style');style.textContent='.ash-npc-panel{position:fixed;left:50%;top:50%;margin:0;transform:translate(-50%,-50%);box-shadow:0 24px 90px #05251e66;box-sizing:border-box;width:min(560px,calc(100vw - 24px));max-height:85dvh;overflow:auto;border:3px solid #637875;border-radius:16px;background:#e1e8e4;color:#233d35;padding:22px;font:600 16px/1.6 Ubuntu,sans-serif}.ash-npc-panel::backdrop{background:#05251e80}.ash-npc-panel header{display:flex;justify-content:space-between;align-items:center}.ash-npc-panel h2{margin:0;font-size:26px;line-height:1.2}.ash-npc-panel button,.ash-npc-panel select{font:inherit;min-height:42px;border:1px solid #567569;border-radius:8px;padding:6px 14px}.ash-npc-panel select{max-width:100%;width:100%}.ash-npc-submit{margin-top:10px;background:#39755b;color:white;width:100%;cursor:pointer}.ash-npc-panel button:disabled{opacity:.45;cursor:default}';document.head.append(style);
   const craftButton=()=>document.querySelector('.side-actions button:last-child');
   document.addEventListener('click',event=>{const button=event.target.closest?.('.side-actions button:last-child'),npc=ashNearestNpc();if(button&&npc){event.preventDefault();event.stopImmediatePropagation();ashOpenNpc(npc);}},true);

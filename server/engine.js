@@ -14,6 +14,10 @@ function loadEngine(webRoot) {
   if (crypto.createHash('sha256').update(source).digest('hex') !== HASH)
     throw new Error('Client capture changed; re-audit server/engine.js before upgrading.');
   let code = source.slice(source.indexOf('var a='), source.indexOf(';function hj'));
+  code=code.replace('replenishAdventure(){','replenishAdventure(){if(this.serverCrystalRoom)return;');
+  code=code.replace('spawnReferenceAt(x,y,budget,regions,forcedRarity){','spawnReferenceAt(x,y,budget,regions,forcedRarity,forcedType){');
+  code=code.replace('const rarity=forcedRarity??choice.rarity,first=this.mobs.length','if(forcedType&&No(choice.region).some(v=>v.type===forcedType))choice.type=forcedType;const rarity=forcedRarity??choice.rarity,first=this.mobs.length');
+  code=code.replace('choice.type==="Hel Centipede"?1/0:budget-1','choice.type==="Hel Centipede"&&forcedRarity===undefined?1/0:budget-1');
   const pickupLoop='this.refreshPickup();for(let t of this.drops){';
   if(code.split(pickupLoop).length!==2)throw Error('Loot pickup boundary changed');
   code=code.replace(pickupLoop,'this.refreshPickup();for(let t of this.queryWorldDrops?this.queryWorldDrops(this):this.drops){');
@@ -43,7 +47,9 @@ function loadEngine(webRoot) {
   code=code.replace(densityScale,'referencePopulateScale(){return 1}');
   const spawnCadence='this.spawnTimer>1&&(this.spawnTimer=0,this.replenishAdventure())';
   if(code.split(spawnCadence).length!==2)throw Error('Population replenish cadence boundary changed');
-  code=code.replace(spawnCadence,'this.spawnTimer>(this.latentManaged?.25:1)&&(this.spawnTimer=0,this.replenishAdventure())');
+  code=code.replace(spawnCadence,'this.spawnTimer>(this.latentManaged?.1:1)&&(this.spawnTimer=0,this.replenishAdventure())');
+  code=code.replace('e.time+(n.extraSpawnDelay??0)','e.time+(e.serverPopulationBoost?Math.min(.2,n.extraSpawnDelay??0):(n.extraSpawnDelay??0))');
+  code=code.replace('if(e.rareReady.super<=e.time)return 7','if(!e.serverSuperManaged&&e.rareReady.super<=e.time)return 7');
   const regionLoop='for(let t of go[this.save.biome]){if(!c(t))continue;';
   if(code.split(regionLoop).length!==2)throw Error('Population region ordering boundary changed');
   code=code.replace(regionLoop,`const populationDistance=region=>{let best=Infinity;for(const p of populationAnchors??[]){const px=p.x/this.width,py=p.y/this.height;if(Lo(region,px,py))return 0;for(let i=0,j=region.points.length-1;i<region.points.length;j=i++){const a=region.points[j],b=region.points[i],ax=a[0]*this.width,ay=a[1]*this.height,dx=(b[0]-a[0])*this.width,dy=(b[1]-a[1])*this.height,u=Math.max(0,Math.min(1,((p.x-ax)*dx+(p.y-ay)*dy)/(dx*dx+dy*dy||1)));best=Math.min(best,(p.x-ax-u*dx)**2+(p.y-ay-u*dy)**2)}}return best};const populationRegions=populationAnchors?go[this.save.biome].map(region=>({region,distance:populationDistance(region)})).sort((a,b)=>a.distance-b.distance).map(v=>v.region):go[this.save.biome];for(let t of populationRegions){if(!c(t))continue;`);
@@ -200,7 +206,7 @@ function loadEngine(webRoot) {
   code += ';'+source.slice(craftStart,source.indexOf('\n',craftStart));
   const contactStart=source.indexOf('var viepBodyContact=');
   code += ';'+source.slice(contactStart,source.indexOf('\n',contactStart));
-  code += ';globalThis.api={Engine:lj,defaults:ij,normalize:aj,petals:et,rarityCount:L.length,mobs:B,spawnRegions:go,maps:Et,constants:V,craft:Mt,canCraft:viepCanCraft,slots:Ct,resolvePlayerContacts:viepBodyContact.resolvePlayerContacts,BatchDecoder:fM,commands:serverCommands,session:kj,validate:rM,validateVisual:eM,snapshotSchema,findPortal:eS,portalExit:tS,portals:$x,mapSize:zx,enterMound:vA,exitMound:yA};';
+  code += ';globalThis.api={Engine:lj,defaults:ij,normalize:aj,petals:et,rarityCount:L.length,mobs:B,spawnRegions:go,spawnTypes:r=>No(r).map(v=>v.type),maps:Et,constants:V,mobXp:(e)=>Zn(e.type,e.rarity,Si(e.type,e.rarity,_a(e.type,e.rarity,Ai(e.type,e.rarity,Ri(e.type,e.rarity,B[e.type].xp*5**e.rarity))))),craft:Mt,craftOutput:e=>Ot(e),canCraft:viepCanCraft,slots:Ct,resolvePlayerContacts:viepBodyContact.resolvePlayerContacts,BatchDecoder:fM,commands:serverCommands,session:kj,validate:rM,validateVisual:eM,snapshotSchema,findPortal:eS,portalExit:tS,portals:$x,mapSize:zx,spawnPoint:nS,enterMound:vA,exitMound:yA};';
   // UI declarations occur before the engine in this compiled module. Imports
   // are inert here; no browser, network, or rendering API is supplied.
   const inert = new Proxy(function () { return inert; }, { get: () => inert });

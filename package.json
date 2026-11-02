@@ -6,7 +6,7 @@
   "scripts": {
     "start": "node server/server.js",
     "build": "node scripts/build-server.js",
-    "test": "node --test test/*.test.js",
+    "test": "node --test --test-concurrency=2 test/*.test.js",
     "test:browser": "node test/browser-smoke.js",
     "test:combat": "node test/combat-browser.js",
     "benchmark": "node scripts/benchmark-simulation.js",

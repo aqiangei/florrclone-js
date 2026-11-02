@@ -30,7 +30,7 @@ test('large regions spend their spawn budget around players instead of across th
 });
 test('nearby retained mobs still consume the local population cap',()=>{
   const {e}=setup('Garden');
-  for(let i=0;i<180;i++)e.addMob('Rock',e.x+600,e.y,1);
+  for(let i=0;i<e.referenceSeedCap;i++)e.addMob('Rock',e.x+600,e.y,1);
   const ids=e.mobs.map(m=>m.id);e.populateReferenceRegions();
   assert.deepEqual(e.mobs.map(m=>m.id),ids);
 });

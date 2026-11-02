@@ -4,7 +4,7 @@
 function captureRun(c){
   const e=c.engine;
   if(!['playing','dead'].includes(e.state)){delete c.account.activeRun;return;}
-  const position=e.moundVisit??e;
+  const position=e.crystalVisit??e.moundVisit??e;
   c.account.activeRun={savedAt:Date.now(),biome:e.save.biome,state:e.state,x:position.x,y:position.y,hp:e.hp,angle:e.angle,
     sessionKills:e.sessionKills,sessionXP:e.sessionXP,sessionCollected:{...e.sessionCollected},sessionMobKills:{...e.sessionMobKills}};
 }

@@ -1,6 +1,12 @@
 'use strict';
 // Applied to the same pinned simulation source on both sides.
 function patchFeel(source){
+  const leafbug='addMob(e,t,n,r=0,i=!1,a=0,o=!1,s=1/0){';
+  if(source.split(leafbug).length!==2)throw Error('Super Leafbug variant boundary changed');
+  source=source.replace(leafbug,leafbug+'if(!i&&!o&&r===7&&(e===`Leafbug`||e===`Golden Leafbug`))e=this.rng()<.5?`Leafbug`:`Golden Leafbug`;');
+  const killXp='ri(e)||this.gainXP(Zn(e.type,e.rarity,Si(e.type,e.rarity,_a(e.type,e.rarity,Ai(e.type,e.rarity,Ri(e.type,e.rarity,B[e.type].xp*5**e.rarity))))))';
+  if(source.split(killXp).length!==2)throw Error('Monster XP multiplier boundary changed');
+  source=source.replace(killXp,killXp.replace('this.gainXP(Zn','this.gainXP(20*Zn'));
   for(const [before,after] of [
     ['V={speed:250,attackRadius:104','V={speed:1125,attackRadius:104'],
     // Petal/body contact damage window: capture is 10Hz (1/10); raise to 20 hits/s.
