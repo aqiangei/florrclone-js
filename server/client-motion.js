@@ -5,7 +5,7 @@ function recordOnlineMotion(engine,snapshot){
   const now=engine.clock.now(),room=snapshot.map.roomId;
   let history=onlineMotionHistory.get(engine);
   if(!history||history.room!==room||history.state!==snapshot.self.state||
-    Math.hypot(snapshot.self.x-(history.samples.at(-1)?.snapshot.self.x??snapshot.self.x),snapshot.self.y-(history.samples.at(-1)?.snapshot.self.y??snapshot.self.y))>250){
+    Math.hypot(snapshot.self.x-(history.samples.at(-1)?.snapshot.self.x??snapshot.self.x),snapshot.self.y-(history.samples.at(-1)?.snapshot.self.y??snapshot.self.y))>Math.max(250,(snapshot.motion?.speed??0)*.75)){
     history={room,state:snapshot.self.state,samples:[],gap:0};onlineMotionHistory.set(engine,history);
   }
   const last=history.samples.at(-1);

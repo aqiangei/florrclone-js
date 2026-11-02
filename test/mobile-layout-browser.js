@@ -16,7 +16,6 @@ const assert=require('node:assert/strict'),fs=require('node:fs'),crypto=require(
     await page.goto(base,{waitUntil:'networkidle'});
     await page.getByRole('button',{name:'Ready',exact:true}).click();
     await page.locator('.touch-pad').waitFor();
-    await page.getByRole('button',{name:'关闭公告',exact:true}).click();
     await page.waitForTimeout(1500);
     const client=app.clients.get(account.account.id);client.engine.invuln=100000;
     const results=[];

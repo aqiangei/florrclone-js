@@ -7,6 +7,33 @@ function patchClient(source){
     if(source.split(before).length!==2)throw Error('Client playback patch no longer matches the pinned capture');
     source=source.replace(before,after);
   }
+  replaceOnce('className:`guild-squad`,disabled:h,onClick:()=>void _(()=>Xc(e.id)),children:`Squad`',
+    'className:`guild-squad`,disabled:h,onClick:()=>void _(()=>Xc(e.id)),children:`Invite to squad`');
+  replaceOnce('(0,b.jsx)(`h3`,{className:`guild-title`,children:r.guild.name})',
+    '(0,b.jsx)(AshGuildHeading,{guild:r.guild})');
+  replaceOnce('className:`guild-member`,children:[(0,b.jsxs)(`span`,{className:`guild-member-name`',
+    'className:`guild-member`,children:[(0,b.jsx)(`span`,{className:`ash-guild-avatar`,\"aria-hidden\":true,children:e.name.slice(0,1).toUpperCase()}),(0,b.jsxs)(`span`,{className:`guild-member-name`');
+  // Powder can cover 250 units between reconciliation samples without a teleport.
+  replaceOnce('Math.hypot(o.x-l.x,o.y-l.y)>250','Math.hypot(o.x-l.x,o.y-l.y)>Math.max(250,e.motion.speed*(.75+c))');
+  replaceOnce('function H(e,t,n,r,i,a=0){let o=on[t];',
+    'function H(e,t,n,r,i,a=0){if(t===`Square`)return ashDrawSquare(e,n,r,i/2,a);let o=on[t];');
+  replaceOnce('function Mn(e,t,n,r,i,a,o=0,s=!1){if(t!==`Test Dummy`',
+    'function Mn(e,t,n,r,i,a,o=0,s=!1){if(t===`Square`)return ashDrawSquare(e,n,r,i,o);if(t!==`Test Dummy`');
+  replaceOnce('driftX:Q.optional(),driftY:Q.optional()})).max(4096)',
+    'driftX:Q.optional(),driftY:Q.optional(),webGround:Zg().optional()})).max(4096)');
+  replaceOnce('driftY:AM(e.driftY,0)}),FM=', 'driftY:AM(e.driftY,0),webGround:e.webGround===true}),FM=');
+  replaceOnce('return{id:p.id,name:p.name,level:', 'return{id:p.id,name:p.name,guildName:p.guildName??``,level:');
+  replaceOnce('players:r_(q({..._j,id:xg(),name:xg(),level:', 'players:r_(q({..._j,id:xg(),name:xg(),guildName:xg().optional(),level:');
+  replaceOnce('t.type===`Wax`&&(r.life=0),!s.invulnerable', '(t.type===`Wax`||t.type===`Moon Rock`)&&(r.life=0),!s.invulnerable');
+  replaceOnce('m.sort((e,t)=>e.time-t.time);for(let{time:t,target:n',
+    'm.sort((e,t)=>e.time-t.time||Number(!!t.intercept)-Number(!!e.intercept));for(let{time:t,target:n');
+  replaceOnce('roomId:xg().optional()}),mapMobs:', 'roomId:xg().optional(),dungeon:q({kind:g_(\`termite\`),rarity:vj}).optional()}),mapMobs:');
+  replaceOnce('this.width=e.map.width,this.height=e.map.height;let u={...this.face};',
+    'this.width=e.map.width,this.height=e.map.height;if(this.ashDungeonRoom!==e.map.roomId){this.moundVisit=e.map.dungeon?{room:gA({id:0,type:\`Termite Mound\`,rarity:e.map.dungeon.rarity})}:void 0;this.ashDungeonRoom=e.map.roomId}let u={...this.face};');
+  replaceOnce('const geometry=wS(snapshot.map.biome,e.width,e.height);',
+    'const geometry=e.moundVisit?.room.geometry??wS(snapshot.map.biome,e.width,e.height);');
+  replaceOnce('!e.waveMode&&Bx(snapshot.map.biome)?wS(snapshot.map.biome,e.width,e.height):void 0',
+    '!e.waveMode&&Bx(snapshot.map.biome)?e.moundVisit?.room.geometry??wS(snapshot.map.biome,e.width,e.height):void 0');
   replaceOnce('function p(){return f}', 'function p(){return l.size}');
   replaceOnce('function h(){return d??=Promise.all(Object.entries(c).map(async([e,t])=>{let n=new Image;n.src=`/assets/world-tiles/${t}`,await n.decode();let r=document.createElement(`canvas`);r.width=r.height=256,r.getContext(`2d`).drawImage(n,0,0,256,256),l.set(Number(e),r)})).then(()=>{f=!0}).catch(e=>{throw d=void 0,e})}',
     'function h(){return d??=ashLoadTerrainTiles(c,l,()=>{f=l.size>0}).finally(()=>{d=void 0})}');
@@ -15,12 +42,21 @@ function patchClient(source){
     'c=!!o.closest(`.loadout`),ashGesture=ashInventoryGesture(i,s),l=o.getBoundingClientRect()');
   replaceOnce('ee=()=>{window.removeEventListener(`pointermove`,A)',
     'ee=()=>{ashGesture?.dispose();window.removeEventListener(`pointermove`,A)');
+  // Scroll swipes: suppress drag/click but do NOT abort via M() — that disposed
+  // ashInventoryGesture and left button-started pans unable to move scrollTop.
   replaceOnce('A=n=>{if(n.pointerId!==u||(d=n.clientX,f=n.clientY,!S&&Math.hypot(d-p,f-m)<5))return;',
-    'A=n=>{if(n.pointerId!==u)return;if(ashGesture&&!ashGesture.allow(n)){if(ashGesture.scrolling){r.current=true;M()}return}if((d=n.clientX,f=n.clientY,!S&&Math.hypot(d-p,f-m)<5))return;');
+    'A=n=>{if(n.pointerId!==u)return;if(ashGesture&&!ashGesture.allow(n)){if(ashGesture.scrolling)r.current=true;return}if((d=n.clientX,f=n.clientY,!S&&Math.hypot(d-p,f-m)<5))return;');
+  // Mobile long-press shows petal tip; coarse pointers skip focus/hover flash tips.
+  replaceOnce(
+    'let d=pv(e,()=>l?.(null)),f=r&&d.reserved?Math.max(0,(n??1)-1):n,p=r&&f===1?void 0:f;return(0,b.jsxs)(`button`,{className:`petal-card ${i?`small`:``} ${o?`selected`:``}`,style:{"--rarity":L[e.rarity].color,gridColumn:a,visibility:r&&d.reserved&&f===0?`hidden`:void 0},"data-petal-count":f,onPointerDown:d.onPointerDown,onClick:e=>{if(d.suppressClick.current){e.preventDefault(),d.suppressClick.current=!1;return}c?.(e)},onMouseEnter:n=>l?.(t??e,n.currentTarget),onMouseLeave:()=>l?.(null),onFocus:n=>l?.(t??e,n.currentTarget),onBlur:()=>l?.(null),',
+    'let tipItem=t??e,d=pv(e,()=>{ashClearPetalTipLatch();l?.(null)}),f=r&&d.reserved?Math.max(0,(n??1)-1):n,p=r&&f===1?void 0:f;return(0,b.jsxs)(`button`,{className:`petal-card ${i?`small`:``} ${o?`selected`:``}`,style:{"--rarity":L[e.rarity].color,gridColumn:a,visibility:r&&d.reserved&&f===0?`hidden`:void 0},"data-petal-count":f,onPointerDown:ev=>{if(ashPetalTipHeld()&&ashPetalTipLatch?.target===ev.currentTarget){ashClearPetalTipLatch();d.suppressClick.current=!0;ashPetalTipDismissClick=!0;return}ashArmPetalLongPress(ev,tipItem,l,d.suppressClick);d.onPointerDown(ev);},onClick:e=>{if(ashConsumePetalTipDismissClick()||d.suppressClick.current){e.preventDefault(),d.suppressClick.current=!1;return}c?.(e)},onMouseEnter:n=>{if(ashIsCoarsePointer())return;l?.(tipItem,n.currentTarget);},onMouseLeave:()=>{if(ashPetalTipHeld())return;l?.(null);},onFocus:n=>{if(ashIsCoarsePointer())return;l?.(tipItem,n.currentTarget);},onBlur:()=>{if(ashPetalTipHeld())return;l?.(null);},');
   // Fit the world to the short edge on phones. Render and snapshot interest
   // must use the same zoom, including immediately after an orientation change.
   replaceOnce('get effectiveZoom(){return this.zoom*(this.visionScale??1)}',
     'get viewportScale(){return ashMobileViewportScale(this.w,this.h)}get effectiveZoom(){return this.zoom*this.viewportScale*(this.visionScale??1)}');
+  // Mobile labels: skip segments only; keep all rarities; font tracks zoom.
+  replaceOnce('this.showNames&&!this.labelsHidden&&!r.wormGut&&(eC(t,r.type===`Test Dummy`?`Target Dummy`:r.type,r.x-30,r.y+s+15,12,`#fff`,`left`,void 0,void 0,11*this.dpr),eC(t,L[r.rarity].name+(r.waveLevel?` · Lv ${r.waveLevel}`:``),r.x+30,r.y+s+34,10,L[r.rarity].color,`right`,void 0,void 0,10*this.dpr))',
+    'this.showNames&&!this.labelsHidden&&ashShouldDrawMobName(r)&&(eC(t,r.type===`Test Dummy`?`Target Dummy`:r.type,r.x-30,r.y+s+15,ashMobNameFont(12,this.effectiveZoom),`#fff`,`left`,void 0,void 0,ashMobNameFont(11,this.effectiveZoom)*this.dpr),eC(t,L[r.rarity].name+(r.waveLevel?` · Lv ${r.waveLevel}`:``),r.x+30,r.y+s+34,ashMobNameFont(10,this.effectiveZoom),L[r.rarity].color,`right`,void 0,void 0,ashMobNameFont(10,this.effectiveZoom)*this.dpr))');
   replaceOnce('let f=this.zoom*this.visionScale,p=r/2-this.camera.x*f',
     'let f=this.effectiveZoom,p=r/2-this.camera.x*f');
   replaceOnce('let t=typeof DecompressionStream==`function`?new WebSocket(e,[dM,aM]):new WebSocket(e);',
@@ -40,6 +76,11 @@ function patchClient(source){
     'className:`window-fullscreen`,title:ashTr(`Fullscreen landscape`),"aria-label":ashTr(`Fullscreen landscape`),onClick:()=>void hc(),children:[(0,b.jsx)(ie,{}),(0,b.jsx)(`span`,{children:ashTr(`Landscape game`)})]');
   replaceOnce('theme:`reference-settings settings-${o.toLowerCase()}`,close:r,open:e,children:[',
     'theme:`reference-settings settings-${o.toLowerCase()}`,close:r,open:e,children:[(0,b.jsx)(AshDisplaySettings,{}),');
+  // Scroll wheel steps the same Zoom setting the Graphics slider uses.
+  replaceOnce('[ze,Be]=(0,O.useState)(nN)',
+    '[ze,Be]=(0,O.useState)(nN),ashWheelZoom=useAshWheelZoom(Be)');
+  replaceOnce('`L + 1–0: load build · Shift+L + 1–0: save build`,(0,b.jsx)(`br`,{}),`Enter: Chat · Esc: Close panel`',
+    '`L + 1–0: load build · Shift+L + 1–0: save build`,(0,b.jsx)(`br`,{}),`Scroll wheel: zoom`,(0,b.jsx)(`br`,{}),`Enter: Chat · Esc: Close panel`');
   replaceOnce('className:`play-button`,onClick:Vn,disabled:',
     'className:`play-button`,onClick:()=>{if(ashDisplay().mobile())void ashDisplay().enter(true);Vn()},disabled:');
   replaceOnce('let e=e=>{if(e.target.matches(`input,textarea`))return;if(s.current)',
@@ -56,8 +97,12 @@ function patchClient(source){
   replaceOnce('Fn=(0,O.useCallback)(e=>{let t=v.current;if(!t)return!1;let n=bv(e,{loadout:t.save.loadout.map(e=>e?{...e}:null),reserve:t.save.reserve.map(e=>e?{...e}:null)});return jn(n?`Saved build ${e+1}`:`Build slots are unavailable in this browser`),n},[jn]),In=(0,O.useCallback)(e=>{let t=v.current;if(!t)return!1;let n=xv(e);if(!n)return ov(t.save.loadout.length),t.applyBuild([],[]),Tn(),jn(`Build ${e===9?`0`:e+1} is empty — petals cleared; press K+${e===9?`0`:e+1} to save`),!1;ov(t.save.loadout.length);let r=t.applyBuild(n.loadout,n.reserve);return Tn(),jn(r?`Loaded build ${e+1}`:`Could not load that build`),r},[jn,Tn]);',
     'Fn=(0,O.useCallback)(e=>{let t=v.current;if(!t)return!1;const ok=ashSaveBuild(t,e|0);if(ok)jn(`Saved ${(e|0)<10?`K`:`L`}${((e|0)%10===9)?`0`:(e|0)%10+1}`);return ok},[jn]),In=(0,O.useCallback)(e=>{let t=v.current;if(!t)return!1;const ok=ashLoadBuild(t,e|0);Tn();return ok},[Tn]);');
 
+  // Craft keeps one-click tools; inventory uses stock drag/tap equip only.
   replaceOnce('children:(0,b.jsx)(se,{size:21})})]}),(F===`inventory`||F===`craft`)',
-    'children:(0,b.jsx)(se,{size:21})})]}),(F===`inventory`||F===`craft`)&&(0,b.jsx)(AshPanelTools,{engine:v,selected:I,slots:er,panel:F}),(F===`inventory`||F===`craft`)');
+    'children:(0,b.jsx)(se,{size:21})})]}),(F===`craft`)&&(0,b.jsx)(AshPanelTools,{engine:v,selected:I,slots:er,panel:F}),(F===`inventory`||F===`craft`)');
+  // Death Continue/Close only render when !F; close inventory/craft on death so respawn stays reachable.
+  replaceOnce('(0,O.useEffect)(()=>{F===`inventory`&&ze.searchOnOpen&&ue.current?.focus()},[F,ze.searchOnOpen])',
+    '(0,O.useEffect)(()=>{if(Ne===`dead`&&F)Fe(null);},[Ne,F]),(0,O.useEffect)(()=>{F===`inventory`&&ze.searchOnOpen&&ue.current?.focus()},[F,ze.searchOnOpen])');
   replaceOnce('hj(this,{snapshot:t,age:(this.clock.now()-this.receivedAt)/1e3,dt:e});this.hitFlash=',
     'hj(this,{snapshot:t,age:(this.clock.now()-this.receivedAt)/1e3,dt:e});smoothOnlineMotion(this);this.hitFlash=');
   // Online input was sampled at 10Hz (~100ms), which feels like sticky movement
@@ -65,9 +110,9 @@ function patchClient(source){
   replaceOnce('this.sampler=new TM({clock:this.clock,hz:10,onSample:()=>this.tickSample()})',
     'this.sampler=new TM({clock:this.clock,hz:30,onSample:()=>this.tickSample()})');
   replaceOnce('(0,b.jsx)(`a`,{className:`lobby-menu-qq community-link`,title:`Visit the florr.io QQ community`,"aria-label":`Florr.io QQ`,href:`https://jq.qq.com/?_wv=1027&k=eMLWfOJb`,target:`_blank`,rel:`noopener noreferrer`,children:(0,b.jsx)(S,{name:`qq`})})',
-    '(0,b.jsx)(AshflorQQEntry,{existingLink:!0}),(0,b.jsx)(AshflorGithubEntry,{})');
+    '(0,b.jsx)(AshflorFeedbackEntry,{}),(0,b.jsx)(AshflorQQEntry,{existingLink:!0}),(0,b.jsx)(AshflorGithubEntry,{})');
   replaceOnce('children:(0,b.jsx)(se,{})})]}),Ne===`lobby`',
-    'children:(0,b.jsx)(se,{})}),(0,b.jsx)(AshMobileDisplayPrompt,{lobby:Ne===`lobby`}),(0,b.jsx)(AshOnlineTools,{engine:v}),(0,b.jsx)(AshDeathSummary,{engine:v}),(0,b.jsx)(AshflorQQEntry,{clearInput:()=>{T.current.clear(),E.current.active=!1,E.current.down=!1,E.current.right=!1,v.current?.flushControls?.()}}),(0,b.jsx)(AshflorGithubEntry,{clearInput:()=>{T.current.clear(),E.current.active=!1,E.current.down=!1,E.current.right=!1,v.current?.flushControls?.()}})]}),Ne===`lobby`');
+    'children:(0,b.jsx)(se,{})}),(0,b.jsx)(AshMobileDisplayPrompt,{lobby:Ne===`lobby`}),(0,b.jsx)(AshOnlineTools,{engine:v}),(0,b.jsx)(AshDeathSummary,{engine:v}),(0,b.jsx)(AshflorFeedbackEntry,{clearInput:()=>{T.current.clear(),E.current.active=!1,E.current.down=!1,E.current.right=!1,v.current?.flushControls?.()}}),(0,b.jsx)(AshflorQQEntry,{clearInput:()=>{T.current.clear(),E.current.active=!1,E.current.down=!1,E.current.right=!1,v.current?.flushControls?.()}}),(0,b.jsx)(AshflorGithubEntry,{clearInput:()=>{T.current.clear(),E.current.active=!1,E.current.down=!1,E.current.right=!1,v.current?.flushControls?.()}})]}),Ne===`lobby`');
   // Live drop list is ashflor-style death-only; hide the in-run loot box.
   replaceOnce('P.biome!==`Hel`&&cr.length>0&&(0,b.jsxs)(`aside`,{className:`loot-box`',
     'false&&(0,b.jsxs)(`aside`,{className:`loot-box`');
@@ -96,10 +141,10 @@ function patchClient(source){
   // Other-player plate: name above-left, health bar, Lv. below-right (florr_clone-web).
   replaceOnce(
     'Iv(e,o.x,o.y,o.radius,s,this.engine.time,this.hideOtherPetals?[]:o.petals,!1,!1,o.corrupted,false,o.hitFlash??0,o.dev===true),eC(e,o.name,o.x,o.y+40,13),e.fillStyle=`#334e35`,e.beginPath(),e.roundRect(o.x-24,o.y+47,48,6,3),e.fill(),e.fillStyle=`#77e368`,e.beginPath(),e.roundRect(o.x-23,o.y+48,46*Math.max(0,Math.min(1,o.hp/o.maxHp)),4,2),e.fill()',
-    'Iv(e,o.x,o.y,o.radius,s,this.engine.time,this.hideOtherPetals?[]:o.petals,!1,!1,o.corrupted,false,o.hitFlash??0,o.dev===true),(()=>{const left=o.x-24,right=o.x+24,barY=o.y+47,best=Math.max(0,...(o.petals||[]).filter(Boolean).map(p=>p.rarity??0)),tier=L[best]?.color??`#fff`;eC(e,o.name||`Player`,left,barY-4,12,`#fff`,`left`);e.fillStyle=`#334e35`;e.beginPath();e.roundRect(left,barY,48,6,3);e.fill();e.fillStyle=`#77e368`;e.beginPath();e.roundRect(left+1,barY+1,46*Math.max(0,Math.min(1,o.hp/Math.max(1,o.maxHp))),4,2);e.fill();eC(e,`Lv. ${Math.max(1,o.level|0)}`,right,barY+20,10,tier,`right`)})()');
+    'Iv(e,o.x,o.y,o.radius,s,this.engine.time,this.hideOtherPetals?[]:o.petals,!1,!1,o.corrupted,false,o.hitFlash??0,o.dev===true),ashDrawPlayerNameplate(e,o)');
   // Downed/dead remotes: same nameplate as living (not gray/hidden).
   replaceOnce('if(o.dead){if(!a){let t=Pv();Iv(e,o.x,o.y,o.radius,t,this.engine.time,[],!1,!0,!1),eC(e,o.name,o.x,o.y+40,11,`#b9b9b9`)}continue}',
-    'if(o.dead){if(!a){let t=Pv();Iv(e,o.x,o.y,o.radius,t,this.engine.time,[],!1,!0,!1);(()=>{const left=o.x-24,right=o.x+24,barY=o.y+47,best=Math.max(0,...(o.petals||[]).filter(Boolean).map(p=>p.rarity??0)),tier=L[best]?.color??`#fff`;eC(e,o.name||`Player`,left,barY-4,12,`#fff`,`left`);eC(e,`Lv. ${Math.max(1,o.level|0)}`,right,barY+20,10,tier,`right`)})()}continue}');
+    'if(o.dead){if(!a){let t=Pv();Iv(e,o.x,o.y,o.radius,t,this.engine.time,[],!1,!0,!1);ashDrawPlayerNameplate(e,o)}continue}');
   // Alt latch (florr_clone-web): rarity glow under every petal (self + remotes).
   replaceOnce(
     'function yx(e,t,n,r,i,a,o,s=0,c,l=0,u=[2,5]){let d=vx(t,i)*(t===`Beetle Egg`?i/9:1);if(t===`Mimic`)return!0;',
@@ -124,11 +169,9 @@ function patchClient(source){
   replaceOnce(
     'let e=e=>{e.key===`Alt`&&c(!0)},t=e=>{e.key===`Alt`&&c(!1)},n=()=>c(!1),r=()=>{document.visibilityState===`hidden`&&n()};return window.addEventListener(`keydown`,e),window.addEventListener(`keyup`,t),window.addEventListener(`blur`,n),document.addEventListener(`visibilitychange`,r),()=>{window.removeEventListener(`keydown`,e),window.removeEventListener(`keyup`,t),window.removeEventListener(`blur`,n),document.removeEventListener(`visibilitychange`,r)}',
     'const sync=()=>c(!!ashAltMode);sync();return window.addEventListener(`ashflor-alt`,sync),()=>window.removeEventListener(`ashflor-alt`,sync)');
-  replaceOnce('this.drawPlayerAppearance(t,n.x,n.y,n.radius);let S=this.healthMotion(n).sample(n.hp,n.maxHp,e)',
-    'this.drawPlayerAppearance(t,n.x,n.y,n.radius);(n.state===`playing`||n.state===`dead`)&&eC(t,n.save.name||`Player`,n.x,n.y+40,14,`#fff`);let S=this.healthMotion(n).sample(n.hp,n.maxHp,e)');
-  // Dead body path (Rb) should also keep the local name visible.
-  replaceOnce('x?Rb(t,n.x,n.y,n.radius,n):n.burrowLeft>0?(t.fillStyle=`rgba(0,0,0,.2)`,t.beginPath(),t.arc(n.x,n.y,n.radius,0,Math.PI*2),t.fill()):this.drawPlayerAppearance(t,n.x,n.y,n.radius);(n.state===`playing`||n.state===`dead`)&&eC(t,n.save.name||`Player`,n.x,n.y+40,14,`#fff`);let S=this.healthMotion(n).sample(n.hp,n.maxHp,e)',
-    'x?(Rb(t,n.x,n.y,n.radius,n),eC(t,n.save.name||`Player`,n.x,n.y+40,14,`#fff`)):n.burrowLeft>0?(t.fillStyle=`rgba(0,0,0,.2)`,t.beginPath(),t.arc(n.x,n.y,n.radius,0,Math.PI*2),t.fill()):(this.drawPlayerAppearance(t,n.x,n.y,n.radius),(n.state===`playing`||n.state===`dead`)&&eC(t,n.save.name||`Player`,n.x,n.y+40,14,`#fff`));let S=this.healthMotion(n).sample(n.hp,n.maxHp,e)');
+  // Local nameplate: readable on mobile zoom; also show over the dead body sprite.
+  replaceOnce('x?Rb(t,n.x,n.y,n.radius,n):n.burrowLeft>0?(t.fillStyle=`rgba(0,0,0,.2)`,t.beginPath(),t.arc(n.x,n.y,n.radius,0,Math.PI*2),t.fill()):this.drawPlayerAppearance(t,n.x,n.y,n.radius);let S=this.healthMotion(n).sample(n.hp,n.maxHp,e)',
+    'x?(Rb(t,n.x,n.y,n.radius,n),eC(t,n.save.name||`Player`,n.x,n.y+40,ashPlayerNameFont(14,this.effectiveZoom),`#fff`)):n.burrowLeft>0?(t.fillStyle=`rgba(0,0,0,.2)`,t.beginPath(),t.arc(n.x,n.y,n.radius,0,Math.PI*2),t.fill()):(this.drawPlayerAppearance(t,n.x,n.y,n.radius),(n.state===`playing`||n.state===`dead`)&&eC(t,n.save.name||`Player`,n.x,n.y+40,ashPlayerNameFont(14,this.effectiveZoom),`#fff`));let S=this.healthMotion(n).sample(n.hp,n.maxHp,e)');
   // Legacy drawMap path (kept for compatibility).
   replaceOnce('n.fillStyle=`#7fe9ff`;for(let e of this.remotePlayers)n.beginPath(),n.arc(e.x/r.width*i,e.y/r.height*a,t?4*o:2.5,0,Math.PI*2),n.fill();n.fillStyle=`#ffe666`,n.strokeStyle=`#3f542d`,n.lineWidth=2,n.beginPath(),n.arc(r.x/r.width*i,r.y/r.height*a,t?6*o:3.5,0,Math.PI*2),n.fill(),n.stroke()',
     'n.fillStyle=`#7fe9ff`;for(let e of this.remotePlayers){const s=e.x/r.width*i,c=e.y/r.height*a,label=(e.name||`Player`).slice(0,10);n.beginPath(),n.arc(s,c,t?4*o:2.5,0,Math.PI*2),n.fill();eC(n,label,s,c+(t?14:11),t?18:16,`#dff9ff`,`center`,`#0b2a1c`,2,10)}n.fillStyle=`#ffe666`,n.strokeStyle=`#3f542d`,n.lineWidth=2,n.beginPath(),n.arc(r.x/r.width*i,r.y/r.height*a,t?6*o:3.5,0,Math.PI*2),n.fill(),n.stroke();eC(n,(r.save.name||`Player`).slice(0,10),r.x/r.width*i,r.y/r.height*a+(t?15:12),t?18:16,`#ffe666`,`center`,`#2a3a14`,2,10)');
@@ -146,12 +189,16 @@ function patchClient(source){
   // Channel shortcuts also accept /public; /s and /g are handled by ashHandleChatCommand.
   replaceOnce('let r=/^\\/(local|squad|guild)(?:\\s+(.*))?$/i.exec(n),i=c;',
     'let r=/^\\/(local|public|squad|guild)(?:\\s+(.*))?$/i.exec(n),i=c;');
+  // Channel toggle must not focus the draft — that opens the mobile IME.
+  replaceOnce(
+    '"aria-label":`Change chat channel`,onClick:()=>{w(),v.current?.focus()}',
+    '"aria-label":`Change chat channel`,onClick:()=>{w()}');
   // Slash commands: squad helpers + suggestions; keep /clear /debug stock paths.
   replaceOnce('n.startsWith(`/`)?(a(`Invalid command, type /help to list all commands.`),!0)',
     'n.startsWith(`/`)?(ashHandleChatCommand(n,x.current||v.current,a)?!0:(a(`Invalid command, type /help to list all commands.`),!0))');
   // Adventure lobby: show squad create/join/ready UI (stock only showed it for Wave).
   replaceOnce('return mode==="wave"&&e.squadAction&&(s?children.push(jsx("div",{style:{marginTop:8,color:"white",font:"700 14px Ubuntu,sans-serif"},children:[jsx("p",{children:`Wave squad ${s.code} \\xB7 ${s.phase==="countdown"?`Starting in ${Math.ceil(s.countdown)}`:s.phase}`},"title"),...s.members.map(m=>jsx("p",{children:`${m.name} \\xB7 ${m.connected?"Online":"Offline"} \\xB7 ${m.ready?"Ready":"Not ready"}`},m.id)),button(s.members.find(m=>m.id===s.selfId)?.ready?"Unready":"Ready",()=>send({type:"squadReady",ready:!s.members.find(m=>m.id===s.selfId)?.ready})),button("Leave squad",()=>send({type:"squadLeave"}))]},"squad")):children.push(jsx("div",{style:{display:"flex",justifyContent:"center",flexWrap:"wrap",gap:6,marginTop:8},children:[button("New Squad",()=>send({type:"squadCreate",public:!1})),button("Find Public",()=>send({type:"squadFind"})),jsx("input",{"aria-label":"Wave squad code",placeholder:"Room code",value:code,maxLength:8,onChange:ev=>setCode(ev.target.value.toUpperCase()),style:{width:95}},"code"),button("Join",()=>send({type:"squadJoin",code}))]},"join")))',
-    'return e.squadAction&&(s?children.push(jsx("div",{style:{marginTop:8,color:"white",font:"700 14px Ubuntu,sans-serif"},children:[jsx("p",{children:`Squad ${s.code} · ${s.public?"Public":"Private"} · ${s.phase==="countdown"?`Starting in ${Math.ceil(s.countdown)}`:s.phase}`},"title"),...s.members.map(m=>jsx("p",{children:`${m.name}${m.id===s.leaderId?" ★":""} · ${m.connected?"Online":"Offline"} · ${m.ready?"Ready":"Not ready"}`},m.id)),button(s.members.find(m=>m.id===s.selfId)?.ready?"Unready":"Ready",()=>send({type:"squadReady",ready:!s.members.find(m=>m.id===s.selfId)?.ready})),s.leaderId===s.selfId&&button(s.public?"Make Private":"Make Public",()=>send({type:"squadPublic",public:!s.public})),button("Leave squad",()=>send({type:"squadLeave"})),s.leaderId===s.selfId&&(s.phase==="playing"||s.phase==="ended")&&button("Everyone returns",()=>send({type:"squadReturn"}))]},"squad")):children.push(jsx("div",{style:{display:"flex",justifyContent:"center",flexWrap:"wrap",gap:6,marginTop:8},children:[button("Create Private",()=>send({type:"squadCreate",public:!1})),button("Create Public",()=>send({type:"squadCreate",public:!0})),button("Find Public",()=>send({type:"squadFind"})),jsx("input",{"aria-label":"Room code",placeholder:"Room code",value:code,maxLength:8,onChange:ev=>setCode(ev.target.value.toLowerCase()),style:{width:95}},"code"),button("Join",()=>send({type:"squadJoin",code:code.toLowerCase()}))]},"join")))');
+    'return e.squadAction&&children.push(jsx(AshLobbySquad,{engine:e,send,squad:s}))');
   // Death Continue: revive where you died (same as server Engine.start patch).
   replaceOnce(
     'let t=Bx(this.save.biome)?nS(this.save.biome,this.width,this.height):{x:540,y:700},n=!this.waveMode&&Bx(this.save.biome)?this.geometry.projectInside(t.x,t.y,this.radius):t;this.x=n.x,this.y=n.y',
@@ -245,6 +292,6 @@ function patchClient(source){
   replaceOnce('Rj(e.petal.type)','(Rj(e.petal.type)||[`coral-piece-1a`,`coral-piece-1b`,`coral-piece-2`].includes(e.petal.type))');
   replaceOnce('e.petalBreaks.every(e=>Aj(e)&&Uj(e)&&Rj(e.type)',
     'e.petalBreaks.every(e=>Aj(e)&&Uj(e)&&(Rj(e.type)||[`coral-piece-1a`,`coral-piece-1b`,`coral-piece-2`].includes(e.type))');
-  return source+'\n'+['wire.js','client-terrain.js','client-motion.js','client-builds.js','client-qq.js','client-ux.js','client-mobile.js','client-display.js'].map(file=>fs.readFileSync(path.join(__dirname,file),'utf8')).join('\n')+'\n'+fs.readFileSync(path.join(__dirname,'client-touch-guard.js'),'utf8');
+  return source+'\n'+['wire.js','client-terrain.js','client-motion.js','client-builds.js','client-qq.js','client-ux.js','client-mobile.js','client-display.js'].map(file=>fs.readFileSync(path.join(__dirname,file),'utf8')).join('\n')+'\n'+fs.readFileSync(path.join(__dirname,'client-touch-guard.js'),'utf8')+'\n'+fs.readFileSync(path.join(__dirname,'client-lobby.js'),'utf8');
 }
 module.exports={patchClient};

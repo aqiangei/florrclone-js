@@ -2,7 +2,7 @@
 const crypto=require('node:crypto');
 const {AccountError}=require('./accounts');
 class Social {
-  constructor(db,clients,world){this.db=db;this.clients=clients;this.world=world;this.squads=new Map();db.guilds??={};db.guildInvites??={};this.invites=new Map();}
+  constructor(db,clients,world){this.db=db;this.clients=clients;this.world=world;this.squads=new Map();db.guilds??={};db.guildInvites??={};this.invites=new Map();world.api.guildName=account=>account?this.guild(account)?.name??'':'';}
   error(message){throw new AccountError(409,message);}
   guild(a){return Object.values(this.db.guilds).find(g=>g.members.includes(a.id));}
   squad(c){return this.squads.get(c?.squadCode);}
@@ -13,9 +13,17 @@ class Social {
     const s={code,leaderId:c.id,public:isPublic,members:new Set([c.id]),ready:new Set(),biome:c.engine.save.biome,phase:'waiting',countdown:0};this.squads.set(code,s);c.squadCode=code;return s;}
   leave(c){const s=this.squad(c);delete c.squadCode;if(!s)return;s.members.delete(c.id);s.ready.delete(c.id);s.countdown=0;s.phase='waiting';
     if(!s.members.size)this.squads.delete(s.code);else if(s.leaderId===c.id)s.leaderId=s.members.values().next().value;}
-  join(c,code){const s=this.squads.get(code.toLowerCase());if(!s)this.error('Squad not found');if(s.members.has(c.id))return;
-    if(s.members.size>=4)this.error('Squad is full');if(s.phase!=='waiting')this.error('Squad has already started');if(c.engine.state==='playing')this.error('Return to the lobby before joining');
-    this.leave(c);s.members.add(c.id);c.squadCode=s.code;c.engine.setBiome(s.biome);this.world.join(c);s.ready.clear();}
+  join(c,code,{invited=false}={}){const s=this.squads.get(code.toLowerCase());if(!s)this.error('Squad not found');if(s.members.has(c.id))return;
+    if(s.members.size>=4)this.error('Squad is full');if(s.phase!=='waiting'&&!(invited&&s.phase==='playing'))this.error('Squad has already started');
+    const inRun=c.engine.state==='playing'||c.engine.state==='dead';
+    if(inRun&&(!invited||c.engine.save.biome!==s.biome))this.error(invited?'Travel to the squad biome before accepting':'Return to the lobby before joining');
+    this.leave(c);s.members.add(c.id);c.squadCode=s.code;
+    // An invitation can group players already fighting in the same shared map.
+    // Preserve their position, life, nearby mobs and accumulated statistics.
+    if(!inRun)c.engine.setBiome(s.biome);this.world.join(c);s.ready.clear();
+    if(inRun)s.phase='playing';
+    else if(s.phase==='playing'){c.engine.start();this.world.bind(c);}
+  }
   command(c,m){const s=this.squad(c);switch(m.type){
     case 'squadCreate':if(c.engine.state!=='lobby')this.error('Return to the lobby first');this.create(c,m.public);break;
     case 'squadJoin':this.join(c,m.code);break;
@@ -34,15 +42,31 @@ class Social {
     if(s.phase==='playing'&&[...s.members].every(id=>this.clients.get(id)?.engine.state!=='playing'))s.phase='ended';
   }}
   snapshot(c){const s=this.squad(c);if(!s)return null;return {code:s.code,leaderId:s.leaderId,selfId:c.id,public:s.public,mode:'adventure',biome:s.biome,phase:s.phase,countdown:s.countdown,
-    members:[...s.members].map(id=>{const p=this.clients.get(id),e=p.engine;return {id,name:e.save.name,level:e.save.level,ready:s.ready.has(id),connected:true,state:e.state,hp:e.hp,maxHp:e.maxHp,loadout:e.save.loadout.slice(0,10),biome:e.save.biome};})};}
+    members:[...s.members].map(id=>{const p=this.clients.get(id),e=p.engine;return {id,name:e.save.name,level:e.save.level,ready:s.ready.has(id),connected:true,state:e.state,hp:e.hp,maxHp:e.maxHp,loadout:e.save.loadout.slice(0,10).map(p=>p?{type:p.type,rarity:p.rarity}:null),biome:e.save.biome};})};}
   async request(a,action,body){const g=this.guild(a),c=this.clients.get(a.id),now=Date.now();switch(action){
     case '':break;
     case 'create':{if(g)this.error('Leave your current guild first');const name=typeof body.name==='string'?body.name.trim():'';if(name.length<2||name.length>20||/[\u0000-\u001f<>]/.test(name))this.error('Guild name must contain 2–20 characters');if(Object.values(this.db.guilds).some(g=>g.name.toLowerCase()===name.toLowerCase()))this.error('Guild name already taken');const id=crypto.randomUUID();this.db.guilds[id]={id,name,leader:a.id,members:[a.id]};break;}
     case 'invite':{if(!g||g.leader!==a.id)this.error('Only the guild leader can invite');const target=Object.values(this.db.accounts).find(p=>p.username.toLowerCase()===String(body.username).toLowerCase());if(!target)this.error('Account not found');if(this.guild(target))this.error('Player already belongs to a guild');if(g.members.length>=50)this.error('Guild is full');this.db.guildInvites[target.id]=[{guildId:g.id,from:a.username,until:now+86400000}];break;}
     case 'respond':{if(typeof body.accept!=='boolean')this.error('Invalid response');const invite=(this.db.guildInvites[a.id]??[]).find(i=>i.until>now&&this.db.guilds[i.guildId]);if(!invite)this.error('Invitation expired');if(body.accept){if(g)this.error('Leave your current guild first');const target=this.db.guilds[invite.guildId];if(target.members.length>=50)this.error('Guild is full');target.members.push(a.id);}delete this.db.guildInvites[a.id];break;}
     case 'leave':if(g){g.members=g.members.filter(id=>id!==a.id);if(!g.members.length)delete this.db.guilds[g.id];else if(g.leader===a.id)g.leader=g.members[0];}break;
-    case 'squad-invite':{const target=this.clients.get(body.target);if(!g||!target||!g.members.includes(target.id)||target.id===a.id)this.error('Guild member is not online');if(!c||c.engine.state!=='lobby'||target.engine.state==='playing')this.error('Both players must be in the lobby');let s=this.squad(c)??this.create(c);if(s.leaderId!==c.id)this.error('Only the squad leader can invite');if(s.members.size>=4)this.error('Squad is full');if(s.phase!=='waiting')this.error('Squad has already started');this.invites.set(target.id,{from:a.id,code:s.code,until:now+60000});target.ws.send(JSON.stringify({type:'squadInvite',fromId:a.id,from:a.username}));break;}
-    case 'squad-respond':{if(typeof body.accept!=='boolean')this.error('Invalid response');const invite=this.invites.get(a.id);if(!invite||invite.until<now)this.error('Squad invitation expired');if(body.accept){if(!c)this.error('Connect to online play first');this.join(c,invite.code);}this.invites.delete(a.id);break;}
+    case 'squad-invite':{
+      if(!c)this.error('Connect to online play first');
+      let target;
+      if(typeof body.username==='string'){
+        const name=body.username.trim().toLowerCase(),online=[...this.clients.values()].filter(p=>p.ws?.readyState===1);
+        target=online.find(p=>p.account.username.toLowerCase()===name);
+        if(!target){const matches=online.filter(p=>p.engine.save.name.toLowerCase()===name);if(matches.length>1)this.error('Multiple players have that name; use the account username');target=matches[0];}
+        if(!target)this.error('Player is not online');
+      }else{target=this.clients.get(body.target);if(!g||!target||!g.members.includes(target.id))this.error('Guild member is not online');}
+      if(target.id===a.id)this.error('You cannot invite yourself');if(target.ws?.readyState!==1)this.error('Player is not online');
+      let s=this.squad(c);if(s&&s.members.has(target.id))this.error('Player is already in your squad');
+      if(!s){s=this.create(c);if(c.engine.state!=='lobby')s.phase='playing';}
+      if(s.leaderId!==c.id)this.error('Only the squad leader can invite');if(s.members.size>=4)this.error('Squad is full');
+      if(!['waiting','playing'].includes(s.phase))this.error('Return the squad to the lobby first');
+      this.invites.set(target.id,{from:a.id,code:s.code,until:now+60000});target.ws.send(JSON.stringify({type:'squadInvite',fromId:a.id,from:a.username}));
+      return {view:this.view(a),message:'Squad invitation sent.'};
+    }
+    case 'squad-respond':{if(typeof body.accept!=='boolean')this.error('Invalid response');const invite=this.invites.get(a.id);if(!invite||invite.until<now)this.error('Squad invitation expired');if(body.accept){if(!c)this.error('Connect to online play first');this.join(c,invite.code,{invited:true});}this.invites.delete(a.id);break;}
     default:throw new AccountError(404,'Not found');
   }return {view:this.view(a)};}
   recipients(c,channel){

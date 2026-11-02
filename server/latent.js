@@ -8,7 +8,7 @@ class LatentPopulation{
   constructor({grace=5,limit=2048,wakeBudget=32,activeLimit=256}={}){this.records=new Map();this.farSince=new Map();this.grace=grace;this.limit=limit;this.wakeBudget=wakeBudget;this.activeLimit=activeLimit;this.nextCensus=0;this.restored=0;this.slept=0;}
   near(m,viewers,margin){return viewers.some(e=>(m.x-e.x)**2+(m.y-e.y)**2<=(Math.max(1800,e.simulationViewRadius??1800)+(m.radius??0)+margin)**2);}
   eligible(m,referenced){
-    return m.hp>0&&m.hp===m.maxHp&&m.rarity<7&&!m.friendly&&!m.aggro&&!m.segment&&!referenced.has(m.id)&&
+    return m.hp>0&&m.hp===m.maxHp&&m.rarity<7&&!m.serverDungeonOpen&&!m.friendly&&!m.aggro&&!m.segment&&!referenced.has(m.id)&&
       LINKS.every(k=>m[k]===undefined)&&m.ownerId===undefined&&m.lastHitBy===undefined&&m.lastHitByMob===undefined&&m.summonAggroId===undefined&&m.poisonBy===undefined&&
       !m.poison&&!m.poisonTime&&!m.hit&&!m.slowTime&&!m.armorDebuffTime&&!m.chargeRemaining&&!m.wildUndead&&!m.revived&&!m.flowerEquipment&&!m.helTeleport&&
       !m.shots?.some(s=>s.life>0)&&!m.healingSuppression?.some(n=>n>0);

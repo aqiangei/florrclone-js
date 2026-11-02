@@ -7,6 +7,7 @@ const ashflorQQStyle=`
 .ashflor-qq-entry img{width:36px;height:36px;object-fit:contain;pointer-events:none}
 .ashflor-qq-caption{font:700 11px/1.1 Ubuntu,sans-serif;color:#e8e8e8;text-shadow:0 1px 2px #0008;white-space:nowrap;pointer-events:none}
 .reference-ui .ashflor-qq-entry .ashflor-github-button{background:#7b8cff!important;text-decoration:none}
+.reference-ui .ashflor-qq-entry .ashflor-feedback-button{background:#547d46!important;text-decoration:none}
 @media(max-width:520px){
   .reference-ui .toolbar{left:6px!important;gap:4px!important}
   .reference-ui .toolbar .tool,.reference-ui .toolbar .menu-close{width:40px!important;height:40px!important;min-width:40px;min-height:40px;padding:4px!important}
@@ -66,4 +67,13 @@ function AshflorGithubEntry({clearInput}={}){
   const [mounted,setMounted]=(0,O.useState)(false);(0,O.useEffect)(()=>setMounted(true),[]);
   if(!mounted)return null;
   return (0,b.jsxs)('span',{className:'ashflor-qq-entry ashflor-github-entry',children:[(0,b.jsx)('a',{className:'ashflor-qq-button ashflor-github-button',title:'GitHub 开源仓库','aria-label':'GitHub 开源仓库',href:'https://github.com/aqiangei/florrclone',target:'_blank',rel:'noopener noreferrer',onClick:()=>clearInput?.(),children:(0,b.jsx)('img',{src:'/assets/ashflor-github.svg',alt:'',width:36,height:36,draggable:false})}),(0,b.jsx)('span',{className:'ashflor-qq-caption',children:'GitHub'})]});
+}
+function ashflorFeedbackBoardUrl(){
+  const from=encodeURIComponent(location.origin||'');
+  return 'https://ashflor.com/feedback.html?v=prog5&from='+from;
+}
+function AshflorFeedbackEntry({clearInput}={}){
+  const [mounted,setMounted]=(0,O.useState)(false);(0,O.useEffect)(()=>setMounted(true),[]);
+  if(!mounted)return null;
+  return (0,b.jsxs)('span',{className:'ashflor-qq-entry ashflor-feedback-entry',children:[(0,b.jsx)('a',{className:'ashflor-qq-button ashflor-feedback-button',title:'给作者留言','aria-label':'给作者留言',href:ashflorFeedbackBoardUrl(),target:'_blank',rel:'noopener noreferrer',onClick:()=>clearInput?.(),children:(0,b.jsx)('img',{src:'/assets/ashflor-feedback.svg',alt:'',width:36,height:36,draggable:false})}),(0,b.jsx)('span',{className:'ashflor-qq-caption',children:'留言'})]});
 }

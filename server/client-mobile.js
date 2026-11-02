@@ -1,7 +1,31 @@
 // CSS pixels, independent of DPR. Keep a useful world view on either orientation.
 function ashMobileViewportScale(width,height){
   const touch=typeof matchMedia==='function'&&(matchMedia('(pointer:coarse)').matches||navigator.maxTouchPoints>0);
-  return touch?Math.min(1,Math.min(width,height)/720):1;
+  if(!touch)return 1;
+  const short=Math.min(width,height);
+  // Landscape phones are often ~360–400px tall; pull the world back further so
+  // HUD chrome and labels do not dominate the playfield.
+  const base=height<width?640:720;
+  return Math.min(1,Math.max(.55,short/base));
+}
+function ashIsTouchUi(){
+  return typeof document!=='undefined'&&document.documentElement.classList.contains('ash-touch');
+}
+// Skip centipede/worm segment spam only. Keep Common/Unusual names visible.
+function ashShouldDrawMobName(mob){
+  return !!(mob&&!mob.wormGut&&!mob.segment);
+}
+// World-space font → roughly constant on-screen size. Mobile labels stay small
+// even when the camera zooms in on the flower.
+function ashMobNameFont(size,zoom){
+  if(!ashIsTouchUi())return size;
+  const z=Math.max(.45,Number(zoom)||1);
+  return Math.max(4.5,Math.min(7.5,(size*.42)/z));
+}
+function ashPlayerNameFont(size,zoom){
+  if(!ashIsTouchUi())return size;
+  const z=Math.max(.45,Number(zoom)||1);
+  return Math.max(8,Math.min(14,(size*.7)/z));
 }
 if(typeof document!=='undefined'){
   const style=document.createElement('style');
@@ -76,51 +100,116 @@ html.ash-touch,html.ash-touch body{overflow:hidden;overscroll-behavior:none}
     top:calc(12dvh / var(--ref,1))!important;
   }
 }
-/* In-game HUD: one screen coordinate system for touch controls. */
+/* In-game HUD: one coordinate system. --ash-ui / --ash-loadout drive every chrome. */
 .game-shell:has(.touch-pad) .reference-ui{display:contents;--ref:1}
-.game-shell:has(.touch-pad){--hud-native-scale:.6;--loadout-native-scale:.48;--ash-hud-bottom:max(12px, calc(env(safe-area-inset-bottom, 0px) + var(--ash-vv-bottom, 0px)))}
-.game-shell:has(.touch-pad) .toolbar{top:max(8px,env(safe-area-inset-top));left:max(8px,env(safe-area-inset-left));transform:none;gap:5px}
-.game-shell:has(.touch-pad) .toolbar .tool{width:36px!important;height:36px!important;border-width:2px}
+.game-shell:has(.touch-pad){
+  --ash-ui:.68;
+  --ash-loadout:.56;
+  --ash-map:.82;
+  --ash-touch:1.08;
+  --ash-hud-bottom:max(10px, calc(env(safe-area-inset-bottom, 0px) + var(--ash-vv-bottom, 0px)));
+  --hud-native-scale:var(--ash-ui);
+  --loadout-native-scale:var(--ash-loadout);
+}
+.game-shell:has(.touch-pad) .toolbar{
+  top:max(6px,env(safe-area-inset-top));left:max(6px,env(safe-area-inset-left));
+  transform:scale(var(--ash-ui));transform-origin:top left;gap:5px
+}
+.game-shell:has(.touch-pad) .toolbar .tool{width:38px!important;height:38px!important;border-width:2px}
 .game-shell:has(.touch-pad) .toolbar .tool svg{width:24px;height:24px}
-.game-shell:has(.touch-pad) .player-hud{left:max(12px,env(safe-area-inset-left));top:52px;transform:scale(.58);transform-origin:top left}
-.game-shell:has(.touch-pad) .side-actions{left:max(8px,env(safe-area-inset-left));bottom:var(--ash-hud-bottom)!important;transform:scale(.46);transform-origin:bottom left;gap:8px}
+.game-shell:has(.touch-pad) .player-hud{
+  left:max(8px,env(safe-area-inset-left));top:calc(48px * var(--ash-ui) + 8px);
+  transform:scale(var(--ash-ui));transform-origin:top left
+}
+.game-shell:has(.touch-pad) .side-actions{
+  left:max(6px,env(safe-area-inset-left));bottom:var(--ash-hud-bottom)!important;
+  transform:scale(var(--ash-ui));transform-origin:bottom left;gap:8px
+}
 .game-shell:has(.touch-pad) .loadout,
 .game-shell:has(.touch-pad):has(.game-panel:not([inert])) .loadout{
-  --hud-scale:var(--ash-loadout-scale,.48);
-  bottom:var(--ash-hud-bottom)!important;
-  left:50%!important;
-  right:auto!important;
-  top:auto!important;
+  --hud-scale:var(--ash-loadout-scale,var(--ash-loadout));
+  bottom:var(--ash-hud-bottom)!important;left:50%!important;right:auto!important;top:auto!important;
   transform:translateX(-50%) scale(var(--hud-scale))!important;
-  transform-origin:bottom center!important;
-  z-index:16;
+  transform-origin:bottom center!important;z-index:16
 }
-.game-shell:has(.touch-pad) .touch-stick{box-sizing:border-box;width:88px!important;height:88px!important;left:max(16px,calc(env(safe-area-inset-left) + 12px))!important;bottom:max(154px,calc(var(--ash-hud-bottom) + 132px))!important}
-.game-shell:has(.touch-pad) .touch-knob{box-sizing:border-box;width:40px!important;height:40px!important}
+.game-shell:has(.touch-pad) .viep-preset-panel{transform:scale(.9);transform-origin:bottom center;max-width:92vw}
+.game-shell:has(.touch-pad) .minimap-wrap{
+  top:max(6px,env(safe-area-inset-top))!important;right:max(6px,env(safe-area-inset-right))!important;
+  transform:scale(var(--ash-map));transform-origin:top right;gap:2px
+}
+.game-shell:has(.touch-pad) .minimap-wrap canvas{width:112px!important;height:84px!important;border-width:2px!important}
+.game-shell:has(.touch-pad) .minimap-wrap>span{font-size:10px!important}
+.game-shell:has(.touch-pad) .ashflor-roster{
+  transform:scale(var(--ash-map));transform-origin:top right;max-height:28vh;font-size:10px
+}
+.game-shell:has(.touch-pad) .ashflor-qq-entry{
+  transform:scale(calc(var(--ash-ui) * 1.05));transform-origin:top center
+}
+.game-shell:has(.touch-pad):not(.is-lobby) .ashflor-qq-caption{display:none}
 .game-shell:has(.touch-pad) .swap-all,
 .game-shell:has(.touch-pad) .petal-speed{display:none}
-.game-shell:has(.touch-pad) .online-readout{top:106px;bottom:auto;font-size:9px;line-height:14px;gap:6px;padding:2px 6px;pointer-events:none}
-.game-shell:has(.touch-pad) .fps-readout{top:86px;font-size:9px;line-height:14px;padding:2px 6px}
-.game-shell:has(.touch-pad) .game-chat{left:110px;bottom:max(96px,calc(var(--ash-hud-bottom) + 72px));width:322px;transform:scale(.55);transform-origin:bottom left}
-.game-shell:has(.touch-pad) .touch-actions{right:max(12px,calc(env(safe-area-inset-right) + 8px))!important;bottom:max(106px,calc(var(--ash-hud-bottom) + 84px))!important;gap:8px!important;align-items:flex-end!important}
-.game-shell:has(.touch-pad) .touch-actions button{box-sizing:border-box;width:52px!important;height:52px!important;font-size:12px!important;border-width:2px!important}
-.game-shell:has(.touch-pad) .touch-actions .touch-attack{width:68px!important;height:68px!important;font-size:14px!important}
+.game-shell:has(.touch-pad) .online-readout{
+  top:max(6px,env(safe-area-inset-top));bottom:auto;left:50%;transform:translateX(-50%) scale(.85);
+  transform-origin:top center;font-size:9px;line-height:13px;gap:6px;padding:2px 6px;pointer-events:none
+}
+.game-shell:has(.touch-pad) .fps-readout{
+  top:max(26px,calc(env(safe-area-inset-top) + 20px));left:50%;transform:translateX(-50%) scale(.85);
+  transform-origin:top center;font-size:9px;line-height:13px;padding:2px 6px
+}
+.game-shell:has(.touch-pad) .game-chat{
+  left:max(104px,calc(env(safe-area-inset-left) + 96px));
+  bottom:max(96px,calc(var(--ash-hud-bottom) + 72px));
+  width:min(320px,48vw);transform:scale(.62);transform-origin:bottom left
+}
+.game-shell:has(.touch-pad) .ash-death-summary{
+  top:max(56px,calc(env(safe-area-inset-top) + 48px));right:max(8px,env(safe-area-inset-right));
+  width:min(220px,42vw);transform:scale(.85);transform-origin:top right
+}
+.game-shell:has(.touch-pad) .touch-stick{
+  box-sizing:border-box;width:calc(96px * var(--ash-touch))!important;height:calc(96px * var(--ash-touch))!important;
+  left:max(12px,calc(env(safe-area-inset-left) + 8px))!important;
+  bottom:max(148px,calc(var(--ash-hud-bottom) + 120px))!important
+}
+.game-shell:has(.touch-pad) .touch-knob{box-sizing:border-box;width:calc(44px * var(--ash-touch))!important;height:calc(44px * var(--ash-touch))!important}
+.game-shell:has(.touch-pad) .touch-actions{
+  right:max(10px,calc(env(safe-area-inset-right) + 8px))!important;
+  bottom:max(110px,calc(var(--ash-hud-bottom) + 84px))!important;
+  gap:8px!important;align-items:flex-end!important;
+  transform:scale(var(--ash-touch));transform-origin:bottom right
+}
+.game-shell:has(.touch-pad) .touch-actions button{box-sizing:border-box;width:56px!important;height:56px!important;font-size:13px!important;border-width:2px!important}
+.game-shell:has(.touch-pad) .touch-actions .touch-attack{width:72px!important;height:72px!important;font-size:15px!important}
 .game-shell:has(.touch-pad) .touch-mini{gap:8px!important}
 .game-shell:has(.touch-pad) .touch-mini .touch-build,
-.game-shell:has(.touch-pad) .touch-mini .touch-swap{width:44px!important;height:44px!important;font-size:11px!important;border-width:2px!important}
-.game-shell:has(.touch-pad) .touch-build-panel{bottom:max(220px,calc(var(--ash-hud-bottom) + 196px))!important;max-height:calc(100dvh - 230px)}
-.game-shell:has(.touch-pad) .touch-controls{bottom:max(180px,calc(var(--ash-hud-bottom) + 160px))!important}
+.game-shell:has(.touch-pad) .touch-mini .touch-swap{width:48px!important;height:48px!important;font-size:12px!important;border-width:2px!important}
+.game-shell:has(.touch-pad) .touch-build-panel{bottom:max(200px,calc(var(--ash-hud-bottom) + 170px))!important;max-height:min(42dvh,calc(100dvh - 200px));transform:scale(.9);transform-origin:bottom right}
+.game-shell:has(.touch-pad) .touch-controls{bottom:max(160px,calc(var(--ash-hud-bottom) + 140px))!important}
+/* Landscape: keep controls thumb-sized; only ease down on very short screens. */
 @media(orientation:landscape){
-  .game-shell:has(.touch-pad){--ash-hud-bottom:max(10px, calc(env(safe-area-inset-bottom, 0px) + var(--ash-vv-bottom, 0px)))}
+  .game-shell:has(.touch-pad){
+    --ash-ui:.58;
+    --ash-loadout:.46;
+    --ash-map:.72;
+    --ash-touch:1;
+  }
   .game-shell:has(.touch-pad) .side-actions{display:flex;flex-direction:row}
-  .game-shell:has(.touch-pad) .online-readout{top:8px}
-  .game-shell:has(.touch-pad) .fps-readout{top:28px}
+  .game-shell:has(.touch-pad) .touch-mini{flex-direction:row!important}
   .game-shell:has(.touch-pad) .touch-stick{bottom:max(72px,calc(var(--ash-hud-bottom) + 52px))!important}
   .game-shell:has(.touch-pad) .touch-actions{bottom:max(72px,calc(var(--ash-hud-bottom) + 52px))!important}
-  .game-shell:has(.touch-pad) .touch-mini{flex-direction:row!important}
-  .game-shell:has(.touch-pad) .game-chat{bottom:max(72px,calc(var(--ash-hud-bottom) + 52px))}
-  .game-shell:has(.touch-pad) .touch-build-panel{bottom:max(148px,calc(var(--ash-hud-bottom) + 128px))!important;max-height:calc(100dvh - 160px)}
-  .game-shell:has(.touch-pad) .touch-controls{bottom:max(148px,calc(var(--ash-hud-bottom) + 128px))!important}
+  .game-shell:has(.touch-pad) .game-chat{bottom:max(72px,calc(var(--ash-hud-bottom) + 52px));width:min(280px,40vw);transform:scale(.55)}
+  .game-shell:has(.touch-pad) .touch-build-panel{bottom:max(140px,calc(var(--ash-hud-bottom) + 118px))!important;max-height:min(48dvh,calc(100dvh - 140px))}
+  .game-shell:has(.touch-pad) .touch-controls{bottom:max(140px,calc(var(--ash-hud-bottom) + 118px))!important}
+  .game-shell:has(.touch-pad) .online-readout{top:max(4px,env(safe-area-inset-top))}
+  .game-shell:has(.touch-pad) .fps-readout{top:max(22px,calc(env(safe-area-inset-top) + 18px))}
+  .game-shell:has(.touch-pad) .ash-death-summary{width:min(200px,36vw);transform:scale(.85)}
+}
+@media(orientation:landscape) and (max-height:420px){
+  .game-shell:has(.touch-pad){
+    --ash-ui:.50;
+    --ash-loadout:.40;
+    --ash-map:.62;
+    --ash-touch:.9;
+  }
 }
 `;
   document.head.appendChild(style);
@@ -207,7 +296,11 @@ html.ash-touch,html.ash-touch body{overflow:hidden;overscroll-behavior:none}
     const shell=document.querySelector('.game-shell:has(.touch-pad)'),row=shell?.querySelector('.loadout');
     if(!row)return;
     if(observed!==row){if(observed)resize.unobserve(observed);resize.observe(row);observed=row;}
-    const scale=String(Math.min(.48,(innerWidth-112)/Math.max(1,row.offsetWidth)));
+    const landscape=innerWidth>innerHeight;
+    const short=landscape&&innerHeight<=420;
+    const cap=short?0.40:landscape?0.46:0.56;
+    const margin=landscape?(short?140:120):96;
+    const scale=String(Math.min(cap,(innerWidth-margin)/Math.max(1,row.offsetWidth)));
     if(shell.style.getPropertyValue('--ash-loadout-scale')!==scale)shell.style.setProperty('--ash-loadout-scale',scale);
   }
   function schedule(){if(!frame)frame=requestAnimationFrame(sync);}

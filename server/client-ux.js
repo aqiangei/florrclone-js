@@ -1,4 +1,44 @@
 // Additions to the pinned client. JSX remains React-owned, including translations.
+// Draw geometry at the current canvas transform, so giant Square summons stay
+// sharp at every rarity, zoom and device pixel ratio.
+function ashDrawSquare(ctx,x,y,radius,angle=0){
+  ctx.save();ctx.translate(x,y);ctx.rotate(angle);ctx.fillStyle='#82ff5d';ctx.strokeStyle='#67ca4b';
+  ctx.lineWidth=radius*.13;ctx.lineJoin='miter';ctx.fillRect(-radius*.85,-radius*.85,radius*1.7,radius*1.7);
+  ctx.strokeRect(-radius*.85,-radius*.85,radius*1.7,radius*1.7);ctx.restore();return true;
+}
+function ashDrawPlayerNameplate(ctx,player){
+  const guild=player.guildName?`[${player.guildName}]`:'',name=player.name||'Player';
+  ctx.save();ctx.font='700 10px Ubuntu,sans-serif';
+  const width=Math.max(96,Math.min(200,ctx.measureText(guild).width+58),Math.min(200,ctx.measureText(name).width));
+  const left=player.x-width/2,right=player.x+width/2,y=player.y+player.radius+20;
+  eC(ctx,name,left,y-5,12,'#fff','left');ctx.fillStyle='#334e35';ctx.beginPath();ctx.roundRect(left,y,width,6,3);ctx.fill();
+  ctx.fillStyle='#77e368';ctx.beginPath();ctx.roundRect(left+1,y+1,(width-2)*Math.max(0,Math.min(1,player.hp/Math.max(1,player.maxHp))),4,2);ctx.fill();
+  if(guild)eC(ctx,guild,left,y+19,10,'#a6e4ff','left');
+  const best=Math.max(0,...(player.petals||[]).filter(Boolean).map(p=>p.rarity??0));
+  eC(ctx,`Lv. ${Math.max(1,player.level|0)}`,right,y+19,10,L[best]?.color??'#fff','right');ctx.restore();
+}
+function AshGuildHeading({guild}){
+  const online=guild.members.filter(m=>m.online).length;
+  return(0,b.jsxs)('div',{className:'ash-guild-heading',children:[
+    (0,b.jsx)('div',{className:'ash-guild-emblem','aria-hidden':true,children:'✦'}),
+    (0,b.jsxs)('div',{children:[(0,b.jsx)('small',{children:'GUILD'}),(0,b.jsx)('h3',{className:'guild-title',children:guild.name})]}),
+    (0,b.jsxs)('div',{className:'ash-guild-counts',children:[(0,b.jsxs)('span',{children:[(0,b.jsx)('b',{children:guild.members.length}),' ',ashTr('Members')]}),(0,b.jsxs)('span',{children:[(0,b.jsx)('b',{children:online}),' ',ashTr('Online')]})]})
+  ]});
+}
+function AshLobbySquad({engine,send,squad}){
+  const[code,setCode]=(0,O.useState)('');
+  const button=(label,action)=>(0,b.jsx)('button',{type:'button',onClick:action,children:label},label);
+  if(squad){const self=squad.members.find(m=>m.id===squad.selfId);return(0,b.jsxs)('section',{className:'ash-lobby-squad','aria-label':ashTr('Squad'),children:[
+    (0,b.jsxs)('div',{className:'ash-lobby-squad-title',children:[(0,b.jsx)('strong',{children:ashTr('Squad')}),(0,b.jsx)('code',{children:squad.code}),(0,b.jsx)('span',{children:`${squad.members.length}/4`})]}),
+    (0,b.jsx)('div',{className:'ash-lobby-squad-members',children:squad.members.map(m=>(0,b.jsx)('span',{children:`${m.id===squad.leaderId?'★ ':''}${m.name}${m.ready?' ✓':''}`},m.id))}),
+    (0,b.jsxs)('div',{className:'ash-lobby-squad-actions',children:[button(self?.ready?'Unready':'Ready up',()=>send({type:'squadReady',ready:!self?.ready})),button('Leave squad',()=>send({type:'squadLeave'}))]})
+  ]});}
+  return(0,b.jsxs)('section',{className:'ash-lobby-squad','aria-label':ashTr('Squad'),children:[
+    (0,b.jsxs)('div',{className:'ash-lobby-squad-title',children:[(0,b.jsx)('strong',{children:ashTr('Squad')}),(0,b.jsx)('small',{children:'1–4'})]}),
+    (0,b.jsxs)('div',{className:'ash-lobby-squad-actions',children:[button('Create Private',()=>send({type:'squadCreate',public:false})),button('Create Public',()=>send({type:'squadCreate',public:true})),button('Find Public',()=>send({type:'squadFind'}))]}),
+    (0,b.jsxs)('div',{className:'ash-lobby-squad-join',children:[(0,b.jsx)('input',{'aria-label':ashTr('Room code'),placeholder:ashTr('Room code'),value:code,maxLength:8,onChange:e=>setCode(e.target.value.toLowerCase())}),(0,b.jsx)('button',{type:'button',disabled:!/^[a-f0-9]{8}$/.test(code),onClick:()=>send({type:'squadJoin',code}),children:'Join'})]})
+  ]});
+}
 // Alt latch (default off): rarity glow under petals + exact tip numbers, matching florr_clone-web.
 var ashAltMode=false;
 function ashSetAltMode(on){
@@ -49,7 +89,8 @@ var ashStrings={
   'Search petals':'搜索花瓣','Drag a petal to equip it':'点选花瓣后选择装备槽，也可拖动装备','All':'全部','Stack':'堆叠',
   'Attack':'攻击','Defend':'防御','Build':'配装','Builds':'配装','Movement joystick':'移动摇杆','Swap reserve equipment':'主副装备互换',
   'Fullscreen':'全屏','Enter fullscreen':'进入全屏','Exit fullscreen':'退出全屏','Landscape game':'横屏游戏','Fullscreen landscape':'横屏游戏',
-  'Display':'屏幕显示','Landscape and fullscreen for a wider view.':'横屏全屏，获得更宽阔的游戏视野。',
+  'Display':'屏幕显示','Zoom ':'缩放 ','Scroll wheel: zoom':'滚轮：调整视野',
+  'Landscape and fullscreen for a wider view.':'横屏全屏，获得更宽阔的游戏视野。',
   'Landscape game enters fullscreen automatically.':'点「横屏游戏」会自动全屏并锁定横屏。',
   'Rotate your phone to landscape.':'请将手机横过来，继续游戏。',
   'Tap to enter fullscreen.':'轻触「横屏游戏」进入全屏。',
@@ -59,6 +100,7 @@ var ashStrings={
   'Fullscreen was blocked. Tap Landscape game to retry.':'未能进入全屏，请轻触「横屏游戏」重试。',
   'Ready':'准备','Not ready':'取消准备','Continue':'重生','Close':'关闭','Cancel':'取消','Save':'保存','Use':'使用',
   'Online':'在线','Offline':'离线','Local':'附近','Public':'公共','Squad':'组队','Guild':'公会','Party invite':'组队邀请','Accept':'接受','Decline':'拒绝',
+  'Invite to squad':'快捷组队','Squad invitation sent.':'组队邀请已发送。',
   'Create guild':'创建公会','Guild name':'公会名称','Account username':'账号名称','Invite username':'邀请账号','Invite':'邀请',
   'Leave guild':'退出公会','Guild invitations':'公会邀请','Loading guild…':'正在读取公会…',
   "You don't have a guild yet. Enter a name to create one.":'还没有加入公会，可以输入名称创建。',
@@ -93,11 +135,6 @@ function AshLanguageSelect(){const lang=useAshLanguage();return(0,b.jsxs)('selec
 function ashSend(ref,command){return ref.current?.sendCommand?.(command);}
 function useAshEngine(ref){const [data,set]=(0,O.useState)({});(0,O.useEffect)(()=>{let last='';const update=()=>{const e=ref.current;if(!e?.sendCommand)return;const next={roster:e.onlineRoster??[],stats:e.combatStats??{},job:e.craftJob??null,squad:e.squad??null,state:e.state,biome:e.save.biome,online:e.connection?.status??'online'};const json=JSON.stringify(next);if(json!==last){last=json;set(next);}};update();const timer=setInterval(update,200);return()=>clearInterval(timer);},[ref]);return data;}
 function AshDialog({title,close,clear,children}){const ref=(0,O.useRef)(null);(0,O.useEffect)(()=>{clear?.();ref.current?.showModal();return()=>clear?.();},[]);return(0,ce.createPortal)((0,b.jsxs)('dialog',{ref,className:'ashflor-dialog',onCancel:close,onClose:close,onPointerDown:e=>e.stopPropagation(),children:[(0,b.jsxs)('header',{children:[(0,b.jsx)('h2',{children:title}),(0,b.jsx)('button',{'aria-label':'Close',onClick:close,children:'×'})]}),children]}),document.body);}
-const ASH_ANNOUNCEMENT='本服为 florr 克隆私服，当前全部花瓣开放测试，正版访问地址：152.32.173.78。本服仅用于花瓣测试游玩。原版开发者：666 & hyper1Qa；私服运营：aqa。后续将同步更新原版新版本数值。';
-function AshAnnouncement(){const [open,setOpen]=(0,O.useState)(true);if(!open)return null;
-  return(0,b.jsxs)('aside',{className:'ashflor-announce',role:'status','aria-label':'公告',onPointerDown:e=>e.stopPropagation(),children:[
-    (0,b.jsx)('button',{type:'button',className:'ashflor-announce-close','aria-label':'关闭公告',title:'关闭',onClick:()=>setOpen(false),children:'×'}),
-    (0,b.jsx)('strong',{children:'公告'}),(0,b.jsx)('p',{children:ASH_ANNOUNCEMENT})]});}
 function ashFormatStack(n){if(typeof Ya==='function')return Ya(n);for(const[t,s]of[[1e9,'b'],[1e6,'m'],[1e3,'k']])if(Math.abs(n)>=t)return`${(n/t).toFixed(1)}${s}`;return String(n);}
 function ashParseStacked(map,kind){
   return Object.entries(map??{}).filter(([,n])=>n>0).map(([key,count])=>{
@@ -109,8 +146,21 @@ function AshDeathSummary({engine}){
   useAshLanguage();
   const [,bump]=(0,O.useState)(0);
   (0,O.useEffect)(()=>{const timer=setInterval(()=>bump(n=>n+1),200);return()=>clearInterval(timer);},[]);
+  // Death Continue only mounts when no panel is open — dismiss craft/inventory on death.
+  // Stock keeps closed panels mounted with [inert]; only non-inert ones still block.
+  (0,O.useEffect)(()=>{
+    const close=()=>{
+      if(engine.current?.state!=='dead')return;
+      document.querySelector('.game-panel:not([inert]) header button[aria-label="Close panel"]')?.click();
+    };
+    close();
+    const timer=setInterval(close,200);
+    return()=>clearInterval(timer);
+  },[engine]);
   const e=engine.current;
   if(!e||e.state!=='dead')return null;
+  // Match stock death loot: stay out of the way while inventory/craft/etc. is open.
+  if(document.querySelector('.game-panel:not([inert])'))return null;
   const kills=ashParseStacked(e.sessionMobKills,'mob');
   const petals=ashParseStacked(e.sessionCollected,'petal');
   if(!kills.length&&!petals.length)return null;
@@ -138,14 +188,19 @@ function AshDeathSummary({engine}){
   ]}),document.body);
 }
 function AshOnlineTools({engine}){useAshLanguage();const data=useAshEngine(engine),[collapsed,setCollapsed]=(0,O.useState)(false),roster=(0,O.useRef)(null);
-  (0,O.useEffect)(()=>{setCollapsed(matchMedia('(max-width:600px)').matches);const timer=setInterval(()=>{
-    const map=document.querySelector('.minimap-wrap'),el=roster.current;if(!el)return;const r=map?.getBoundingClientRect();const bottom=r&&r.height>0?r.bottom:64;el.style.top=Math.min(innerHeight-80,bottom+6)+'px';el.style.right=Math.max(8,r?innerWidth-r.right:12)+'px';el.style.width=Math.max(140,Math.min(180,r?.width??150))+'px';
+  (0,O.useEffect)(()=>{setCollapsed(matchMedia('(max-width:900px), (orientation:landscape) and (max-height:520px)').matches);const timer=setInterval(()=>{
+    const map=document.querySelector('.minimap-wrap'),el=roster.current;if(!el)return;const r=map?.getBoundingClientRect();const bottom=r&&r.height>0?r.bottom:64;
+    const touch=document.documentElement.classList.contains('ash-touch');const landscape=innerWidth>innerHeight;
+    el.style.top=Math.min(innerHeight-(touch?56:80),bottom+(touch?4:6))+'px';
+    el.style.right=Math.max(touch?6:8,r?innerWidth-r.right:12)+'px';
+    el.style.width=Math.max(touch?110:140,Math.min(touch?(landscape?128:150):180,r?.width??150))+'px';
+    el.style.maxHeight=touch?(landscape?'22vh':'28vh'):'';
   },200);return()=>clearInterval(timer);},[]);
   if(!data.state)return null;
-  return(0,ce.createPortal)((0,b.jsxs)(b.Fragment,{children:[(0,b.jsx)(AshAnnouncement,{}),
+  return(0,ce.createPortal)((0,b.jsxs)(b.Fragment,{children:[
     data.state!=='lobby'&&(0,b.jsxs)('aside',{ref:roster,className:'ashflor-roster','aria-label':'Online players',children:[(0,b.jsxs)('button',{className:'ashflor-roster-heading',onClick:()=>setCollapsed(v=>!v),'aria-expanded':!collapsed,children:[ashTr('Online players'),' · ',data.roster.length,collapsed?' ▸':' ▾']}),!collapsed&&(0,b.jsx)('ul',{children:data.roster.map(p=>(0,b.jsxs)('li',{'data-self':p.id===engine.current?.squad?.selfId,children:[(0,b.jsx)('strong',{children:p.name}),(0,b.jsxs)('small',{children:['Lv.',p.level,' · ',p.biome,' · ',ashTr(p.state==='playing'?'Playing':p.state==='dead'?'Dead':'Lobby')]})]},p.id))})]})]}),document.body);}
-function AshPanelTools({engine,selected,slots,panel}){useAshLanguage();const data=useAshEngine(engine),[reserve,setReserve]=(0,O.useState)(false),[slot,setSlot]=(0,O.useState)(0),[max,setMax]=(0,O.useState)(6);if(!engine.current?.sendCommand)return null;const send=c=>ashSend(engine,c),running=!!data.job?.running;
-  return(0,b.jsxs)('div',{className:'ashflor-panel-tools',children:panel==='inventory'?[(0,b.jsx)('p',{children:'Select a petal, then a slot.'}),(0,b.jsxs)('div',{className:'ashflor-action-row',children:[(0,b.jsxs)('label',{children:[(0,b.jsx)('input',{type:'checkbox',checked:reserve,onChange:e=>setReserve(e.target.checked)}),'Reserve']}),(0,b.jsx)('span',{className:'ashflor-slot-buttons',children:Array.from({length:slots},(_,i)=>(0,b.jsx)('button',{type:'button','aria-label':'Equip slot '+(i+1),disabled:!selected,onClick:()=>{engine.current.ashEquipSlot=i;setSlot(i);engine.current.equip(i,selected,reserve);},children:String(i+1)},i))}),(0,b.jsx)('button',{disabled:!selected,onClick:()=>engine.current.equip(engine.current.ashEquipSlot??slot,selected,reserve),children:'Equip selected'}),(0,b.jsx)('button',{onClick:()=>engine.current.unequip(engine.current.ashEquipSlot??slot,reserve),children:'Unequip slot'}),(0,b.jsx)('button',{onClick:()=>send({type:'swapAll'}),children:'Swap all'})]})]:panel==='craft'?[(0,b.jsx)('strong',{children:'One-click crafting'}),(0,b.jsx)('p',{children:'Only inventory petals are consumed. Equipped petals are protected.'}),(0,b.jsxs)('label',{children:['Highest input rarity',' ',(0,b.jsx)('select',{'aria-label':'Highest input rarity',value:max,disabled:running,onChange:e=>setMax(Number(e.target.value)),children:L.slice(0,9).map((r,i)=>(0,b.jsx)('option',{value:i,children:r.name},i))})]}),(0,b.jsxs)('div',{className:'ashflor-action-row',children:[(0,b.jsx)('button',{disabled:running||!selected||selected.rarity>8,onClick:()=>send({type:'craftBatch',scope:'selected',item:selected,maxRarity:selected.rarity}),children:'Craft selected stack'}),(0,b.jsx)('button',{disabled:running,onClick:()=>send({type:'craftBatch',scope:'inventory',maxRarity:max}),children:'Craft inventory'}),running&&(0,b.jsx)('button',{onClick:()=>send({type:'craftCancel'}),children:'Cancel crafting'})]}),data.job&&(0,b.jsxs)('p',{role:'status',children:[ashTr(running?'Running':data.job.status==='cancelled'?'Cancelled':'Completed'),' · ',data.job.attempts,' ',ashTr('attempts'),' · ',data.job.successes,' ',ashTr('successes')]})]:null});}
+function AshPanelTools({engine,selected,panel}){useAshLanguage();const data=useAshEngine(engine),[max,setMax]=(0,O.useState)(6);if(panel!=='craft'||!engine.current?.sendCommand)return null;const send=c=>ashSend(engine,c),running=!!data.job?.running;
+  return(0,b.jsxs)('div',{className:'ashflor-panel-tools',children:[(0,b.jsx)('strong',{children:'One-click crafting'}),(0,b.jsx)('p',{children:'Only inventory petals are consumed. Equipped petals are protected.'}),(0,b.jsxs)('label',{children:['Highest input rarity',' ',(0,b.jsx)('select',{'aria-label':'Highest input rarity',value:max,disabled:running,onChange:e=>setMax(Number(e.target.value)),children:L.slice(0,9).map((r,i)=>(0,b.jsx)('option',{value:i,children:r.name},i))})]}),(0,b.jsxs)('div',{className:'ashflor-action-row',children:[(0,b.jsx)('button',{disabled:running||!selected||selected.rarity>8,onClick:()=>send({type:'craftBatch',scope:'selected',item:selected,maxRarity:selected.rarity}),children:'Craft selected stack'}),(0,b.jsx)('button',{disabled:running,onClick:()=>send({type:'craftBatch',scope:'inventory',maxRarity:max}),children:'Craft inventory'}),running&&(0,b.jsx)('button',{onClick:()=>send({type:'craftCancel'}),children:'Cancel crafting'})]}),data.job&&(0,b.jsxs)('p',{role:'status',children:[ashTr(running?'Running':data.job.status==='cancelled'?'Cancelled':'Completed'),' · ',data.job.attempts,' ',ashTr('attempts'),' · ',data.job.successes,' ',ashTr('successes')]})]});}
 function useAshTouchReset(input){(0,O.useEffect)(()=>{const reset=()=>Object.assign(input.current,{x:0,y:0,attack:false,defend:false});window.addEventListener('blur',reset);document.addEventListener('visibilitychange',reset);window.addEventListener('ashflor-clear-input',reset);return()=>{reset();window.removeEventListener('blur',reset);document.removeEventListener('visibilitychange',reset);window.removeEventListener('ashflor-clear-input',reset);};},[input]);}
 var ASH_CHAT_COMMANDS=[
   {command:'/help',description:'List chat and squad commands'},
@@ -159,6 +214,9 @@ var ASH_CHAT_COMMANDS=[
   {command:'/squad-create',description:'Create a private or public squad'},
   {command:'/squad-find-public',description:'Find or create a public squad'},
   {command:'/squad-join',description:'Join a squad by room code'},
+  {command:'/squad-invite',description:'Invite an online player by name'},
+  {command:'/squad-accept',description:'Accept a squad invitation'},
+  {command:'/squad-decline',description:'Decline a squad invitation'},
   {command:'/squad-public',description:'Make your squad public'},
   {command:'/squad-private',description:'Make your squad private'},
   {command:'/squad-ready',description:'Toggle ready in your squad'},
@@ -166,7 +224,7 @@ var ASH_CHAT_COMMANDS=[
   {command:'/squad-info',description:'Show current squad status'},
   {command:'/squad-return',description:'Leader: return everyone to lobby'},
 ];
-var ASH_CHAT_HELP='/local · /public · /squad · /guild · /s · /g · /squad-create [public|private] · /squad-find-public · /squad-join <code> · /squad-ready · /squad-leave · /squad-info · /help · /clear';
+var ASH_CHAT_HELP='/local · /public · /squad · /guild · /s · /g · /squad-create [public|private] · /squad-find-public · /squad-join <code> · /squad-invite <player> · /squad-accept · /squad-decline · /squad-ready · /squad-leave · /squad-info · /help · /clear';
 function ashMatchChatCommands(draft){
   const q=String(draft||'').trim().toLowerCase();
   if(!q.startsWith('/'))return [];
@@ -180,8 +238,8 @@ function ashSetChatDraft(input,value){
 }
 function ashSquadSend(engine,command){
   if(!engine)return false;
-  if(typeof engine.squadAction==='function')return !!engine.squadAction(command);
   if(typeof engine.sendCommand==='function')return !!engine.sendCommand(command);
+  if(typeof engine.squadAction==='function')return engine.squadAction(command)!==false;
   return false;
 }
 function ashHandleChatCommand(text,engine,systemMsg){
@@ -190,6 +248,14 @@ function ashHandleChatCommand(text,engine,systemMsg){
   const lower=raw.toLowerCase();
   const say=msg=>{systemMsg?.(typeof msg==='string'?msg:String(msg));return true;};
   if(lower==='/help'||lower.startsWith('/help '))return say(ASH_CHAT_HELP);
+  if(lower==='/squad-invite'||lower.startsWith('/squad-invite ')||lower==='/squad-accept'||lower==='/squad-decline'){
+    const inviting=lower==='/squad-invite'||lower.startsWith('/squad-invite '),username=inviting?raw.slice('/squad-invite'.length).trim():'';
+    if(inviting&&!username)return say('Usage: /squad-invite <player name>');
+    fetch('/api/guild/'+(inviting?'squad-invite':'squad-respond'),{method:'POST',credentials:'same-origin',headers:{'Content-Type':'application/json'},body:JSON.stringify(inviting?{username}:{accept:lower==='/squad-accept'})})
+      .then(async response=>{const result=await response.json();if(!response.ok)throw Error(result.error||'Squad request failed');say(ashTr(result.message||(inviting?'Squad invitation sent.':lower==='/squad-accept'?'Joined squad.':'Invitation declined.')));})
+      .catch(error=>say(error.message));
+    return true;
+  }
   const channelOnly=/^\/(local|public|squad|guild|s|g)$/i.exec(raw);
   if(channelOnly){
     const key=channelOnly[1].toLowerCase();
@@ -320,7 +386,7 @@ function ashHandleChatCommand(text,engine,systemMsg){
   },true);
 })();
 if(typeof document!=='undefined'){const style=document.createElement('style');style.textContent=`
-.ashflor-announce{position:fixed;left:12px;top:12px;z-index:50;width:min(360px,calc(100vw - 24px));box-sizing:border-box;padding:12px 36px 12px 12px;background:#183e2cde;border:2px solid #243b2b;border-radius:8px;color:white;text-shadow:0 1px 2px #000;pointer-events:auto}.ashflor-announce strong{display:block;font-size:14px;margin:0 0 6px}.ashflor-announce p{margin:0;font-size:12px;line-height:1.45}.ashflor-announce-close{position:absolute;top:4px;right:4px;width:28px;height:28px;border:0;border-radius:6px;background:transparent;color:white;font:700 22px/1 Ubuntu,sans-serif;cursor:pointer;padding:0}.ashflor-announce-close:hover{background:#ffffff22}.ashflor-panel-tools button,.ashflor-dialog button{background:#3b6449;color:white;border:2px solid #243b2b;border-radius:6px;padding:6px 10px;cursor:pointer;font:inherit;min-height:34px;text-shadow:none}.ashflor-roster{position:fixed;right:12px;top:200px;width:150px;z-index:34;color:white;background:#183e2cde;border:2px solid #243b2b;border-radius:6px;box-sizing:border-box;text-shadow:0 1px 2px #000;pointer-events:auto}.ashflor-roster-heading{background:none;border:0;color:white;font:inherit;font-size:11px;width:100%;padding:4px 6px;text-align:left;cursor:pointer}.ashflor-roster ul{margin:0;padding:0 6px 4px;list-style:none;min-height:0;max-height:160px;overflow:auto;overscroll-behavior:contain}.ashflor-roster li{border-top:1px solid #ffffff25;padding:2px 0;overflow-wrap:anywhere}.ashflor-roster strong{font-size:11px}.ashflor-roster small{display:block;font-size:9px;opacity:.8}.ash-death-summary{position:fixed;top:72px;right:12px;z-index:60;display:flex;flex-direction:column;gap:10px;width:min(280px,calc(100vw - 24px));pointer-events:auto;color:#fff;text-shadow:0 1px 2px #000;font:700 13px Ubuntu,sans-serif}.ash-death-summary-panel{background:#2a1c14cc;border-radius:8px;padding:10px 12px;box-sizing:border-box}.ash-death-summary-panel h2{margin:0 0 8px;font-size:16px;text-align:left;color:#ffe9c8}.ash-death-summary-empty{margin:0;font-size:14px;opacity:.75;text-align:center;padding:10px 0}.ash-death-summary-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;max-height:168px;overflow:auto;overscroll-behavior:contain}.ash-death-summary-card{border:3px solid #0003;border-radius:6px;height:52px;display:grid;place-items:center;position:relative;overflow:hidden}.ash-death-summary-card canvas{width:100%;height:100%;display:block;pointer-events:none}.ash-death-summary-card b{text-shadow:1px 1px #000;font-size:11px;position:absolute;top:-2px;right:-1px;background:#000e;border-radius:6px;padding:0 5px;color:#ffd56a}.loot-box{display:none!important}.ashflor-dialog{box-sizing:border-box;max-width:calc(100vw - 20px);width:520px;max-height:85dvh;overflow:auto;border:3px solid #253d2c;border-radius:12px;background:#82ac76;color:#142719;padding:14px;z-index:200;text-shadow:none}.ashflor-dialog::backdrop{background:#0007}.ashflor-dialog header{display:flex;align-items:center;justify-content:space-between}.ashflor-dialog h2{font-size:22px;margin:0}.ashflor-dialog-body p{font-size:14px}.ashflor-dialog input:not([type=checkbox]){max-width:65%;padding:8px}.ashflor-stats>div{display:flex;justify-content:space-between;border-bottom:1px solid #24412b40;padding:8px}.ashflor-stats dd{margin:0;font-variant-numeric:tabular-nums}.ashflor-action-row{display:flex;flex-wrap:wrap;gap:6px;align-items:center}.ashflor-panel-tools{padding:8px 12px;border-bottom:1px solid #fff3;font-size:13px}.ashflor-panel-tools p{margin:4px 0 7px}.ashflor-panel-tools select{max-width:160px;padding:5px;font:inherit}.ashflor-panel-tools button:disabled,.ashflor-dialog button:disabled{opacity:.45;cursor:default}.ashflor-panel-tools input,.ashflor-dialog input{accent-color:#355e41}.touch-pad,.touch-stick,.touch-actions button{touch-action:none!important;user-select:none;-webkit-user-select:none}.ashflor-squad-members{padding-left:20px}.ashflor-squad-members li{padding:6px 0}
+.ashflor-panel-tools button,.ashflor-dialog button{background:#3b6449;color:white;border:2px solid #243b2b;border-radius:6px;padding:6px 10px;cursor:pointer;font:inherit;min-height:34px;text-shadow:none}.ashflor-roster{position:fixed;right:12px;top:200px;width:150px;z-index:34;color:white;background:#183e2cde;border:2px solid #243b2b;border-radius:6px;box-sizing:border-box;text-shadow:0 1px 2px #000;pointer-events:auto}.ashflor-roster-heading{background:none;border:0;color:white;font:inherit;font-size:11px;width:100%;padding:4px 6px;text-align:left;cursor:pointer}.ashflor-roster ul{margin:0;padding:0 6px 4px;list-style:none;min-height:0;max-height:160px;overflow:auto;overscroll-behavior:contain}.ashflor-roster li{border-top:1px solid #ffffff25;padding:2px 0;overflow-wrap:anywhere}.ashflor-roster strong{font-size:11px}.ashflor-roster small{display:block;font-size:9px;opacity:.8}.ash-death-summary{position:fixed;top:72px;right:12px;z-index:40;display:flex;flex-direction:column;gap:10px;width:min(280px,calc(100vw - 24px));pointer-events:none;color:#fff;text-shadow:0 1px 2px #000;font:700 13px Ubuntu,sans-serif}.ash-death-summary-panel{pointer-events:auto;background:#2a1c14cc;border-radius:8px;padding:10px 12px;box-sizing:border-box}.ash-death-summary-panel h2{margin:0 0 8px;font-size:16px;text-align:left;color:#ffe9c8}.ash-death-summary-empty{margin:0;font-size:14px;opacity:.75;text-align:center;padding:10px 0}.ash-death-summary-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;max-height:168px;overflow:auto;overscroll-behavior:contain}.ash-death-summary-card{border:3px solid #0003;border-radius:6px;height:52px;display:grid;place-items:center;position:relative;overflow:hidden}.ash-death-summary-card canvas{width:100%;height:100%;display:block;pointer-events:none}.ash-death-summary-card b{text-shadow:1px 1px #000;font-size:11px;position:absolute;top:-2px;right:-1px;background:#000e;border-radius:6px;padding:0 5px;color:#ffd56a}.loot-box{display:none!important}.ashflor-dialog{box-sizing:border-box;max-width:calc(100vw - 20px);width:520px;max-height:85dvh;overflow:auto;border:3px solid #253d2c;border-radius:12px;background:#82ac76;color:#142719;padding:14px;z-index:200;text-shadow:none}.ashflor-dialog::backdrop{background:#0007}.ashflor-dialog header{display:flex;align-items:center;justify-content:space-between}.ashflor-dialog h2{font-size:22px;margin:0}.ashflor-dialog-body p{font-size:14px}.ashflor-dialog input:not([type=checkbox]){max-width:65%;padding:8px}.ashflor-stats>div{display:flex;justify-content:space-between;border-bottom:1px solid #24412b40;padding:8px}.ashflor-stats dd{margin:0;font-variant-numeric:tabular-nums}.ashflor-action-row{display:flex;flex-wrap:wrap;gap:6px;align-items:center}.ashflor-panel-tools{padding:8px 12px;border-bottom:1px solid #fff3;font-size:13px}.ashflor-panel-tools p{margin:4px 0 7px}.ashflor-panel-tools select{max-width:160px;padding:5px;font:inherit}.ashflor-panel-tools button:disabled,.ashflor-dialog button:disabled{opacity:.45;cursor:default}.ashflor-panel-tools input,.ashflor-dialog input{accent-color:#355e41}.touch-pad,.touch-stick,.touch-actions button{touch-action:none!important;user-select:none;-webkit-user-select:none}.ashflor-squad-members{padding-left:20px}.ashflor-squad-members li{padding:6px 0}
 .ashflor-chat-suggestions{position:fixed;z-index:80;max-height:220px;overflow:auto;box-sizing:border-box;padding:4px;background:#102418f2;border:2px solid #2f513b;border-radius:8px;color:#fff;text-shadow:0 1px 2px #000;pointer-events:auto}
 .ashflor-chat-suggestion{display:flex;gap:8px;align-items:baseline;width:100%;border:0;background:transparent;color:inherit;font:12px/1.35 Ubuntu,sans-serif;text-align:left;padding:6px 8px;border-radius:5px;cursor:pointer}
 .ashflor-chat-suggestion .cmd{color:#9fdfff;flex:0 0 auto}
@@ -359,8 +425,6 @@ img[src*="/assets/talents/"],img[src*="/assets/petals/"]{
   background:#c9a227!important;color:#1a1408!important;border-color:#8a6e1a!important;
 }
 @media(max-width:600px){
-  .ashflor-announce{top:8px;left:8px;width:calc(100vw - 16px);padding:10px 34px 10px 10px}
-  .ashflor-announce p{font-size:11px}
   .ashflor-roster{width:min(150px,42vw);right:8px}
   .ashflor-roster ul{min-height:0;max-height:min(140px,22vh)}
   .ash-death-summary{top:64px;right:8px;width:min(260px,calc(100vw - 16px))}

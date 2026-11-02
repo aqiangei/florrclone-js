@@ -7,6 +7,12 @@ var AshWire=(()=>{
   const object=v=>v!==null&&typeof v==='object'&&!Array.isArray(v);
   const safe=k=>k!=='__proto__'&&k!=='constructor'&&k!=='prototype';
   function copy(v){if(Array.isArray(v))return v.map(x=>x===undefined?null:copy(x));if(object(v)){const out={};for(const k of Object.keys(v))if(v[k]!==undefined&&safe(k))out[k]=copy(v[k]);return out;}return v;}
+  function clean(v,depth=0){
+    if(depth>64)throw Error('Value too deep');
+    if(Array.isArray(v)){for(let i=0;i<v.length;i++)if(v[i]===undefined)v[i]=null;else clean(v[i],depth+1);}
+    else if(object(v))for(const k of Object.keys(v)){if(v[k]===undefined||!safe(k))delete v[k];else clean(v[k],depth+1);}
+    return v;
+  }
   const keyed=a=>a.length>0&&a.every(v=>object(v)&&(typeof v.id==='string'||typeof v.id==='number'))&&new Set(a.map(v=>v.id)).size===a.length;
   // 0 = replacement, 1 = object fields/deletions, 2 = array slots/length,
   // 3 = entities by stable id (order, creates, changes, removals).
@@ -88,8 +94,8 @@ var AshWire=(()=>{
   }
   class Encoder{
     constructor(){this.seq=0;this.previous=null;this.strings=new Map();}
-    prepare(frame){
-      const next=copy(frame),reset=!this.previous||frame.map.roomId!==this.previous.map.roomId||this.seq%200===0;
+    prepare(frame,immutable=false){
+      const next=immutable?clean(frame):copy(frame),reset=!this.previous||frame.map.roomId!==this.previous.map.roomId||this.seq%200===0;
       const strings=reset?new Map():new Map(this.strings),writer=new Writer(strings),seq=this.seq+1;
       writer.byte(65);writer.byte(83);writer.byte(1);writer.byte(reset?1:0);writer.uint(seq);writer.value(reset?[0,next]:diff(this.previous,next)??[1,[],[]]);
       const bytes=writer.bytes.slice(0,writer.at);

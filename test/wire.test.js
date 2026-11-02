@@ -1,6 +1,11 @@
 'use strict';
 const {test}=require('node:test'),assert=require('node:assert/strict'),Wire=require('../server/wire');
 const frame=(mobs=[],room='Garden')=>({type:'snapshot',map:{roomId:room},self:{x:0,hp:1e30,petals:[null,{type:'Basic',x:-0,rarity:7}]},mobs,players:[],events:[]});
+test('owned immutable frames normalize optional undefined fields before delta encoding',()=>{
+  const encoder=new Wire.Encoder(),decoder=new Wire.Decoder(),first=frame();first.self.optional=undefined;first.self.list=[undefined,2];
+  const packet=encoder.prepare(first,true);packet.commit();const decoded=decoder.decode(packet.bytes);assert.ok(!Object.hasOwn(decoded.self,'optional'));assert.deepEqual(decoded.self.list,[null,2]);
+  const next=frame();next.self.list=[3,undefined];const delta=encoder.prepare(next,true);delta.commit();assert.deepEqual(decoder.decode(delta.bytes).self.list,[3,null]);
+});
 test('binary deltas retain identity across reorder, removal, room changes and keyframes',()=>{
   const encoder=new Wire.Encoder(),decoder=new Wire.Decoder();
   for(let i=0;i<420;i++){

@@ -1,6 +1,16 @@
 'use strict';
 const test=require('node:test'),assert=require('node:assert/strict'),vm=require('node:vm'),fs=require('node:fs');
 const code=fs.readFileSync(require.resolve('../server/client-display.js'),'utf8').split('function useAshDisplay(){')[0];
+test('zoom clamps to the settings slider range in 5% steps',()=>{
+  const context={document:{querySelector:()=>null},window:{},O:{useEffect(){}},Event};
+  vm.createContext(context);vm.runInContext(code,context);
+  assert.equal(context.ashClampZoom(1),1);
+  assert.equal(context.ashClampZoom(.62),.6);
+  assert.equal(context.ashClampZoom(.63),.65);
+  assert.equal(context.ashClampZoom(.59),.6);
+  assert.equal(context.ashClampZoom(1.42),1.4);
+  assert.equal(context.ashClampZoom('1.07'),1.05);
+});
 function setup({width=390,height=844,touch=true}={}){
   const events=()=>({listeners:{},addEventListener(name,fn){(this.listeners[name]??=[]).push(fn);},dispatchEvent(event){for(const fn of this.listeners[event.type]??[])fn(event);}});
   const document=Object.assign(events(),{documentElement:{},fullscreenElement:null}),window=events(),calls=[];

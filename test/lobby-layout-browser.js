@@ -14,7 +14,6 @@ const assert=require('node:assert/strict'),fs=require('node:fs'),crypto=require(
     assert.equal(res.status(),200);
     const page=await ctx.newPage();page.on('pageerror',e=>errors.push(e.message));
     await page.goto(base,{waitUntil:'networkidle'});
-    await page.getByRole('button',{name:'关闭公告',exact:true}).click().catch(()=>{});
     const prompt=page.locator('.ash-display-prompt');
     await prompt.getByRole('button',{name:'Landscape game',exact:true}).waitFor();
     assert.equal(await prompt.getByRole('button',{name:'Enter fullscreen'}).count(),0);

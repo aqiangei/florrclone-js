@@ -1,3 +1,37 @@
+// Match the Settings Zoom slider: 60%–140% in 5% steps.
+const ASH_ZOOM_MIN=.6,ASH_ZOOM_MAX=1.4,ASH_ZOOM_STEP=.05;
+function ashClampZoom(value){
+  const stepped=Math.round(Number(value)/ASH_ZOOM_STEP)*ASH_ZOOM_STEP;
+  return Math.min(ASH_ZOOM_MAX,Math.max(ASH_ZOOM_MIN,Math.round(stepped*100)/100));
+}
+function ashWheelZoomsOver(target){
+  return !!target?.closest?.('input,textarea,select,dialog,[role="dialog"],.reference-window,.ashflor-dialog,.reference-settings,.game-panel,.inventory-scroll,.ashflor-roster,.chat-prompt,.game-chat,.talent-wheel,.touch-pad');
+}
+function ashWheelZoomBlocked(){
+  return !!document.querySelector('.game-panel:not([inert]),.reference-window:not([inert]),.reference-settings:not([inert]),dialog[open],.ashflor-dialog[open],#ashflor-qq-dialog[open]');
+}
+// Scroll wheel adjusts the same settings.zoom the Graphics slider writes.
+function useAshWheelZoom(setSettings){
+  (0,O.useEffect)(()=>{
+    if(typeof setSettings!=='function')return;
+    let acc=0;
+    const onWheel=e=>{
+      if(!e.isTrusted||!e.deltaY||ashWheelZoomBlocked()||ashWheelZoomsOver(e.target))return;
+      e.preventDefault();
+      acc+=e.deltaY;
+      if(Math.abs(acc)<40)return;
+      const steps=Math.max(-4,Math.min(4,Math.trunc(acc/40)));
+      acc-=steps*40;
+      // Scroll up → zoom in (narrower view); scroll down → zoom out (wider view).
+      setSettings(s=>{
+        const zoom=ashClampZoom((Number(s.zoom)||1)-steps*ASH_ZOOM_STEP);
+        return zoom===s.zoom?s:{...s,zoom};
+      });
+    };
+    window.addEventListener('wheel',onWheel,{passive:false,capture:true});
+    return()=>window.removeEventListener('wheel',onWheel,{capture:true});
+  },[setSettings]);
+}
 // One controller for lobby, settings, the small window action and rotation.
 // requestFullscreen must run directly in the gesture, before any await.
 function ashDisplay(){
@@ -127,8 +161,7 @@ if(typeof document!=='undefined'){
 .ash-display-buttons button:focus-visible{outline:3px solid #ffe667;outline-offset:3px}
 .ash-display-prompt{position:fixed;right:max(12px,env(safe-area-inset-right));z-index:70;max-width:calc(100vw - 24px);pointer-events:auto;color:white;text-shadow:0 1px 3px #123;font:700 12px/1.4 Ubuntu,Segoe UI,sans-serif}
 .ash-display-prompt p{max-width:290px;background:#153b2eef;border-radius:8px;padding:8px;margin:6px 0 0}
-body:has(.reference-settings:not([inert])) .ash-display-prompt,
-body:has(.ashflor-announce) .ash-display-prompt{display:none}
+body:has(.reference-settings:not([inert])) .ash-display-prompt{display:none}
 /* Lobby: top-right under the toolbar so Ready/browser chrome cannot clip it. */
 .ash-display-prompt.is-lobby{top:max(56px,calc(env(safe-area-inset-top) + 48px));bottom:auto}
 .ash-display-prompt.is-lobby .ash-display-buttons button{animation:ash-display-pulse 1.1s ease-in-out infinite}

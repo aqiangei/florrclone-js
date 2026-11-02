@@ -10,7 +10,11 @@ const crypto=require('node:crypto'),assert=require('node:assert/strict'),fs=requ
     const registered=await context.request.post(base+'/api/account/register',{data:{username:'qq_'+crypto.randomBytes(4).toString('hex'),password:crypto.randomBytes(12).toString('hex')}});assert.equal(registered.status(),200);
     const page=await context.newPage(),errors=[];page.on('pageerror',e=>errors.push(e.message));
     await page.goto(base,{waitUntil:'networkidle'});await page.waitForFunction(()=>!document.querySelector('.boot-screen'));
-    const qq=page.getByRole('button',{name:'Ashflor QQ 群',exact:true}),github=page.getByRole('link',{name:'GitHub 开源仓库',exact:true});
+    const feedback=page.getByRole('link',{name:'给作者留言',exact:true}),qq=page.getByRole('button',{name:'Ashflor QQ 群',exact:true}),github=page.getByRole('link',{name:'GitHub 开源仓库',exact:true});
+    const feedbackHref=await feedback.getAttribute('href');
+    assert.ok(feedbackHref.startsWith('https://ashflor.com/feedback.html?'),feedbackHref);
+    assert.ok(feedbackHref.includes('from='+encodeURIComponent(base)),feedbackHref);
+    assert.equal(await feedback.getAttribute('target'),'_blank');
     assert.equal(await github.getAttribute('href'),'https://github.com/aqiangei/florrclone');assert.equal(await github.getAttribute('target'),'_blank');
     await qq.click();
     const dialog=page.getByRole('dialog',{name:'Ashflor 交流群'});assert.equal(await dialog.isVisible(),true);
@@ -26,12 +30,13 @@ const crypto=require('node:crypto'),assert=require('node:assert/strict'),fs=requ
     await dialog.getByRole('button',{name:'关闭',exact:true}).click();assert.equal(await dialog.count(),0);
     await page.setViewportSize({width:375,height:812});
     const bounds=await qq.boundingBox();assert.ok(bounds.x>=0&&bounds.x+bounds.width<=375&&bounds.y<100,JSON.stringify(bounds));
+    const feedbackBounds=await feedback.boundingBox();assert.ok(feedbackBounds.x>=0&&feedbackBounds.x+feedbackBounds.width<=375&&feedbackBounds.y<100,JSON.stringify(feedbackBounds));
     const gitBounds=await github.boundingBox();assert.ok(gitBounds.x>=0&&gitBounds.x+gitBounds.width<=375&&gitBounds.y<100,JSON.stringify(gitBounds));
     await qq.click();const box=await dialog.boundingBox();assert.ok(box.x>=0&&box.x+box.width<=375,JSON.stringify(box));
     await page.screenshot({path:'test-results/qq-dialog-mobile.png'});await dialog.getByRole('button',{name:'关闭',exact:true}).click();
     await page.waitForTimeout(3000);const health=await(await fetch(base+'/api/health')).json();
-    assert.equal(health.targetTps,60);assert.equal(health.snapshotHz,60);assert.ok(health.actualTps>50&&health.actualTps<65,JSON.stringify(health));assert.deepEqual(errors,[]);
+    assert.equal(health.targetTps,30);assert.equal(health.snapshotHz,20);assert.ok(health.actualTps>20&&health.actualTps<40,JSON.stringify(health));assert.deepEqual(errors,[]);
     await page.setViewportSize({width:320,height:740});const small=await github.boundingBox();assert.ok(small.x+small.width<=320,JSON.stringify(small));
-    console.log(JSON.stringify({ok:true,group:'227990150',github:'https://github.com/aqiangei/florrclone',desktopAndMobile:true,inputNeutralWhileDialogOpen:true,health,errors},null,2));
+    console.log(JSON.stringify({ok:true,group:'227990150',feedback:feedbackHref,github:'https://github.com/aqiangei/florrclone',desktopAndMobile:true,inputNeutralWhileDialogOpen:true,health,errors},null,2));
   }finally{await browser.close();await app.close();}
 })().catch(e=>{console.error(e);process.exitCode=1;});

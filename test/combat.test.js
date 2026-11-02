@@ -59,6 +59,14 @@ test('Hornet missiles are serialized and Moon Rock intercepts their swept path b
   const hp=e.hp;e.collideMobShots(hornet,1/30);assert.equal(hornet.shots[0].life,0);assert.equal(e.hp,hp);assert.ok(moon.hp<10000);
   moon.cd=1;hornet.shots=[{x:e.x+10,y:e.y,vx:12000,vy:0,radius:8,damage:9,life:2,hp:20,type:'Missile'}];e.collideMobShots(hornet,1/30);assert.ok(e.hp<hp,'unprotected flower is hit');
 });
+test('a healthy low-tier Moon blocks a durable projectile, including an overlapping flower contact',()=>{
+  const {engine:e}=fixture();e.save.loadout=[{type:'Moon Rock',rarity:0},null,null,null,null];e.rebuildPetals();e.invuln=0;
+  const moon=e.petals[0];moon.x=e.x;moon.y=e.y;moon.hp=10000;moon.cd=0;moon.motion=undefined;
+  e.addMob('Hornet',e.x-400,e.y,0);const hornet=e.mobs.at(-1),hp=e.hp;
+  hornet.shots=[{x:e.x,y:e.y,vx:0,vy:0,radius:8,damage:9,life:2,hp:1000000000,type:'Missile'}];
+  e.collideMobShots(hornet,1/30);assert.equal(hornet.shots[0].life,0);assert.equal(e.hp,hp);assert.ok(moon.hp<10000);
+});
+
 test('Lightning arcs ride visualEvents like florr_clone-web strike bolts',()=>{
   const {world,client,engine:e}=fixture();
   e.localVisuals=true;e.visualScope=client.room.id;world.bind(client);

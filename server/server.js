@@ -109,26 +109,26 @@ function createServer(options={}){
     const socket=c.ws;
     const started=performance.now(),encoder=c.encoder;
     c.sending=true;
-    try{const frame=snapshot(c,c.room,api);
+    try{const frame=snapshot(c,c.room,api,TICK_HZ,true);
     const mates=ids=>ids.map(id=>clients.get(id)).filter(p=>p&&p!==c&&p.engine.save.biome===c.engine.save.biome).map(p=>({id:p.id,name:p.engine.save.name,x:p.engine.x,y:p.engine.y}));
     frame.squad=social.snapshot(c);frame.guildMates=mates(social.guild(c.account)?.members??[]).slice(0,10);frame.squadMates=mates([...(social.squad(c)?.members??[])]);
     const roster=[...clients.values()].map(p=>({id:p.id,name:p.engine.save.name,level:p.engine.save.level,biome:p.engine.save.biome,state:p.engine.state}));
     const rosterJSON=JSON.stringify(roster);if(rosterJSON!==c.lastRosterJSON)frame.onlineRoster=roster;
-    frame.combatStats=c.combatStats;frame.craftJob=c.craftJob??null;
+    frame.combatStats={...c.combatStats};frame.craftJob=c.craftJob?structuredClone(c.craftJob):null;
     const presets=ensurePresets(c.account),presetsJSON=JSON.stringify(presets);
-    if(presetsJSON!==c.lastPresetsJSON)frame.loadoutPresets=presets;
+    if(presetsJSON!==c.lastPresetsJSON)frame.loadoutPresets=JSON.parse(presetsJSON);
     // Inventory can contain thousands of entries. Passive loot/XP changes
     // sample at 5 Hz; explicit equipment/craft commands invalidate it now.
     if(c.saveDirty||!c.saveSampleAt||Date.now()-c.saveSampleAt>=200){
       c.sampledSaveJSON=JSON.stringify(frame.save);c.saveSampleAt=Date.now();c.saveDirty=false;
     }
     const saveJSON=c.sampledSaveJSON;
-    if(saveJSON===c.lastSaveJSON)delete frame.save;
+    if(saveJSON===c.lastSaveJSON)delete frame.save;else frame.save=JSON.parse(saveJSON);
     if(!api.validate(frame)){
       const issues=api.snapshotSchema.safeParse(frame).error?.issues??[];
       throw Error('Invalid snapshot: '+JSON.stringify(issues.slice(0,6).map(i=>({path:i.path,code:i.code,message:i.message}))));
     }
-    const encoded=encoder?.prepare(frame);
+    const encoded=encoder?.prepare(frame,true);
     const payload=encoded?encoded.bytes:(socket.protocol?await gzip(JSON.stringify(frame),{level:zlib.constants.Z_BEST_SPEED}):JSON.stringify(frame));
     if(c.ws!==socket||socket.readyState!==WebSocket.OPEN)return;
     socket.send(payload,{binary:!!socket.protocol});encoded?.commit();c.lastVisualAck=frame.visualAck??c.lastVisualAck;c.lastSaveJSON=saveJSON;c.lastRosterJSON=rosterJSON;c.lastPresetsJSON=presetsJSON;c.snapshotFails=0;
