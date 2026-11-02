@@ -4,10 +4,10 @@ const RARITIES=['普通(C)','罕见(Un)','稀有(R)','史诗(E)','传奇(L)','�
 class Announcements{
   constructor(clients){this.clients=clients;this.pending=new Map();}
   add(key,data){const old=this.pending.get(key);if(old){old.count+=(data.count??0);old.attempts+=(data.attempts??0);old.successes+=(data.successes??0);old.consumed+=(data.consumed??0);old.prominent||=data.prominent;}else this.pending.set(key,{count:0,attempts:0,successes:0,consumed:0,...data});}
-  kill(c,m){this.add(`kill:${c.id}:${m.type}:${m.rarity}`,{kind:'kill',name:c.engine.save.name||c.account.username,type:m.type,rarity:m.rarity,count:1,prominent:m.rarity>=7});}
+  kill(c,m){if(m.rarity<7)return;this.add(`kill:${c.id}:${m.type}:${m.rarity}`,{kind:'kill',name:c.engine.save.name||c.account.username,type:m.type,rarity:m.rarity,count:1,prominent:true});}
   spawn(c,m){if(m.rarity>=7)this.add(`spawn:${m.id}`,{kind:'spawn',type:m.type,rarity:m.rarity,biome:c.engine.save.biome,count:1,prominent:true});}
-  craft(c,item,result,output){if(!result.attempts)return;this.add(`craft:${c.id}:${item.type}:${item.rarity}`,{kind:'craft',name:c.engine.save.name||c.account.username,type:item.type,rarity:item.rarity,output:output??{type:item.type,rarity:item.rarity+1},attempts:result.attempts,successes:result.successes,consumed:result.lost,prominent:item.rarity>=6&&result.successes>0});}
-  flush(){if(!this.pending.size)return;const rows=[...this.pending.values()];this.pending.clear();for(const row of rows){const rarity=RARITIES[row.rarity]??String(row.rarity);let text;
+  craft(c,item,result,output){if(!result.attempts||(output?.rarity??item.rarity+1)<7)return;this.add(`craft:${c.id}:${item.type}:${item.rarity}`,{kind:'craft',name:c.engine.save.name||c.account.username,type:item.type,rarity:item.rarity,output:output??{type:item.type,rarity:item.rarity+1},attempts:result.attempts,successes:result.successes,consumed:result.lost,prominent:result.successes>0});}
+  flush(){if(!this.pending.size)return;const rows=[];for(const[key,row]of this.pending){if(row.kind==='craft'&&!row.successes)continue;rows.push(row);this.pending.delete(key);}for(const row of rows){const rarity=RARITIES[row.rarity]??String(row.rarity);let text;
     if(row.kind==='kill')text=`[击杀] ${row.name} 击杀 ${rarity} ${row.type} ×${row.count}`;
     else if(row.kind==='spawn')text=`[生成] ${row.biome} 出现 ${rarity} ${row.type}`;
     else text=`[合成] ${row.name} 消耗 ${row.consumed} 个 ${rarity} ${row.type}，尝试 ${row.attempts} 次，获得 ${row.successes} 个 ${RARITIES[row.output.rarity]??row.output.rarity} ${row.output.type}（失败 ${row.attempts-row.successes} 次）`;
